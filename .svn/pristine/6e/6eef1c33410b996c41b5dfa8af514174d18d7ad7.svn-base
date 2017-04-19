@@ -1,0 +1,124 @@
+﻿@model LiveMonitoringWeb.Models.Groups
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout_outh.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#ShiftStartTime').timepicker();
+        $('#ShiftEndTime').timepicker();
+        $('#LunchStartTime').timepicker();
+        $('#LunchEndTime').timepicker();
+    });
+
+    function validate()
+    {
+        var shiftstarttime = $(this).attr('ShiftStartTime').value;
+        var ShiftEndTime = $(this).attr('ShiftEndTime').value;
+        var LunchStartTime = $(this).attr('LunchStartTime').value;
+        var LunchEndTime = $(this).attr('LunchEndTime').value;
+        var sst = shiftstarttime.split(":");
+        var set = ShiftEndTime.split(":");
+        var lst = LunchStartTime.split(":");
+        var let1 = LunchEndTime.split(":");
+
+        if (sst[0] < 0 || sst[0] > 23 || sst[1] < 0 || sst[1] > 59 || sst[0].length > 2 || sst[1].length > 2) {
+            alert("Shift start time is not valid.");
+            return false;
+        }
+        if (set[0] < 0 || set[0] > 23 || set[1] < 0 || set[1] > 59 || set[0].length > 2 || set[1].length > 2) {
+            alert("Shift end time is not valid.");
+            return false;
+        }
+        if (lst[0] < 0 || lst[0] > 23 || lst[1] < 0 || lst[1] > 59 || lst[0].length > 2 || lst[1].length > 2) {
+            alert("Lunch start time is not valid.");
+            return false;
+        }
+        if (let1[0] < 0 || let1[0] > 23 || let1[1] < 0 || let1[1] > 59 || let1[0].length > 2 || let1[1].length > 2) {
+            alert("Lunch end time is not valid.");
+            return false;
+        }
+    
+        return true;    
+    }
+
+</script>
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-globe"></span> Groups &#58;&#58; Edit</h3>
+            <hr />
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10" style="margin-bottom:100px;">
+
+            @using (Html.BeginForm())
+            {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+
+            @Html.HiddenFor(model => model.GroupId)
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.GroupName, new { @class = "labeltop" })
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.GroupName, new { @class = "textarea1" })
+                @Html.ValidationMessageFor(model => model.GroupName)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.ShiftStartTime, new { @class = "labeltop" })
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.ShiftStartTime, new { @class = "textarea1", @maxlength = 5 })
+                @Html.ValidationMessageFor(model => model.ShiftStartTime)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.ShiftEndTime, new { @class = "labeltop" })
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.ShiftEndTime, new { @class = "textarea1", @maxlength = 5 })
+                @Html.ValidationMessageFor(model => model.ShiftEndTime)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.LunchStartTime, new { @class = "labeltop" })
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.LunchStartTime, new { @class = "textarea1", @maxlength = 5 })
+                @Html.ValidationMessageFor(model => model.LunchStartTime)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.LunchEndTime, new { @class = "labeltop" })
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.LunchEndTime, new { @class = "textarea1", @maxlength = 5 })
+                @Html.ValidationMessageFor(model => model.LunchEndTime)
+            </div>
+
+            <div class="editor-label">
+                <span>
+                    @Html.EditorFor(model => model.IsActive)
+                    @Html.ValidationMessageFor(model => model.IsActive)
+                </span> @Html.LabelFor(model => model.IsActive, new { @class = "labelck" })
+            </div>
+
+            <div class="editor-field">
+            </div>
+            <p style="padding-top:10px;">
+                <input type="submit" value="Save" class="button-link" onclick="return validate();" /> | @Html.ActionLink("Back to List", "Index")
+            </p>
+            }
+
+        </div>
+    </div>
+</div>
+

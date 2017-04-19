@@ -1,0 +1,166 @@
+/*.textbox1 {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333;
+    border: 1px solid #A4A4A4;
+    padding: 4px 8px 4px 4px !important;
+    line-height: 1;
+    width: 100%;
+    height: 33px;
+}
+
+    .textbox1:hover {
+        border: 1px solid #fea443;
+        box-shadow: inset 0px 1px 2px rgba(0,0,0,0.3);
+        -moz-box-shadow: inset 0px 1px 2px rgba(0,0,0,0.3);
+        -webkit-box-shadow: inset 0px 1px 2px rgba(0,0,0,0.3);
+    }
+
+    .textbox1:focus {
+        border: 1px solid #fea443;
+        outline: none;
+        box-shadow: inset 0px 1px 2px rgba(0,0,0,0.3);
+        -moz-box-shadow: inset 0px 1px 2px rgba(0,0,0,0.3);
+        -webkit-box-shadow: inset 0px 1px 2px rgba(0,0,0,0.3);
+        background: rgb(255, 255, 255);
+    }*/
+.textbox1 {
+    padding: 4px 8px 4px 4px !important;
+    line-height: 1;
+    width: 100%;
+    height: 33px;
+}
+
+
+.txtcolor {
+    color: #858383;
+    direction: ltr;
+    font-size: 14px;
+
+}
+
+
+
+.myButton {
+    -moz-box-shadow: inset 0px 1px 0px 0px #ffffff;
+    -webkit-box-shadow: inset 0px 1px 0px 0px #ffffff;
+    box-shadow: inset 0px 1px 0px 0px #ffffff;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf));
+    background: -moz-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
+    background: -webkit-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
+    background: -o-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
+    background: -ms-linear-gradient(top, #ededed 5%, #dfdfdf 100%);
+    background: linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf',GradientType=0);
+    background-color: #ededed;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    border: 1px solid #dcdcdc;
+    display: inline-block;
+    cursor: pointer;
+    color: #777777;
+    font-family: arial;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 6px 24px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #ffffff;
+    float:right;
+}
+
+    .myButton:hover {
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed));
+        background: -moz-linear-gradient(top, #dfdfdf 5%, #ededed 100%);
+        background: -webkit-linear-gradient(top, #dfdfdf 5%, #ededed 100%);
+        background: -o-linear-gradient(top, #dfdfdf 5%, #ededed 100%);
+        background: -ms-linear-gradient(top, #dfdfdf 5%, #ededed 100%);
+        background: linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed',GradientType=0);
+        background-color: #dfdfdf;
+    }
+
+    .myButton:active {
+        position: relative;
+        top: 1px;
+    }
+
+.row1 {
+    border-color: #FFF;
+    border-style: solid;
+    border-width: 2px;
+    -webkit-box-shadow: 13px 12px 291px 50px rgba(214,211,209,1);
+    -moz-box-shadow: 13px 12px 291px 50px rgba(214,211,209,1);
+    box-shadow: 13px 12px 291px 50px rgba(214,211,209,1);
+}
+
+.bodycss {
+    background-color: #1865a9;
+    height:100%;
+    width:98%;
+}
+
+.divbg {
+    background-color: #1865a9;
+}
+
+.insidebg {
+    margin-top: 120px;
+    background-color: #fff;
+}
+
+.col-sml1 {
+    margin-top: 8%;
+    text-align: -webkit-center;
+}
+.col1 {
+    margin-top:20px;
+}
+.p1 {
+    margin-bottom: 3px;
+}
+.col2 {
+margin-top:8px;margin-bottom: -7px;
+}
+.col3 {
+    margin-top:21px;
+    margin-bottom:12%;
+}
+/* styles for validation helpers */
+.field-validation-error {
+    color: #e80c4d;
+    list-style-type: none;
+}
+
+.field-validation-valid {
+    display: none;
+    list-style-type: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #e80c4d;
+    list-style-type: none;
+    margin-bottom: 2%;
+
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+    list-style-type: none;
+}
+
+.validation-summary-errors {
+    color: #e80c4d;
+    list-style-type: none;
+    font-size: 1.1em;
+}
+
+.validation-summary-valid {
+    display: none;
+    list-style-type: none;
+}
+ul {
+    list-style-type: none;
+}
+.h2txt {
+    color:#152f48;
+}

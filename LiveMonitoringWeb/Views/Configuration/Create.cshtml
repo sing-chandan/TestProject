@@ -1,0 +1,151 @@
+﻿@model LiveMonitoringWeb.Models.Configuration
+
+@{
+    var role = System.Web.Security.Roles.GetRolesForUser(WebSecurity.CurrentUserName);
+    if (role[0] == "Admin")
+    {
+        Layout = "~/Views/Shared/_Layout_AdminOuth.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout_Outh.cshtml";
+    }
+    ViewBag.Title = "Create";
+}
+<style>
+    .field-validation-error {
+        color: #e80c4d;
+        list-style-type: none;
+    }
+
+    .field-validation-valid {
+        display: none;
+        list-style-type: none;
+    }
+
+    input.input-validation-error {
+        border: 1px solid #e80c4d;
+        list-style-type: none;
+    }
+
+    input[type="checkbox"].input-validation-error {
+        border: 0 none;
+        list-style-type: none;
+    }
+
+    .validation-summary-errors {
+        color: #e80c4d;
+        list-style-type: none;
+        font-size: 1.1em;
+    }
+
+    .validation-summary-valid {
+        display: none;
+        list-style-type: none;
+    }
+
+    ul {
+        list-style-type: none;
+    }
+
+    .h2txt {
+        color: #152f48;
+    }
+</style>
+<div class="container" style="min-height:500px;height:100%; ">
+    <div class="row">
+
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-cog"></span> Configuration [Time Interval(sec.)] &#58;&#58; Create</h3>
+            <hr />
+        </div>
+
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                <div>
+                    @{
+                var message = string.Empty;
+                if (ViewBag.Message != null)
+                {
+                    message = ViewBag.Message;
+                }
+                <label style="color:red;">@message</label>
+
+                    }
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.BrowserTacker_Interval, new { @class = "labeltop" })
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.BrowserTacker_Interval, new { @class = "textarea1" })
+                    @Html.ValidationMessageFor(model => model.BrowserTacker_Interval)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ScreenShot_Interval, new { @class = "labeltop" })
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.ScreenShot_Interval, new { @class = "textarea1" })
+                    @Html.ValidationMessageFor(model => model.ScreenShot_Interval)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.MachineIdle_Interval, new { @class = "labeltop" })
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.MachineIdle_Interval, new { @class = "textarea1" })
+                    @Html.ValidationMessageFor(model => model.MachineIdle_Interval)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.MachineIdle_MinTime, new { @class = "labeltop" })
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.MachineIdle_MinTime, new { @class = "textarea1" })
+                    @Html.ValidationMessageFor(model => model.MachineIdle_MinTime)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.KeyLogger_Interval, new { @class = "labeltop" })
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.KeyLogger_Interval, new { @class = "textarea1" })
+                    @Html.ValidationMessageFor(model => model.KeyLogger_Interval)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.KeyLogger_MinTime, new { @class = "labeltop" })
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.KeyLogger_MinTime, new { @class = "textarea1" })
+                    @Html.ValidationMessageFor(model => model.KeyLogger_MinTime)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.AppTracker_Interval, new { @class = "labeltop" })
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.AppTracker_Interval, new { @class = "textarea1" })
+                    @Html.ValidationMessageFor(model => model.AppTracker_Interval)
+                </div>
+                
+                    <div class="editor-label">
+                    <span>
+                        @Html.CheckBoxFor(model => model.IsSendBlockData, new { @checked = "checked" })
+                        @Html.ValidationMessageFor(model => model.IsSendBlockData)
+                    </span> @Html.LabelFor(model => model.IsSendBlockData, new { @class = "labelck" })
+                </div>
+                <div style="padding-top:5px;">
+                    <input type="submit" value="Create" class="button-link" /> | @Html.ActionLink("Back to List", "Index")
+                </div>
+            }
+        </div>
+        <div class="col-sm-1"></div>
+
+
+    </div>
+    <div class="col-sm-12" style="height:30px;margin-bottom:20px;"></div><br /><br /><br />
+</div>

@@ -1,0 +1,22 @@
+﻿@model LiveMonitoringWeb.Models.LocalPasswordModel
+@{
+    var role = System.Web.Security.Roles.GetRolesForUser(WebSecurity.CurrentUserName);
+    if (role[0] == "Admin")
+    {
+        Layout = "~/Views/Shared/_Layout_AdminOuth.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout_Outh.cshtml";
+    }
+    ViewBag.Title = "Manage Account";
+}
+
+@if (ViewBag.HasLocalPassword)
+{
+    @Html.Partial("_ChangePasswordPartial")
+}
+else
+{
+    @Html.Partial("_SetPasswordPartial")
+}

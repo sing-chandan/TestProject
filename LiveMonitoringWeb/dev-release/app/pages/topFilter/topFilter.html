@@ -1,0 +1,37 @@
+﻿<div class="row" style="margin-bottom:10px">
+    <div class="col-xs-2" ng-hide="CustomDate">
+        <ui-select ng-model="standardItem.selected"
+                   class="btn-group bootstrap-select form-control"
+                   ng-disabled="false"
+                   append-to-body="true"
+                   on-select="datechange()"
+                   search-enabled="false">
+            <ui-select-match placeholder="Standard Select">
+                <span> {{$select.selected.label}}</span>
+            </ui-select-match>
+            <ui-select-choices repeat="standardItem in standardSelectItems ">
+                <span ng-bind-html="standardItem.label"></span>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+    <div class="col-xs-6" ng-show="CustomDate">
+    <div class="input-group" style="margin-bottom:0px;">
+        <datepicker date-format="dd/MM/yyyy">
+            <input ng-model="FromDate" placeholder="From Date" class="form-control" type="text" />
+        </datepicker>
+        <div class="input-group-addon">TO</div>
+        <datepicker date-format="dd/MM/yyyy">
+            <input ng-model="ToDate" placeholder="To Date" class="form-control" type="text" />
+        </datepicker>
+        <div class="input-group-btn"><button type="button" ng-click="customDate()" class="btn btn-success btn-icon"><i class="glyphicon glyphicon-check"></i></button></div>
+        </div>
+    </div>
+    <div class="col-xs-1" ng-show="CustomDate">
+    <button type="button" ng-click="CustomDate=false" class="btn btn-warning">Clear</button>
+    </div>
+    <div class="col-xs-2"><button type="button" class="btn" ng-click="open('dev-release/app/pages/topFilter/UserTree.html', 'sm')">
+    All Users <span class="caret"></span>
+</button></div>
+
+        </div>
+    

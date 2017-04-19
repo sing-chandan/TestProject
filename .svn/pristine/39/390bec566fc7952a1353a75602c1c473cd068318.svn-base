@@ -1,0 +1,79 @@
+﻿@model LiveMonitoringWeb.Models.SubCategory
+
+@{
+    ViewBag.Title = "Edit";
+}
+<div class="container" style="min-height:500px;height:100%;">
+    <div class="row">
+
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-cog"></span> SubCategory &#58;&#58; Edit</h3>
+            <hr />
+        </div>
+        <div class="col-sm-1"></div><div class="col-sm-10" style="margin-bottom:100px;">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+                @Html.HiddenFor(model => model.SubCategoryId)
+                <div>
+                    @{
+                var message = string.Empty;
+                if (ViewBag.Message != null)
+                {
+                    message = ViewBag.Message;
+                }
+                <label style="color:red;">@message</label>
+                    }
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.CategoryId, "Category", new { @class = "labeltop" })
+                </div>
+                <div class="editor-field">
+                    @Html.DropDownList("CategoryId", null, new { @class = "textarea1" })
+                    @Html.ValidationMessageFor(model => model.CategoryId)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.SubCategoryTypeId, "SubCategoryTypes", new { @class = "labeltop" })
+                </div>
+                <div class="editor-field">
+                    @Html.DropDownList("SubCategoryTypeId", null, new { @class = "textarea1" })
+                    @Html.ValidationMessageFor(model => model.SubCategoryTypeId)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.SubCategoryName, new { @class = "labeltop" })
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.SubCategoryName, new { @class = "textarea1" })
+                    @Html.ValidationMessageFor(model => model.SubCategoryName)
+                </div>
+                <div class="editor-label">
+                    <span>
+                        @Html.EditorFor(model => model.IsProductive)
+                        @Html.ValidationMessageFor(model => model.IsProductive)
+                    </span> @Html.LabelFor(model => model.IsProductive, new { @class = "labelck" })
+                </div>
+                <div class="editor-field">
+                </div>
+                <div class="editor-label">
+                    <span>
+                        @Html.EditorFor(model => model.IsBlocked)
+                        @Html.ValidationMessageFor(model => model.IsBlocked)
+                    </span>   @Html.LabelFor(model => model.IsBlocked, new { @class = "labelck" })
+                </div>
+                <div class="editor-field">
+                </div>
+                <div class="editor-label ">
+                    <span>
+                        @Html.EditorFor(model => model.IsActive)
+                        @Html.ValidationMessageFor(model => model.IsActive)
+                    </span>   @Html.LabelFor(model => model.IsActive, new { @class = "labelck" })
+                </div>
+                <p style="padding-top:10px;">
+                    <input type="submit" value="Save" class="button-link-new" /> | @Html.ActionLink("Back to List", "Index")
+                </p>
+            }
+        </div>
+    </div>
+</div>

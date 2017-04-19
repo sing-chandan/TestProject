@@ -1,0 +1,139 @@
+﻿@model LiveMonitoringWeb.Models.treeWorkingPerformance
+@using LiveMonitoringWeb.Models;
+@{
+    ViewBag.Title = "Tree Working Performance";
+    Layout = null;
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+}
+
+<style type="text/css" media="screen">
+    .treeSlide-out-div {
+        padding: 10px;
+        width: 230px;
+        background-image: url(@AppBaseURL/Content/images/sand.png);
+        background-repeat: repeat;
+        border: #29216d 2px solid;
+        z-index: 10;
+        padding-left: 10px;
+   
+    }
+</style>
+<script>
+    $(function () {
+        $('.treeSlide-out-div').tabSlideOut({
+            tabHandle: '.handleTree',                              //class of the element that will be your tab
+            pathToTabImage: '@AppBaseURL/Content/images/arrowright.png',          //path to the image for the tab (optionaly can be set using css)
+            imageHeight: '70px',                               //height of tab image
+            imageWidth: '74px',                               //width of tab image
+            tabLocation: 'left',                               //side of screen where tab lives, top, right, bottom, or left
+            speed: 300,
+            action: 'click',                                  //options: 'click' or 'hover', action to trigger animation
+            topPos: '230px',
+            imagePadding: '10px',
+            //position from the top
+            fixedPosition: true
+            //options: true makes it stick(fixed position) on scroll
+        });
+    });
+
+</script>
+
+<style>
+    /*Here We will add some css for style our treeview*/
+    .collapse {
+        width: 15px;
+        background-image: url('@AppBaseURL/Content/images/ui-icons_454545_256x240.png');
+        background-repeat: no-repeat;
+        background-position: -111px -192px;
+        display: inline-block;
+        cursor: pointer;
+        visibility:visible;
+    }
+
+    .expand {
+        width: 15px;
+        background-image: url('@AppBaseURL/Content/images/ui-icons_454545_256x240.png');
+        background-repeat: no-repeat;
+        background-position: -128px -192px;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .treeview ul {
+        font: 14px Arial, Sans-Serif;
+        margin: 0px;
+        padding-left: 20px;
+        list-style: none;
+    }
+
+
+    .treeview > li > a {
+        font-weight: bold;
+    }
+
+    .treeview li {
+    }
+
+   .treeview li a {
+            padding: 4px;
+            font-size: 12px;
+            display: inline-block;
+            text-decoration: none;
+            width: auto;
+    color: white;
+
+        }
+    .image-crose
+    {
+    position: absolute;
+left: 130px;
+top: 4px;
+z-index: 1;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+
+        $(".treeview li>ul").css('display', 'none'); // Hide all 2-level ul
+        if ('@ViewBag.MachineName' != "") {
+            $('#' + '@ViewBag.MachineName').toggleClass("collapse expand");
+            $('#' + '@ViewBag.MachineName').closest('li').children('ul').slideToggle();
+        }
+
+
+
+        $(".collapsible").click(function (e) {
+            $(".treeview li>ul").css('display', 'none');
+            e.preventDefault();
+            $(this).toggleClass("collapse expand");
+            $(this).closest('li').children('ul').slideToggle();
+        });
+    });
+
+</script>
+<style>
+    .scrool {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+</style>
+
+<div style="z-index:10;">
+    <div id="wrap">
+        <div class="treeSlide-out-div " style="height:280px;">
+            <a class="handleTree" href="#" style="right:-80px;">Content</a>
+            <div class="treeview " style="background-color: #4C638E; border-radius: 10px; padding-top: 10px; padding-bottom: 10px; padding-right: 10px; padding-left: 10px; height: 250px; overflow-x: scroll; }">
+                @if (Model != null && Model.tree.Count() > 0)
+                {
+                    <ul>
+                        @TreeViewWorkPerfm.GetTreeView(Model.tree, @Convert.ToInt32(Model.tree.FirstOrDefault().ParentId), ViewBag.CustomerId)
+                    </ul>
+                }
+            </div>
+
+        </div>
+
+    </div>
+</div>

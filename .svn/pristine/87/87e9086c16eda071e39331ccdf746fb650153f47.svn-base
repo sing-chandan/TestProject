@@ -1,0 +1,16 @@
+﻿@model LiveMonitoringWeb.Models.Groups
+@{
+    Layout = null;
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+}
+
+<div class="col-sm-12 table-responsive" style="margin-bottom: 10px; margin-left: 35px; padding-top: 20px;">
+    <table style="width: 100%;" class="" align="center">
+        <tr>
+            <td>
+                @Html.DropDownList("GroupId", null, new { @class = "textarea1" })
+            </td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<LiveMonitoringWeb.Models.ProjectStatics>
+@using LiveMonitoringWeb.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_outh.cshtml";
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table').dataTable({
+            "iDisplayLength": 10,
+            "bDestroy": true
+        });
+    });
+    function myfunction(id, val) {
+        $('#' + id).tinytooltip({ message: val });
+    }
+</script>
+<div class="container" style="min-height:100%;margin-bottom:2%;">
+    <div class="row" style="margin-bottom:6%;">
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-list-alt"></span> Project Summary</h3><hr />
+        </div>
+        <div class="col-sm-12 table-responsive" style="margin-bottom:50px;">
+            <table id="table" style=" border-right: 1px solid #000000; " class="CSSTableGenerator">
+                <thead>
+                    <tr style=" background-color: #4C638E; color: white; height :30px;">
+                     
+                        <th>
+                            @Html.DisplayNameFor(model => model.MachineName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.UserName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.KeyLoggerCount)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.BrowserDetailCount)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AppDetailCount)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IdleTimeSum) (Sec.)
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MachineName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UserName)
+                            </td>
+                            <td>
+                                <a href='@AppBaseURL/KeyLogger/Index?MachineDetailId=@item.MachineDetailId'>@Html.DisplayFor(modelItem => item.KeyLoggerCount)</a>
+                            </td>
+                            <td>
+                                <a href='@AppBaseURL/BrowserDetails/Index?MachineDetailId=@item.MachineDetailId'>@Html.DisplayFor(modelItem => item.BrowserDetailCount)</a>
+                            </td>
+                            <td>
+                                <a href='@AppBaseURL/AppDetails/Index?MachineDetailId=@item.MachineDetailId'>@Html.DisplayFor(modelItem => item.AppDetailCount)</a>
+                            </td>
+                            <td>
+                                <a href='@AppBaseURL/IdleDetails/Index?MachineDetailId=@item.MachineDetailId'>@Html.DisplayFor(modelItem => item.IdleTimeSum)</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

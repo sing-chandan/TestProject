@@ -1,0 +1,49 @@
+﻿@model IEnumerable<LiveMonitoringWeb.Models.FileList>
+
+@{
+    Layout = null;
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table').dataTable({
+            "bDestroy": true
+        });
+    });
+</script>
+
+<div class="container">
+   
+    <div class="row">
+      
+
+        @if (Model.Count() == 0)
+{
+
+    <div class="col-sm-12 table-responsive " style="margin-bottom:50px;" id="newpost">
+        <table id="table" style=" border: 1px solid #000000;width:96%;height:150px; " class=" table-curved">
+            <tbody>
+
+                <tr>
+                    <td style="text-align:center;">No Data Available</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+}
+else
+{
+    foreach (var item in Model)
+    {
+        var imgTitle = "Computer:" + item.MachineName + "|User:" + item.UserName + "|File:" + item.FileURL;
+                <div class="left col-sm-12" style="text-align:right;">
+                    <a class="example-image-link" href="@AppBaseURL/@item.FileURL" data-lightbox="example-set" title="@imgTitle" data-title="@imgTitle"><img class="example-image" src="@AppBaseURL/@item.FileURL" alt="" /></a>
+                </div>
+            }
+        }
+        <br /><br /><br />
+    </div>
+</div>

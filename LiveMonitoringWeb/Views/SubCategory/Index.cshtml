@@ -1,0 +1,102 @@
+﻿@model IEnumerable<LiveMonitoringWeb.Models.SubCategory>
+@using LiveMonitoringWeb.Models;
+@{
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+    ViewBag.Title = "Index";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table').dataTable({
+            "iDisplayLength": 10,
+            "bDestroy": true
+        });
+    });
+</script>
+<div class="container">
+    <div class="row" style="padding-bottom:80px;">
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-cog"></span> Sub Category</h3>
+            <hr />
+        </div>
+
+        <div class="col-sm-12" style="text-align:right;padding-bottom:14px;">@Html.ActionLink("Create New", "Create", null, new { @class = "button-link" })</div>
+        <div class="col-sm-12 table-responsive">
+            <table id="table" style=" border-right: 1px solid #000000; " class="CSSTableGenerator ">
+                <thead>
+                    <tr style=" background-color: #4C638E; color: white; height :30px;">
+                        <th>
+                            @Html.DisplayNameFor(model => model.Category.CategoryName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.SubCategoryType.SubCategoryTypeName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.SubCategoryName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IsProductive)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IsBlocked)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IsActive)
+                        </th>
+                        <th >
+                            @Html.DisplayNameFor(model => model.IsDeleted)
+                        </th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @{ var Color = "black"; }
+                    @foreach (var item in Model)
+                    {
+                        if (item.IsDeleted.Equals(true))
+                        {
+                            Color = "red";
+                        }
+                        else
+                        {
+                            Color = "black";
+                        }
+                        <tr>
+                            <td style="color:@Color">
+                                @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                            </td>
+                            <td style="color:@Color">
+                                @Html.DisplayFor(modelItem => item.SubCategoryType.SubCategoryTypeName)
+                            </td>
+                            <td style="color:@Color">
+                                <label title="@Html.DisplayFor(modelItem => item.SubCategoryName)"> @Utility.EllipsisString(@Html.DisplayFor(modelItem => item.SubCategoryName).ToString(), 30)</label>
+                                
+                            </td>
+                            <td style="color:@Color">
+                                @Html.DisplayFor(modelItem => item.IsProductive)
+                            </td>
+                            <td style="color:@Color">
+                                @Html.DisplayFor(modelItem => item.IsBlocked)
+                            </td>
+                            <td style="color:@Color">
+                                @Html.DisplayFor(modelItem => item.IsActive)
+                            </td>
+                            <td style="color:@Color">
+                                @Html.DisplayFor(modelItem => item.IsDeleted)
+                            </td>
+                            <td style="width:80px;">
+                                
+                                <a href="@AppBaseURL/SubCategory/Edit?id=@item.SubCategoryId"><img src="~/Content/images/edit.png" title="Edit" style="padding-right:5px;" /></a>
+                                <a href="@AppBaseURL/SubCategory/Details?id=@item.SubCategoryId"><img src="~/Content/images/details.png" title="Details" style="padding-right:8px;" /></a>
+                                <a href="@AppBaseURL/SubCategory/Delete?id=@item.SubCategoryId"><img src="~/Content/images/delete.png" title="Delete" style="padding-right:5px;" /></a>
+                                
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

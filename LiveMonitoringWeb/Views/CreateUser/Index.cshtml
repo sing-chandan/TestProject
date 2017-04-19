@@ -1,0 +1,83 @@
+﻿@model IEnumerable<LiveMonitoringWeb.Models.UserProfile>
+@{
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+    var role = System.Web.Security.Roles.GetRolesForUser(WebSecurity.CurrentUserName);
+    if (role[0] == "Admin")
+    {
+        Layout = "~/Views/Shared/_Layout_AdminOuth.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout_Outh.cshtml";
+    }
+    ViewBag.Title = "Index";
+
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table').dataTable({
+            "iDisplayLength": 10,
+            "bDestroy": true
+        });
+    });
+</script>
+
+<div class="container" style="min-height:100%;margin-bottom:2%;">
+    <div class="row">
+
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-user"></span> Users</h3>
+            <hr />
+        </div>
+
+        <div class="col-sm-12" style="text-align:right;padding-bottom:14px;">@Html.ActionLink("Create New", "Create", null, new { @class = "button-link" })</div>
+
+        <div class="col-sm-12 table-responsive" style="padding-bottom:50px;">
+
+            <table id="table" style=" border-right: 1px solid #000000;width:100%; " class="CSSTableGenerator">
+                <thead>
+                    <tr style=" background-color: #4C638E; color: white; height :30px;border-top-left-radius:20px;">
+                        <th>
+                            @Html.DisplayNameFor(model => model.UserName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RoleName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CreateDate)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UserName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RoleName)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreateDate)
+                            </td>
+                            <td>
+                                
+                                <a href="@AppBaseURL/CreateUser/Edit?id=@item.UserId"><img src="~/Content/images/edit.png" title="Edit" style="padding-right:5px;" /></a>
+                                <a href="@AppBaseURL/CreateUser/Details?id=@item.UserId"><img src="~/Content/images/details.png" title="Details" style="padding-right:8px;" /></a>
+                                
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+       
+    </div>
+
+</div>
+

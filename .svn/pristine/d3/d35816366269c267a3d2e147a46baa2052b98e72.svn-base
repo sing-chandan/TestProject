@@ -1,0 +1,71 @@
+﻿@{
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+   
+
+
+}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" />
+    <title>LiveMonitoringWeb</title>
+    <link href="~/favicon.png" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+    <link href="@AppBaseURL/Content/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    @*<link href="@AppBaseURL/Content/css/bootstrap.min.css" rel="stylesheet" type="text/css" />*@
+    <link href="@AppBaseURL/Content/css/style.css" rel="stylesheet" type="text/css" />
+    <style>
+        .field-validation-error {
+            color: #FA0707;
+            list-style-type: none;
+        }
+
+        .field-validation-valid {
+            display: none;
+            list-style-type: none;
+        }
+
+        input.input-validation-error {
+            border: 1px solid #FA0707;
+            list-style-type: none;
+            margin-bottom: 2%;
+        }
+
+        input[type="checkbox"].input-validation-error {
+            border: 0 none;
+            list-style-type: none;
+        }
+
+        .validation-summary-errors {
+            color: #FA0707;
+            list-style-type: none;
+            font-size: 1.1em;
+            text-align: right;
+            padding-top: 2%;
+        }
+
+        .validation-summary-valid {
+            display: none;
+            list-style-type: none;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        .h2txt {
+            color: #152f48;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+
+        @RenderBody()
+
+    </div>
+</body>
+</html>

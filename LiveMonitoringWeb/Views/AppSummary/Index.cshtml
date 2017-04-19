@@ -1,0 +1,52 @@
+﻿@model IEnumerable<LiveMonitoringWeb.Models.AppDetail>
+@using LiveMonitoringWeb.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_outh.cshtml";
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table').dataTable({
+            "iDisplayLength": 10,
+            "bDestroy": true
+        });
+    });
+   
+</script>
+<div class="container" style="min-height:100%;margin-bottom:2%;">
+    <div class="row" style="margin-bottom:6%;">
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-cloud-upload"></span> AppSummary</h3><hr />
+        </div>
+        <div class="col-sm-12 table-responsive" style="margin-bottom:50px;">
+            <table id="table" style=" border-right: 1px solid #000000; " class="CSSTableGenerator">
+               <thead>
+                <tr style=" background-color: #4C638E; color: white; height :30px;">
+                    <th>
+                        @Html.DisplayNameFor(model => model.AppName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.count)
+                    </th>
+
+                </tr>
+                   </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <label title="@Html.DisplayFor(modelItem => item.AppName)" > @Utility.EllipsisString(@Html.DisplayFor(modelItem => item.AppName).ToString(), 60)</label>
+                        </td>
+                        <td>
+                            <a href='@AppBaseURL/AppDetails/Index?AppName=@item.AppName'>@Html.DisplayFor(modelItem => item.count)</a> 
+                        </td>
+                    </tr>
+                }
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</div>

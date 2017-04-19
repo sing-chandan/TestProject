@@ -1,0 +1,70 @@
+﻿@model IEnumerable<LiveMonitoringWeb.Models.AppDetail>
+@using LiveMonitoringWeb.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_outh.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table').dataTable({
+            "iDisplayLength": 10,
+            "bDestroy": true
+        });
+    });
+</script>
+<div class="container" style="min-height:100%;margin-bottom:2%;">
+    <div class="row" style="margin-bottom:6%;">
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-cog"></span> App Details</h3><hr />
+        </div>
+        <div class="col-sm-12 table-responsive" style="margin-bottom:50px;">
+            <table id="table" style=" border-right: 1px solid #000000; " class="CSSTableGenerator">
+                <thead>
+                    <tr style=" background-color: #4C638E; color: white; height :30px;">
+                        <th>
+                            @Html.DisplayNameFor(model => model.machine_detail.MachineName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.machine_detail.UserName)
+                        </th>
+                        <th style="width:300px;">
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AppName)
+                        </th>
+                        <th style="width:125px;">
+                            @Html.DisplayNameFor(model => model.CreatedDate)
+
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.machine_detail.MachineName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.machine_detail.UserName)
+                            </td>
+                            <td>
+                                <label title="@Html.DisplayFor(modelItem => item.Title)"> @Utility.EllipsisString(@Html.DisplayFor(modelItem => item.Title).ToString(), 100)</label>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AppName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreatedDate)
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,362 @@
+﻿@model LiveMonitoringWeb.Models.ScreenShot
+@using LiveMonitoringWeb.Models;
+@{
+    ViewBag.Title = "Screen Shot List";
+    Layout = "~/Views/Shared/_Layout_outh.cshtml";
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+}
+<style type="text/css" media="screen">
+    .treeSlide-out-div {
+        padding: 10px;
+      width: 230px;
+        background-image: url(@AppBaseURL/Content/images/sand.png);
+        background-repeat: repeat;
+        border: #29216d 2px solid;
+        z-index: 10;
+        padding-left: 10px;
+
+
+    }
+</style>
+<script>
+    $(function () {
+        $('.treeSlide-out-div').tabSlideOut({
+            tabHandle: '.handleTree',                              //class of the element that will be your tab
+            pathToTabImage: '@AppBaseURL/Content/images/arrowright.png',          //path to the image for the tab (optionaly can be set using css)
+            imageHeight: '70px',                               //height of tab image
+            imageWidth: '74px',                               //width of tab image
+            tabLocation: 'left',                               //side of screen where tab lives, top, right, bottom, or left
+            speed: 300,
+            action: 'click',                                  //options: 'click' or 'hover', action to trigger animation
+            topPos: '230px',
+            imagePadding: '10px',
+            //position from the top
+            fixedPosition: true
+            //options: true makes it stick(fixed position) on scroll
+        });
+    });
+
+</script>
+
+<style>
+    /*Here We will add some css for style our treeview*/
+    .collapse {
+        width: 15px;
+        background-image: url('@AppBaseURL/Content/images/ui-icons_454545_256x240.png');
+        background-repeat: no-repeat;
+        background-position: -111px -192px;
+        display: inline-block;
+        cursor: pointer;
+        visibility:visible;
+    }
+
+    .expand {
+        width: 15px;
+        background-image: url('@AppBaseURL/Content/images/ui-icons_454545_256x240.png');
+        background-repeat: no-repeat;
+        background-position: -128px -192px;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .treeview ul {
+        font: 14px Arial, Sans-Serif;
+        margin: 0px;
+        padding-left: 20px;
+        list-style: none;
+    }
+
+
+    .treeview > li > a {
+        font-weight: bold;
+    }
+
+    .treeview li {
+    }
+
+   .treeview li a {
+            padding: 4px;
+            font-size: 12px;
+            display: inline-block;
+            text-decoration: none;
+            width: auto;
+    color: white;
+
+        }
+    .image-crose
+    {
+    position: absolute;
+left: 130px;
+top: 4px;
+z-index: 1;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $(".treeview li>ul").css('display', 'none'); // Hide all 2-level ul
+        if ('@ViewBag.MachineName' != "") {
+            $('#' + '@ViewBag.MachineName').toggleClass("collapse expand");
+            $('#' + '@ViewBag.MachineName').closest('li').children('ul').slideToggle();
+        }
+
+        $(".collapsible").click(function (e) {
+            $(".treeview li>ul").css('display', 'none');
+            e.preventDefault();
+            $(this).toggleClass("collapse expand");
+            $(this).closest('li').children('ul').slideToggle();
+        });
+
+        $("#delete_confirm").click(function () {
+            jConfirm('Are you sure you want ot delete this image?', '', function (r) {
+                if (r == true) { }
+            });
+        });
+
+        $('#selectAll').click(function (event) {  //on click
+
+            if (this.checked) { // check select status
+                if (confirm("Are you sure you want to check all images for this user?")) {
+                    $('.CheckUncheck').each(function () { //loop through each checkbox
+                        if (this.id >= start && this.id <= end) {
+                            this.checked = true;  //select all checkboxes with class "checkbox1"
+                        }
+                        else {
+                            this.checked = false;
+                        }
+                    });
+                }
+                else {
+                    $('#selectAll').prop('checked', false);
+                }
+            }
+            else {
+                if (confirm("Are you sure you want to Uncheck all images for this user?")) {
+                    $('.CheckUncheck').each(function () { //loop through each checkbox
+                        this.checked = false; //deselect all checkboxes with class "checkbox1"
+                    });
+                }
+                else {
+                    $('#selectAll').prop('checked', true);
+                }
+            }
+        });
+
+        $('#DeleteSelected').click(function (event) {  //on click
+            if (confirm("Are you sure you want to delete selected images for this user?")) {
+                var FileUrls = "";
+                var sMachineDetailId = "";
+                $('.CheckUncheck').each(function () { //loop through each checkbox
+                    if (this.checked == true) {
+                        sMachineDetailId = this.name
+                        FileUrls += $(this).val() + '|';
+                    }
+                });
+                FileUrls = FileUrls.substring(0, FileUrls.length - 1)
+                if (sMachineDetailId != "" && sMachineDetailId != "") {
+                    location.href = '@AppBaseURL/ScreenShot/DeleteAllImage?FileURLs=' + FileUrls + '&sMachineDetailId=' + sMachineDetailId
+                }
+
+            }
+
+        });
+
+        $('.ImageFinder').hover(function () {
+            $(this).find('.DeleteFinder').css("visibility", "visible");
+        }, function () {
+            $(this).find('.DeleteFinder').css("visibility", "hidden");
+        });
+
+    });
+
+</script>
+
+<script>
+    var start = 0;
+    var end = 0;
+    /* when document is ready */
+    $(function () {
+
+        /* initiate plugin */
+        $("div.holder").jPages({
+            containerID: "itemContainer",
+            animation: "bounceInUp",
+            perPage: 10,
+            callback: function (pages, items) {
+                start = items.range.start;
+                end = items.range.end;
+                $('#selectAll').prop('checked', false);
+                $('.CheckUncheck').each(function () { //loop through each checkbox
+                    this.checked = false; //deselect all checkboxes with class "checkbox1"
+                });
+            }
+        });
+
+        /* on select change */
+        $("select").change(function () {
+            /* get new nº of items per page */
+            var newPerPage = parseInt($(this).val());
+            nPages = newPerPage;
+            /* destroy jPages and initiate plugin again */
+            $("div.holder").jPages("destroy").jPages({
+                containerID: "itemContainer",
+                animation: "bounceInUp",
+                perPage: newPerPage,
+                callback: function (pages, items) {
+                    start = items.range.start;
+                    end = items.range.end;
+                    $('.CheckUncheck').each(function () { //loop through each checkbox
+                        this.checked = false; //deselect all checkboxes with class "checkbox1"
+                    });
+                }
+            });
+        });
+
+
+    });
+
+</script>
+
+<style type="text/css">
+    .holder {
+        margin: 15px 0;
+    }
+
+        .holder a {
+            font-size: 12px;
+            cursor: pointer;
+            margin: 0 5px;
+            color: #333;
+        }
+
+            .holder a:hover {
+                background-color: #222;
+                color: #fff;
+            }
+
+            .holder a.jp-previous {
+                margin-right: 15px;
+            }
+
+            .holder a.jp-next {
+                margin-left: 15px;
+            }
+
+            .holder a.jp-current, a.jp-current:hover {
+                color: #FF4242;
+                font-weight: bold;
+            }
+
+            .holder a.jp-disabled, a.jp-disabled:hover {
+                color: #333;
+            }
+
+            .holder a.jp-current, a.jp-current:hover,
+            .holder a.jp-disabled, a.jp-disabled:hover {
+                cursor: default;
+                background: none;
+            }
+
+        .holder span {
+            margin: 0 5px;
+        }
+
+    form {
+        float: right;
+        margin-right: 10px;
+        font-size: 12px;
+    }
+
+        form label {
+            margin-right: 5px;
+        }
+</style>
+
+
+<div class="container" style="margin-bottom: 15%;">
+    <div class="row" style="margin-bottom:5%;">
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-picture"></span>Screen Shots</h3><hr />
+
+        </div>
+        <div class="col-lg-12">
+            @if (ViewBag.MachineCount != null)
+            {
+                <div class="treeSlide-out-div" style="height:280px;">
+                    <a class="handleTree" href="#" style="right:-80px;">Content</a>
+                    <div class="treeview " style="background-color: #4C638E; border-radius: 10px; padding-top: 10px; padding-bottom: 10px; padding-right: 10px; padding-left: 10px; height: 250px; overflow-x: scroll; }">
+                        @if (Model != null && Model.tree.Count() > 0)
+                        {
+                            <ul>
+                                @TreeView.GetTreeView(Model.tree, @Convert.ToInt32(Model.tree.FirstOrDefault().ParentId), ViewBag.CustomerId)
+                            </ul>
+                        }
+                    </div>
+                </div>
+
+            }
+            <div class="col-sm-12" id="dvPaging">
+                @if (@ViewBag.MachineName != "")
+                {
+                    <div class="row">
+                        <div class="col-sm-4" style="padding-left:20px;font-size:14px;font-weight:600">@ViewBag.MachineName <span class="glyphicon glyphicon-share-alt"></span> @ViewBag.UserName </div><div class="col-sm-8">
+                            <div style="float:right;">
+                                <span><input type="checkbox" id="selectAll" class="squaredTwo" style="height:20px;z-index:-1;" /><label for="checkboxG4" class="css-label" style="vertical-align:super;">Select All</label></span>
+                                <span style="margin-left:20px;"><a href="#" id="DeleteSelected" style="vertical-align: super; font-size: 14px; font-weight: 600; color: #333;">Delete Selected</a></span>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <hr />
+
+                <div class="row">
+                    <div class="col-sm-12" style="height: 100%; padding-bottom: 70px; font-size: 14px; font-weight: 600">
+                        <div id="content" class="defaults">
+                            <div id="dvPaging" style="margin-bottom:25px;border-bottom:solid 1px #4C638E;">
+                                <form>
+                                    <label>Screen Shots per page: </label>
+                                    <select id="pagenumber">
+                                        <option>10</option>
+                                        <option>15</option>
+                                        <option>20</option>
+                                        <option>25</option>
+                                    </select>
+                                </form>
+                                <div class="holder row"></div>
+                            </div>
+                            <ul id="itemContainer">
+                                @{
+                                    Int64 count = 0;
+                                    Int64 countId = 1;
+                                    foreach (var item in Model.filelist)
+                                    {
+                                        var db = new DBContext();
+                                        var imgTitle = "Computer:" + @ViewBag.MachineName + "|User:" + @ViewBag.UserName + "|File:" + item.FileURL;
+                                        var machinedetailid = Convert.ToString(db.MachineDetails.Where(a => a.MachineName == item.MachineName && a.UserName == item.UserName).Select(b => b.MachineDetailId).FirstOrDefault());
+                                        var FileName = Path.GetFileName(item.FileURL);
+                                        count = count + 1;
+                                        <div class="ImageFinder">
+                                            <div class="left col-sm-12" style="text-align: right;">
+                                                <span style="float:left;margin-left:4px;"><input type="checkbox" id="@countId" name="@machinedetailid" value="@FileName" class="squaredTwo CheckUncheck" /></span>
+                                                <div class="DeleteFinder" style="visibility: hidden">
+                                                    <a onclick="return confirm('Are you sure you want to delete this?')" href='@AppBaseURL/ScreenShot/DeleteImage?FileURL=@item.FileURL&sMachineDetailId=@machinedetailid' class="btn btn-danger btn-large image-crose"><i class="icon-white icon-heart"></i>X</a>
+                                                </div>
+                                                <a class="example-image-link spacetext" href="@AppBaseURL/@item.FileURL" data-lightbox="example-set" title=@imgTitle data-title=@imgTitle><img class="example-image" src="@AppBaseURL/@item.FileURL" alt="" /></a>
+                                            </div>
+                                        </div>
+                                        countId = countId + 1;
+                                    }
+                                    if (count <= 0)
+                                    {
+                                        <script type="text/javascript">$("#dvPaging").hide();</script>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

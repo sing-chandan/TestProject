@@ -1,0 +1,48 @@
+﻿@{
+    Layout = null;
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+}
+
+
+<div id="currentIdleUsersGraph"> 
+        <img id="loading" style="display: none;"
+             src="@AppBaseURL/content/images/Graph_image.png" />     
+    </div>
+<script>
+    $.get('@Url.Action("JsonCurrentIdleUsers")', function (result) {  
+        if (result.length == 0) {
+            $("#loading").show();
+            debugger;
+            $.get('<%= Url.Action("@AppBaseURL/Home/Index") %>', {},
+                function (data) {
+                    $('#currentIdleUsersGraph').html(data);
+                    $('#loading').hide();
+                });
+        }
+        else
+        {
+            new Morris.Bar({
+                element: 'currentIdleUsersGraph',
+                data: result,
+                // The name of the data record attribute that contains x-values.
+                xkey: 'User',
+                // A list of names of data record attributes that contain y-values.
+                ykeys: ['IdleMinute'],
+                // Labels for the ykeys -- will be displayed when you hover over the
+                // chart.
+                labels: ['Idle'],
+                hideHover: 'auto',
+                barColors: [' rgb(64, 103, 142)'],
+                resize: true,
+                parseTime: false,
+                xLabelAngle: 90,
+                axes: 'y',
+                units: ' min.',
+                integerYLabels: true,
+
+            });
+            $('svg').height(400);
+        }
+    });
+</script>

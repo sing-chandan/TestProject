@@ -1,0 +1,87 @@
+﻿@model IEnumerable<LiveMonitoringWeb.Models.MachineDetail>
+
+@{
+    ViewBag.Title = "CustomerMachineDetail";
+    Layout = "~/Views/Shared/_Layout_AdminOuth.cshtml";
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table').dataTable({
+            "iDisplayLength": 10,
+            "bDestroy": true
+        });
+    });
+</script>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-cog"></span> Customer Machine List</h3>
+            <hr />
+        </div>
+        <div class="col-sm-12 table-responsive">
+
+            <table id="table" style=" border-right: 1px solid #000000; " class="CSSTableGenerator">
+                <thead>
+                    <tr style=" background-color: #4C638E; color: white; height :30px;">
+                        <th>
+                            @Html.Label("Customer Name")
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.MachineMacAddress)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.MachineName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.MachineIP)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.UserName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CreatedDate)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.customer.FirstName)&nbsp;@Html.DisplayFor(modelItem => item.customer.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MachineMacAddress)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MachineName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MachineIP)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UserName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreatedDate)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+</div>
+

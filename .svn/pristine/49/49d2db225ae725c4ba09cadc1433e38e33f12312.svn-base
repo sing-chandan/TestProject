@@ -1,0 +1,6 @@
+
+
+#wrap {width:960px; margin: 0 auto; background:#999;}
+#header, #footer {background: #0f1923; color:#fff; padding:10px 40px;}
+#footer p {font-size:80%; text-align:right;}
+#content {background:#ccc; padding:10px 40px;}

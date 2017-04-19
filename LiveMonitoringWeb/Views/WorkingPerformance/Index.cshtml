@@ -1,0 +1,123 @@
+﻿@model IEnumerable<LiveMonitoringWeb.Models.WorkingPerformance>
+@{
+    Layout = "~/Views/Shared/_Layout_outh.cshtml";
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+}
+<script type="text/javascript">
+    $(function () {
+        $("#tabs").tabs();
+    });
+</script>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table').dataTable({
+            "iDisplayLength": 31,
+            "bDestroy": true
+        });
+    });
+</script>
+<div class="col-sm-12"><h3><span class="glyphicon glyphicon-stats"></span> Working Performance</h3><hr /></div>
+<div class="col-sm-12" style="padding-left:20px;font-size:14px;font-weight:600">
+
+    @if (@ViewBag.macName != "")
+    {
+        @ViewBag.macName  <span class="glyphicon glyphicon-share-alt"></span> @ViewBag.UserName
+    }
+    <hr />
+</div>
+
+@{Html.RenderAction("treePartialView", "WorkingPerformance");}
+<div class="clearfix"></div>
+<div id="tabs">
+
+    <ul>
+        <li><a href="#tabs-1">Graph Data</a></li>
+        <li><a href="#tabs-2">Tabular Data</a></li>
+    </ul>
+    <div id="tabs-1">
+        <div class="container" style="margin-bottom: 10px;">
+            <div class="row" style="margin-bottom:5%;">
+                <div class="col-sm-12">
+                    <div id="userWorkingPerformanceGraph"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="tabs-2">
+        <div class="col-sm-12 table-responsive" style="margin-bottom:50px;">
+            <table id="table" style=" border-right: 1px solid #000000; " class="CSSTableGenerator">
+                <thead>
+                    <tr style=" background-color: #4C638E; color: white; height :30px;">
+                        <th>
+                            @Html.DisplayName("Day of Month")
+                        </th>
+                        <th>
+                            @Html.DisplayName("working Time (mins)")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Idle Time (mins)")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Office Time (mins)")
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.dateOfMonth)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.workingTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.idleTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.groupTime)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+<script type="text/javascript">
+
+    $.get('@Url.Action("JsonWorkingPerformanceGraph","WorkingPerformance")', function (result) {
+        new Morris.Bar({
+            element: 'userWorkingPerformanceGraph',
+            data: result,
+            // The name of the data record attribute that contains x-values.
+            xkey: 'dateOfMonth',
+
+            // A list of names of data record attributes that contain y-values.
+            ymin: 0,
+            ymax: 720,
+            postUnits: " mins",
+            ykeys: ['workingTime', 'idleTime'],
+
+
+            // Labels for the ykeys -- will be displayed when you hover over the chart.
+            labels: ['workingTime', 'idleTime'],
+            barColors: ["#1531B2", "#f90909"],
+            hideHover: 'auto',
+            resize: true,
+            parseTime: false,
+            xLabelAngle: 360,
+            goals: [result[0].groupTime, 720]
+        });
+        $('svg').height(450);
+    });
+
+</script>
+

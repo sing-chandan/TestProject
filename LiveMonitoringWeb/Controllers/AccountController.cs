@@ -1,0 +1,503 @@
+﻿using CommonUtility;
+using LiveMonitoringWeb.Models;
+using System;
+using System.Security.Principal;
+using System.Text.RegularExpressions;
+using System.Web.Mvc;
+using System.Web.Security;
+using WebMatrix.WebData;
+using System.Linq;
+using System.IO;
+
+namespace LiveMonitoringWeb.Controllers
+{
+    [Authorize(Roles = "Admin,User,Customer")]
+    
+    public class AccountController : Controller
+    {
+        #region Declaration
+
+        private AppSettingReader appKeyReader = new AppSettingReader();
+
+        #endregion Declaration
+
+        //
+        // GET: /Account/Login
+
+        [AllowAnonymous]
+        public ActionResult Login(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
+        //
+        // POST: /Account/Login
+
+        [HttpPost]
+        [AllowAnonymous]
+       // [ValidateAntiForgeryToken]
+        public ActionResult Login(LoginModel model, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+
+                if (WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
+                {
+                    var role = System.Web.Security.Roles.GetRolesForUser(model.UserName);
+                    if (role[0] == "Admin")
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+
+                }
+                else
+                {
+                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
+                }
+            }
+            return View(model);
+            // If we got this far, something failed, redisplay form
+        }
+
+        //
+        // POST: /Account/LogOff
+
+        [HttpPost]
+      //  [ValidateAntiForgeryToken]
+        public ActionResult LogOff()
+        {
+            WebSecurity.Logout();
+            var role = System.Web.Security.Roles.GetRolesForUser(WebSecurity.CurrentUserName);
+            if (role[0] == "Admin")
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        //
+        // GET: /Account/Register
+
+        [AllowAnonymous]
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Account/Register
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult Register(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Attempt to register the user
+                try
+                {
+                    bool isEmail = Regex.IsMatch(model.Email, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase);
+                    if (isEmail)
+                    {
+                        using (var db = new DBContext())
+                        {
+                            var cp = db.Customers.Where(a => a.Email.Trim() == model.Email.Trim()).FirstOrDefault();
+                            if (cp != null)
+                            {
+                                ModelState.AddModelError("", "Email Address already exists..");
+                            }
+                            else
+                            {
+                                WebSecurity.CreateUserAndAccount(model.Email, model.Password);
+                                Roles.AddUserToRoles(model.Email, new[] { "Customer" });
+                                int currentUserId = WebSecurity.GetUserId(model.Email);
+                                //WebSecurity.Login(model.Email, model.Password);
+
+                                Customer customer = new Customer();
+                                customer.MembershipId = currentUserId;
+                                customer.Email = model.Email.Trim();
+                                customer.FirstName = string.Empty;
+                                customer.LastName = string.Empty;
+                                customer.OrganizationName = string.Empty;
+                                customer.CreateDate = DateTime.Now;
+                                db.Customers.Add(customer);
+                                db.SaveChanges();
+
+                                string strFreeUsers = appKeyReader.ReadKey("FreeUsers");
+                                string strPaidUsers = appKeyReader.ReadKey("PaidUsers");
+
+                                Subscriber subscriber = new Subscriber();
+                                subscriber.CustomerId = customer.CustomerId;
+                                subscriber.FreeUsers = string.IsNullOrEmpty(strFreeUsers) == true ? 0 : Convert.ToInt32(strFreeUsers);
+                                subscriber.PaidUsers = string.IsNullOrEmpty(strPaidUsers) == true ? 0 : Convert.ToInt32(strPaidUsers);
+                                subscriber.IsActive = true;
+                                subscriber.CreatedDate = DateTime.Now;
+                                subscriber.CreatedBy = currentUserId;
+                                db.Subscribers.Add(subscriber);
+                                db.SaveChanges();
+
+                                try
+                                {
+                                    //Successfully Register Mail Send to the User
+                                    string toemail = Convert.ToString(model.Email);
+                                    string subject = "Your free LiveMonitoring.com account has been created!";
+                                    string messageBody = string.Empty;
+                                    using (StreamReader reader = new StreamReader(Server.MapPath("~/App_Data/EmailTemplates/CustomerRegistration.html")))
+                                    {
+                                        messageBody = reader.ReadToEnd();
+                                    }
+                                    messageBody = messageBody.Replace("##Login##", model.Email);
+                                    messageBody = messageBody.Replace("##Password##", model.Password);
+                                    EmailUtils eu = new EmailUtils(toemail, subject, messageBody);
+                                    if (eu.SendMail())
+                                    {
+                                    }
+
+                                    WebSecurity.Login(model.Email, model.Password, false);
+
+                                    return RedirectToAction("Index", "Home");
+                                }
+                                catch (Exception ex)
+                                {
+                                    ModelState.AddModelError("", "Error occured while sending email." + ex.Message);
+                                }
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Invalid Email Address");
+                    }
+                }
+                catch (MembershipCreateUserException e)
+                {
+                    ModelState.AddModelError("", ErrorCodeToString(e.StatusCode));
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        //
+        // GET: /Account/Manage
+
+        public ActionResult Manage(ManageMessageId? message)
+        {
+            ViewBag.StatusMessage =
+                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
+                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
+                : message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
+                : "";
+            ViewBag.HasLocalPassword = true;
+            ViewBag.ReturnUrl = Url.Action("Manage");
+            return View();
+        }
+
+        //
+        // POST: /Account/Manage
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Manage(LocalPasswordModel model)
+        {
+            bool hasLocalAccount = true;
+            ViewBag.HasLocalPassword = hasLocalAccount;
+            ViewBag.ReturnUrl = Url.Action("Manage");
+            if (hasLocalAccount)
+            {
+                if (ModelState.IsValid)
+                {
+                    // ChangePassword will throw an exception rather than return false in certain failure scenarios.
+                    bool changePasswordSucceeded;
+                    try
+                    {
+                        changePasswordSucceeded = WebSecurity.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword);
+                    }
+                    catch (Exception)
+                    {
+                        changePasswordSucceeded = false;
+                    }
+
+                    if (changePasswordSucceeded)
+                    {
+                        return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
+                    }
+                }
+            }
+            else
+            {
+                // User does not have a local password so remove any validation errors caused by a missing
+                // OldPassword field
+                ModelState state = ModelState["OldPassword"];
+                if (state != null)
+                {
+                    state.Errors.Clear();
+                }
+
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        WebSecurity.CreateAccount(User.Identity.Name, model.NewPassword);
+                        return RedirectToAction("Manage", new { Message = ManageMessageId.SetPasswordSuccess });
+                    }
+                    catch (Exception)
+                    {
+                        ModelState.AddModelError("", String.Format("Unable to create local account. An account with the name \"{0}\" may already exist.", User.Identity.Name));
+                    }
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        // GET: /Account/ForgotPassword
+        [AllowAnonymous]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        // POST: /Account/ForgotPassword
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult ForgotPassword(ForgotPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                MembershipUser user;
+                using (var context = new DBContext())
+                {
+                    var foundUserName = (from u in context.tbl_UserProfile
+                                         where u.UserName == model.Email
+                                         select u.UserName).FirstOrDefault();
+                    if (foundUserName != null)
+                    {
+                        user = Membership.GetUser(foundUserName.ToString());
+                    }
+                    else
+                    {
+                        user = null;
+                    }
+                }
+
+                if (user != null)
+                {
+                    // Generae password token that will be used in the email link to authenticate user
+                    var token = WebSecurity.GeneratePasswordResetToken(user.UserName);
+                    // Generate the html link sent via email
+                    string resetLink = "<a href='"
+                       + Url.Action("RecoverPassword", "Account", new { rt = token }, "http")
+                       + "'>Reset Password Link</a>";
+
+                    try
+                    {
+                        //Forgot Password Mail Send to the User
+                        string toemail = Convert.ToString(model.Email);
+                        string subject = "Account Recovery - LiveMonitoring.com";
+                        string messageBody = string.Empty;
+                        using (StreamReader reader = new StreamReader(Server.MapPath("~/App_Data/EmailTemplates/ForgotPassword.html")))
+                        {
+                            messageBody = reader.ReadToEnd();
+                        }
+                        messageBody = messageBody.Replace("##user##", model.Email);
+                        messageBody = messageBody.Replace("##resetLink##", resetLink);
+                        EmailUtils eu = new EmailUtils(toemail, subject, messageBody);
+                        if (eu.SendMail())
+                        {
+                        }
+
+                        ModelState.AddModelError("", "Account recovery email sent. Check your inbox.");
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", "Error occured while sending email." + ex.Message);
+                    }
+                }
+                else // Email not found
+                {
+                    /* Note: You may not want to provide the following information
+                    * since it gives an intruder information as to whether a
+                    * certain email address is registered with this website or not.
+                    * If you're really concerned about privacy, you may want to
+                    * forward to the same "Success" page regardless whether an
+                    * user was found or not. This is only for illustration purposes.
+                    */
+                    ModelState.AddModelError("", "Email address not found.");
+                }
+            }
+
+            /* You may want to send the user to a "Success" page upon the successful
+             * sending of the reset email link. Right now, if we are 100% successful
+             * nothing happens on the page. :P */
+            return View(model);
+        }
+
+        // GET: /Account/RecoverPassword
+        [AllowAnonymous]
+        public ActionResult RecoverPassword(string rt)
+        {
+            using (var db = new DBContext())
+            {
+                bool any = (from j in db.tbl_webpages_Membership
+                            where j.PasswordVerificationToken == rt
+                            select j).Any();
+
+                if (any == true)
+                {
+                    bool expire = (from j in db.tbl_webpages_Membership
+                                   where j.PasswordVerificationToken == rt
+                                   && (j.PasswordVerificationTokenExpirationDate < DateTime.Now)
+                                   select j).Any();
+                    if (!expire)
+                    {
+                        RecoverPasswordModel model = new RecoverPasswordModel();
+                        model.ReturnToken = rt;
+                        return View(model);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "This link has expired.");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "The recovery link you just used is not valid.");
+                }
+            }
+
+            return View();
+        }
+
+        // POST: /Account/RecoverPassword
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult RecoverPassword(RecoverPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var db = new DBContext())
+                {
+                    var foundUserId = (from u in db.tbl_UserProfile
+                                       where u.UserName == model.Email
+                                       select u.UserId).FirstOrDefault();
+
+                    if (foundUserId > 0)
+                    {
+                        bool any = (from j in db.tbl_webpages_Membership
+                                    where (j.PasswordVerificationToken == model.ReturnToken)
+                                    && (j.UserId == foundUserId)
+                                    select j).Any();
+                        if (any == true)
+                        {
+                            bool resetResponse = WebSecurity.ResetPassword(model.ReturnToken, model.Password);
+                            if (resetResponse)
+                            {
+                                var foundUserName = (from u in db.tbl_UserProfile
+                                                     where u.UserName == model.Email
+                                                     select u.UserName).FirstOrDefault();
+
+                                WebSecurity.Login(foundUserName, model.Password, false);
+
+                                return RedirectToAction("Index", "Home");
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("", "Something went wrong!");
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Email and recovery link not maching.");
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Email address not found.");
+                    }
+                }
+            }
+
+            return View(model);
+        }
+
+        #region Helpers
+
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        public enum ManageMessageId
+        {
+            ChangePasswordSuccess,
+            SetPasswordSuccess,
+            RemoveLoginSuccess,
+        }
+
+        private static string ErrorCodeToString(MembershipCreateStatus createStatus)
+        {
+            // See http://go.microsoft.com/fwlink/?LinkID=177550 for
+            // a full list of status codes.
+            switch (createStatus)
+            {
+                case MembershipCreateStatus.DuplicateUserName:
+                    return "User name already exists. Please enter a different user name.";
+
+                case MembershipCreateStatus.DuplicateEmail:
+                    return "A user name for that e-mail address already exists. Please enter a different e-mail address.";
+
+                case MembershipCreateStatus.InvalidPassword:
+                    return "The password provided is invalid. Please enter a valid password value.";
+
+                case MembershipCreateStatus.InvalidEmail:
+                    return "The e-mail address provided is invalid. Please check the value and try again.";
+
+                case MembershipCreateStatus.InvalidAnswer:
+                    return "The password retrieval answer provided is invalid. Please check the value and try again.";
+
+                case MembershipCreateStatus.InvalidQuestion:
+                    return "The password retrieval question provided is invalid. Please check the value and try again.";
+
+                case MembershipCreateStatus.InvalidUserName:
+                    return "The user name provided is invalid. Please check the value and try again.";
+
+                case MembershipCreateStatus.ProviderError:
+                    return "The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+
+                case MembershipCreateStatus.UserRejected:
+                    return "The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+
+                default:
+                    return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+            }
+        }
+
+        #endregion Helpers
+    }
+}

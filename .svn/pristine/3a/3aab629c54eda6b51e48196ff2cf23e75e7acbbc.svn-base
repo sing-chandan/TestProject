@@ -1,0 +1,17 @@
+﻿@if (Request.IsAuthenticated)
+{
+
+    <text >
+    <a href="javascript:document.getElementById('logoutForm').submit() " style="float: right; color: #4C638E; margin-top: 0%; padding-left: 10px;">Log off</a>
+    <span style="padding-right:10px;">
+        Hello, @User.Identity.Name!
+
+        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+        {
+            @Html.AntiForgeryToken()
+
+        }
+
+    </span>
+    </text>
+}

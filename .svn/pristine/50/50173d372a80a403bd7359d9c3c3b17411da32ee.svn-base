@@ -1,0 +1,188 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace LiveMonitoring
+{
+    class AppTracker
+    {
+        public static string OldTitle { get; set; }
+
+        [DllImport("user32.dll")]
+        static extern Int32 GetWindowThreadProcessId(IntPtr hWnd, out int lpdwProcessId);
+
+        [DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        static extern int GetWindowTextLength(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+        public static string GetActiveWindowTitle()
+        {
+            IntPtr handle = GetForegroundWindow();
+            if (!handle.Equals(IntPtr.Zero))
+            {
+                int tLength = GetWindowTextLength(handle);
+                if (tLength > 0)
+                {
+                    StringBuilder wTitle = new StringBuilder(string.Empty, tLength + 1);
+                    if (GetWindowText(handle, wTitle, wTitle.Capacity) > 0)
+                    {
+                        return wTitle.ToString();
+                    }
+                }
+            }
+            return string.Empty;
+        }
+
+        public static void fncAppTracker()
+        {
+            if (GlobalClass.CheckForInternetConnection())
+            {
+                try
+                {
+                    string title = string.Empty;
+                    string appexe = string.Empty;
+
+                    IntPtr handle = GetForegroundWindow();
+                    if (!handle.Equals(IntPtr.Zero))
+                    {
+                        int tLength = GetWindowTextLength(handle);
+                        if (tLength > 0)
+                        {
+                            if (tLength > 255)
+                            {
+                                tLength = 255;
+                            }
+                            StringBuilder wTitle = new StringBuilder(string.Empty, tLength + 1);
+                            if (GetWindowText(handle, wTitle, wTitle.Capacity) > 0)
+                            {
+                                title = wTitle.ToString();
+                            }
+                            if (title != OldTitle && !String.IsNullOrEmpty(title))
+                            {
+                                int wProcID = 0;
+                                if (GetWindowThreadProcessId(handle, out wProcID) > 0)
+                                {
+                                    appexe = Process.GetProcessById(wProcID).ProcessName;
+                                }
+                                if (!string.IsNullOrEmpty(appexe))
+                                {
+                                    if (appexe.Equals("firefox"))
+                                    {
+                                        BrowserUrlTracker.ReadBrowserUrlforFirefox();
+                                    }
+                                    else if (appexe.Equals("iexplore"))
+                                    {
+                                        BrowserUrlTracker.ReadBrowserUrlforIE();
+                                    }
+                                    else if (appexe.Equals("chrome"))
+                                    {
+                                        BrowserUrlTracker.ReadBrowserUrlforChrome();
+                                    }
+                                    else if (appexe.Equals("opera"))
+                                    {
+                                        BrowserUrlTracker.ReadBrowserUrlforOpera();
+                                    }
+                                    else
+                                    {
+                                        OldTitle = title;
+                                        appexe = appexe + ".exe";
+                                        WriteData(title, appexe);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error on AppTracker.cs in fncAppTracker function :- " + ex.Message);
+                    GlobalClass.WriteTolog("Error on AppTracker.cs in fncAppTracker function :- " + ex.Message);
+                }
+            }
+            else
+            {
+                GlobalClass.WriteTolog("server not giving any response");
+            }
+        }
+
+        public static string GetExecutable(string Title)
+        {
+            Process[] processes = Process.GetProcesses();
+            string AppExe = string.Empty;
+            foreach (Process process in processes)
+            {
+                if (!string.IsNullOrEmpty(process.MainWindowTitle))
+                {
+                    if (process.MainWindowTitle == Title)
+                    {
+                        AppExe = process.ProcessName + ".exe";
+                        return AppExe;
+                    }
+
+                }
+            }
+            return AppExe;
+        }
+
+        private static void WriteData(string Title, string appexe)
+        {
+            if (GlobalClass.CheckForInternetConnection())
+            {
+                try
+                {
+                    using (HttpClient client = MachineInfoTracker.GetHttpClient())
+                    {
+                        AppDetail model = new AppDetail { MachineDetailId = Program.MachineId, AppName = appexe, Title = Title, CreatedDate = DateTime.Now };
+                        HttpResponseMessage Response = client.PostAsync<AppDetail>("api/LiveMonitoringAPI/AddAppDetails", model, new JsonMediaTypeFormatter()).Result;
+
+                        if (Response.IsSuccessStatusCode == true)
+                        {
+                            var result = Response.Content.ReadAsStringAsync().Result;
+                            if (result.Contains("OK"))
+                            {
+                                Console.WriteLine("Record (AppTraker) saved successfully.");
+                            }
+                            else if (result.Contains("Invalid"))
+                            {
+                                Program.AddMachineInfo();
+                            }
+                        }
+                        else if (Response != null && Response.IsSuccessStatusCode == false)
+                        {
+                            var result = Response.Content.ReadAsStringAsync().Result;
+                            Console.Write("Error Message - " + result);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error In AppTracker.cs in WriteData Fuction " + ex.Message);
+                }
+            }
+        }
+    }
+
+    public class AppDetail
+    {
+        public int AppId { get; set; }
+
+        public int MachineDetailId { get; set; }
+
+        public string AppName { get; set; }
+
+        public string Title { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
+    }
+}

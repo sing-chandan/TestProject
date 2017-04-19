@@ -1,0 +1,96 @@
+﻿@model LiveMonitoringWeb.Models.Subscriber
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>Subscriber</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.customer.Email)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.customer.Email)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.FreeUsers)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FreeUsers)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PaidUsers)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PaidUsers)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.IsActive)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsActive)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.IsDeleted)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.IsDeleted)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreatedDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.CreatedBy)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CreatedBy)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ModifiedDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ModifiedDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.ModifiedBy)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ModifiedBy)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.DeletedDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DeletedDate)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.DeletedBy)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DeletedBy)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

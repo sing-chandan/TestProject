@@ -1,0 +1,71 @@
+﻿<top-filter></top-filter>
+<div class="row">
+    <div class="col-md-12">
+        <div ba-panel ba-panel-title="Project Summary" ba-panel-class="with-scroll">
+           
+            <table class="table table-bordered table-hover" st-table="displayedCollection" st-safe-src="rowCollection">
+                <thead>
+                    <tr class="sortable ">
+                        <th class="table-id" st-sort="id" st-sort-default="true">#</th>
+                        <th st-sort="MachineName">Machine Name</th>
+                        <th st-sort="UserName">User Name</th>
+                        <th st-sort="KeyLoggerCount">Key Log</th>
+                        <th st-sort="BrowserDetailCount">Browser Detail</th>
+                        <th st-sort="AppDetailCount">App Detail</th>
+                        <th st-sort="IdleTimeSum">Idle Time (Sec.)</th>
+
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>
+                            <input st-search="MachineName" placeholder="Search Machine Name" class="input-sm form-control search-input"
+                                   type="search" />
+                        </th>
+                        <th>
+                            <input st-search="UserName" placeholder="Search User Name" class="input-sm form-control search-input"
+                                   type="search" />
+                        </th>
+                        <th>
+                            <input st-search="KeyLoggerCount" placeholder="Search Key Log" class="input-sm form-control search-input"
+                                   type="search" />
+                        </th>
+                        <th>
+                            <input st-search="BrowserDetailCount" placeholder="Search Browser Detail" class="input-sm form-control search-input" type="search" />
+                        </th>
+                        <th>
+                            <input st-search="AppDetailCount" placeholder="Search App Detail" class="input-sm form-control search-input" type="search" />
+                        </th>
+                        <th>
+                            <input st-search="IdleTimeSum" placeholder="Search Created Date" class="input-sm form-control search-input" type="search" />
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in displayedCollection">
+                        <td class="table-id">{{$index+1}}</td>
+                        <td>{{item.MachineName}}</td>
+                        <td>{{item.UserName}}</td>
+                        <td>{{item.KeyLoggerCount}}</td>
+                        <td>{{item.BrowserDetailCount}}</td>
+                        <td>{{item.AppDetailCount}}</td>
+                        <td>{{item.IdleTimeSum}}</td>
+
+
+                        <!--<td><a class="email-link" ng-href="mailto:{{item.email}}">{{item.email}}</a></td>-->
+
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            <div st-pagination="" st-items-by-page="5" st-displayed-pages="5"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            
+        </div>
+    </div>
+</div>
+

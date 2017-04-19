@@ -1,0 +1,142 @@
+﻿@{
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+
+}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <title>LiveMonitoringWeb</title>
+    <link href="~/favicon.png" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+    <link href="@AppBaseURL/Content/css/jquery-ui.css" rel="stylesheet" />
+    <link href="@AppBaseURL/Content/css/jquery.dataTables.css" rel="stylesheet" />
+    <link href="@AppBaseURL/Content/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="@AppBaseURL/Content/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="@AppBaseURL/Content/css/lightbox.css" rel="stylesheet" type="text/css" />
+    <link href="@AppBaseURL/Content/css/screennew.css" rel="stylesheet" type="text/css" />
+    <link href="@AppBaseURL/Content/css/menu/meanmenu.css" rel="stylesheet" type="text/css" />
+    <link href="@AppBaseURL/Content/morrisJS/morris.css" rel="stylesheet" type="text/css" />
+    <link href="@AppBaseURL/Content/css/default.css" rel="stylesheet" type="text/css" />
+    <link href="@AppBaseURL/Content/css/style-menu.css" rel="stylesheet" type="text/css" />
+    <script src="@AppBaseURL/Scripts/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="@AppBaseURL/Scripts/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="@AppBaseURL/Scripts/bootstrap.js" type="text/javascript"></script>
+    <script src="@AppBaseURL/Scripts/lightbox.js"></script>
+    <script src="@AppBaseURL/Scripts/raphael-min.js" type="text/javascript"></script>
+    <script src="@AppBaseURL/Content/morrisJS/morris.min.js" type="text/javascript"></script>
+    <script src="@AppBaseURL/Scripts/zebra_datepicker.js" type="text/javascript"></script>
+    <script src="@AppBaseURL/Scripts/script-menu.js" type="text/javascript"></script>
+    <script src="@AppBaseURL/Scripts/jquery-ui.js"></script>
+    <script src="@AppBaseURL/Content/css/menu/jquery.meanmenu.js" type="text/javascript"></script>
+
+    <script src="@AppBaseURL/Scripts/jPages.js"></script>
+    <link href="@AppBaseURL/Content/css/jPages.css" rel="stylesheet" />
+    <link href="@AppBaseURL/Content/css/animate.css" rel="stylesheet" />
+
+
+    <script>
+        jQuery(document).ready(function () {
+            $(document).tooltip({
+                track: true
+            });
+        });
+
+    </script>
+
+
+</head>
+
+<style>
+    .bg-col-Graph-admin {
+        min-width: 95%;
+        margin-bottom: 15px;
+        /*background-color: rgba(47, 49, 53, 0.05);*/
+        background-image: url(@AppBaseURL/Content/images/sand.png);
+        min-height: 350px;
+        height: 100%;
+    }
+    .field-validation-error {
+        color: #e80c4d;
+        list-style-type: none;
+    }
+
+    .field-validation-valid {
+        display: none;
+        list-style-type: none;
+    }
+
+    input.input-validation-error {
+        border: 1px solid #e80c4d;
+        list-style-type: none;
+    }
+
+    input[type="checkbox"].input-validation-error {
+        border: 0 none;
+        list-style-type: none;
+    }
+
+    .validation-summary-errors {
+        color: #e80c4d;
+        list-style-type: none;
+        font-size: 1.1em;
+    }
+
+    .validation-summary-valid {
+        display: none;
+        list-style-type: none;
+    }
+
+    ul {
+        list-style-type: none;
+    }
+
+    .h2txt {
+        color: #152f48;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 img-responsive logo-aling" style="padding-bottom:1%;padding-top:1%;"><img src="@AppBaseURL/content/images/rgl_logo.png" class="logo-image" /></div>
+            <div class="col-sm-8">
+                <div class="col-sm-12"><div style="text-align: right; padding-top: 1%; color: #4C638E;">@Html.Partial("_LoginPartial")</div></div>
+                <div class="col-sm-12" style="padding-bottom:1%;padding-top:1%;">
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <a class="toggleMenu glyphicon glyphicon-align-justify " href="#" style="color:white;"></a>
+            <ul class="nav">
+                <li class="test">@Html.ActionLink("Dashboard", "Index", "Admin", null, new { @class = "a" })</li>
+                <li class="test">@Html.ActionLink("Users", "Index", "CreateUser", null, new { @class = "a" })</li>
+                <li class="test">@Html.ActionLink("Configuration", "Index", "Configuration", null, new { @class = "a" })</li>
+                <li class="test">@Html.ActionLink("Customers", "CustomerList", "Customer", null, new { @class = "a" })</li>
+                <li class="test">@Html.ActionLink("Subscribers", "SubscriberList", "Subscriber", null, new { @class = "a" })</li>
+                <li>@Html.ActionLink("Change Password", "Manage", "Account", null, new { @class = "a" })</li>
+                @*<li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>0*@
+            </ul>
+        </div>
+
+        <hr />
+        <div class="row">
+            @RenderBody()
+        </div>
+        <div class="row navbar-fixed-bottom " style="background-color: rgb(47, 49, 53);">
+            <p style="text-align:center;color:white;padding-top:10px;padding-left:10px;padding-right:10px;">
+                Copyright © (2015) Regal Outsource (India) Private Limited. All Rights
+                Reserved.
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>

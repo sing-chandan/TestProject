@@ -1,0 +1,13 @@
+﻿<div class="modal-content" ng-controller="TopFilterCtrl">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="$dismiss()" aria-label="Close">
+            <em class="ion-ios-close-empty sn-link-close"></em>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Select User</h4>
+    </div>
+    <div class="modal-body">
+        <div class="tree-locations-container" js-tree="treeLocationCodes.config" ng-model="locationCodes" tree-events="select_node:treeLocationCodes.onSelect; deselect_node:treeLocationCodes.onSelect;" tree="treeLocationCodes.instance"></div>
+
+    </div>
+
+</div>

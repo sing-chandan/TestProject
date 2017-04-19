@@ -1,0 +1,93 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div ba-panel ba-panel-title="My Profile" ba-panel-class="with-scroll">
+
+           <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-bordered table-hover">
+                <thead>
+                    <tr class="sortable ">
+                        <th class="table-id" st-sort="id" st-sort-default="true">#</th>
+                        <th st-sort="Email">Email</th>
+                        <th st-sort="FirstName">First Name</th>
+                        <th st-sort="LastName">Last Name</th>
+                        <th st-sort="OrganizationName">Organization Name</th>
+                        <th st-sort="CreateDate">Created Date</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <th>
+                            <input st-search="Email" placeholder="Search Email" class="input-sm form-control search-input"
+                                   type="search" />
+                        </th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                       
+
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr ng-repeat="item in displayedCollection" class="editable-row">
+                        <td>
+                            {{$index}}
+                        </td>
+                        <td>
+                            <span editable-text="item.Email" e-name="Email" e-form="rowform" e-required>
+                                {{ item.Email || 'empty' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span editable-text="item.FirstName" e-name="FirstName" e-form="rowform">
+                                {{ item.FirstName || 'empty' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span editable-text="item.LastName" e-name="LastName" e-form="rowform">
+                                {{ item.LastName || 'empty' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span editable-text="item.OrganizationName" e-name="OrganizationName" e-form="rowform">
+                                {{ item.OrganizationName || 'empty' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span editable-text="item.CreateDate" e-name="CreateDate" e-form="rowform">
+                                {{ item.CreateDate || 'empty' }}
+                            </span>
+                        </td>
+                     
+
+                        <td>
+                            <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline"
+                                  shown="inserted == item">
+                                <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary editable-table-button btn-xs">
+                                    Save
+                                </button>
+                                <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default editable-table-button btn-xs">
+                                    Cancel
+                                </button>
+                            </form>
+                            <div class="buttons" ng-show="!rowform.$visible">
+                                <button class="btn btn-primary editable-table-button btn-xs" ng-click="rowform.$show()">Edit</button>
+                                <!--<button class="btn btn-danger editable-table-button btn-xs" ng-click="removeUser($index)">Delete</button>-->
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="9" class="text-center">
+                            <div st-pagination="" st-items-by-page="10" st-displayed-pages="5"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+</div>

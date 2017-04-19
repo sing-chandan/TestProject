@@ -1,0 +1,65 @@
+﻿@model LiveMonitoringWeb.Models.Category
+
+@{
+    ViewBag.Title = "Edit";
+}
+<div class="container" style="min-height:400px;height:100%;">
+    <div class="row">
+
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-cog"></span> Category &#58;&#58; Edit</h3>
+            <hr />
+        </div>
+        <div class="col-sm-1"></div><div class="col-sm-10" style="margin-bottom:100px;">
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+
+
+                @Html.HiddenFor(model => model.CategoryId)
+                <div>
+                    @{
+                var message = string.Empty;
+                if (ViewBag.Message != null)
+                {
+                    message = ViewBag.Message;
+                }
+                <label style="color:red;">@message</label>
+                    }
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.CategoryName, new { @class = "labeltop" })
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.CategoryName, new { @class = "textarea1" })
+                    @Html.ValidationMessageFor(model => model.CategoryName)
+                </div>
+
+                <div class="editor-label">
+                    <span>
+                        @Html.EditorFor(model => model.IsBlocked)
+                        @Html.ValidationMessageFor(model => model.IsBlocked)
+                    </span>  @Html.LabelFor(model => model.IsBlocked, new { @class = "labelck" })
+                </div>
+
+
+                <div class="editor-label">
+                    <span>
+                        @Html.EditorFor(model => model.IsActive)
+                        @Html.ValidationMessageFor(model => model.IsActive)
+                    </span> @Html.LabelFor(model => model.IsActive, new { @class = "labelck" })
+                </div>
+
+
+                <p style="padding-top:10px;">
+                    <input type="submit" value="Save" class="button-link" /> | @Html.ActionLink("Back to List", "Index")
+                </p>
+
+            }
+        </div>
+    </div>
+</div>

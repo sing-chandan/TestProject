@@ -1,0 +1,57 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div ba-panel ba-panel-title="User Permission List" ba-panel-class="with-scroll">
+            <div class="add-row-editable-table">
+                <div class="pull-left">
+                    User Name
+                    <select class="form-control" ng-options="s.Value as s.Text for s in Userlist" ng-model="User"></select>
+                </div>
+                <div class="pull-right">
+                    <button class="btn btn-primary" ng-click="addUser()">Save</button>
+                </div>
+            </div>
+            <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-bordered table-hover">
+                <thead>
+                    <tr class="sortable ">
+                        <th class="table-id" st-sort="id" ><input type="checkbox" /></th>
+                        <th st-sort="ScreenDisplayName">Screen Display Name</th>
+                        <th st-sort="ScreenType">Shedule Type</th>
+
+
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <th>
+                            <input st-search="ScreenDisplayName" placeholder="Search display Name" class="input-sm form-control search-input"
+                                   type="search" />
+                        </th>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr ng-repeat="item in displayedCollection" class="editable-row">
+                        <td>
+                            <input type="checkbox" ng-model="item.check" />
+
+                        </td>
+                        <td>
+                            {{item.ScreenDisplayName}}
+                        </td>
+                        <td >
+                            {{item.ScreenType}}
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="9" class="text-center">
+                            <div st-pagination="" st-items-by-page="10" st-displayed-pages="5"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+﻿@model IEnumerable<LiveMonitoringWeb.Models.BrowserDetail>
+@using LiveMonitoringWeb.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table').dataTable({
+            "bDestroy": true
+        });
+    });
+</script>
+
+<div class="col-sm-12 table-responsive " style="margin-bottom:50px;">
+    <table id="table" style=" border: 1px solid #000000; " class="CSSTableGeneratorHome table-curved">
+        <tr style=" background-color: #4C638E; color: white; height: 30px;">
+            <th>
+                @Html.DisplayNameFor(model => model.URL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.count)
+            </th>
+
+        </tr>
+
+        @if (Model.Count() == 0)
+        {
+            <tr style="height: 190px; " id="newpost">
+
+                <td style="text-align:center;background-color:none;">No Data Available</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td style=" border-left: 1px solid #ddd; border-top: 1px solid #ddd;">
+
+                        <label id="@Html.DisplayFor(modelItem => item.BrowserDetailId)" onmouseover="javascript: myfunction($(this).attr('id'),'@Html.DisplayFor(modelItem => item.URL)');"> @Utility.EllipsisString(@Html.DisplayFor(modelItem => item.URL).ToString(), 60)</label>
+                    </td>
+                    <td style=" border-left: 1px solid #ddd; border-top: 1px solid #ddd;">
+                        <a href='@AppBaseURL/BrowserDetails/Index?URL=@item.URL'>@Html.DisplayFor(modelItem => item.count)</a>
+
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    <div style="margin-top:20px;"></div>
+</div>

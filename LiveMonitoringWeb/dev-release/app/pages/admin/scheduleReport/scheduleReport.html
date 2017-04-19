@@ -1,0 +1,49 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div ba-panel ba-panel-title="Shedule Reports Permissions" ba-panel-class="with-scroll">
+
+            <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-bordered table-hover">
+                <thead>
+                    <tr class="sortable ">
+                        <th class="table-id" st-sort="id" st-sort-default="true"><input type="checkbox"/></th>
+                        <th st-sort="Email">Screen Display Name</th>
+                        <th st-sort="FirstName">Shedule Type</th>
+                        
+                        
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <th>
+                            <input st-search="Email" placeholder="Search display Name" class="input-sm form-control search-input"
+                                   type="search" />
+                        </th>
+                        <td></td>
+                       </tr>
+                </thead>
+                <tbody>
+
+                    <tr ng-repeat="item in displayedCollection" class="editable-row">
+                        <td>
+                            <input type="checkbox" ng-model="item.check"/>
+
+                        </td>
+                        <td>
+                            {{item.ScreenDisplayName}}
+                        </td>
+                        <td class="select-td">
+                            <select class="form-control" ng-options="s.value as s.text for s in ScheduleType" ng-model="item.ScheduleType"></select>
+                        </td>  
+                  </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="9" class="text-center">
+                            <div st-pagination="" st-items-by-page="10" st-displayed-pages="5"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+</div>

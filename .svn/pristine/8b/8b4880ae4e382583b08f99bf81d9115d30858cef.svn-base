@@ -1,0 +1,695 @@
+﻿--Create Tables (Added By Shabbir on Dated 04-03-2015)
+-----------------------------------------------LiveMonitoring_Groups TABLE-----------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_Groups](
+	[GroupId] [int] IDENTITY(1,1) NOT NULL,
+	[GroupName] [nvarchar](50) NULL,
+	[ShiftStartTime] [nvarchar](10) NULL,
+	[ShiftEndTime] [nvarchar](10) NULL,
+	[LunchStartTime] [nvarchar](10) NULL,
+	[LunchEndTime] [nvarchar](10) NULL,
+	[IsActive] [bit] NULL,
+	[IsDeleted] [bit] NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedDate] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+	[DeletedDate] [datetime] NULL,
+	[DeletedBy] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_Groups] PRIMARY KEY CLUSTERED 
+(
+	[GroupId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+-----------------------------------------------Machine Grouping TABLE-----------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_MachineGrouping](
+	[MachineGroupId] [int] IDENTITY(1,1) NOT NULL,
+	[MachineDetailId] [int] NULL,
+	[GroupId] [int] NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedDate] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_MachineGrouping] PRIMARY KEY CLUSTERED 
+(
+	[MachineGroupId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+
+
+-----------------------------------------------------------------------------------
+
+--Create Tables (Added By Irshad Hussain on Dated 04-03-2015)
+-----------------------------------------------Machine Sessions-----------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_MachineSessions](
+	[MachineSessionId] [int] IDENTITY(1,1) NOT NULL,
+	[MachineDetailId] [int] NOT NULL,
+	[SessionStart] [datetime] NOT NULL,
+	[SessionEnd] [datetime] NOT NULL,
+	[CreatedDate] [datetime] NULL,
+	[ModifiedDate] [datetime] NULL,
+ CONSTRAINT [PK_LiveMonitoring_MachineSessions] PRIMARY KEY CLUSTERED 
+(
+	[MachineSessionId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+--Create Tables (Added By shabbir Habib on Dated 18-02-2015)
+-------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_AdminScheduleReport](
+	[AdminScheduleReportId] [int] IDENTITY(1,1) NOT NULL,
+	[MachineDetailId] [int] NULL,
+	[CustomerId] [int] NULL,
+	[bSend] [bit] NULL
+) ON [PRIMARY]
+
+GO
+
+--Create & Alter Tables (Added By Vikas Joshi on Dated 16-02-2015)
+-------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_CustomerDownloadHistory](
+	[DownloadHistoryId] [int] IDENTITY(1,1) NOT NULL,
+	[CustomerId] [int] NULL,
+	[DownloadDate] [datetime] NULL,
+ CONSTRAINT [PK_LiveMonitoring_CustomerDownloadHistory] PRIMARY KEY CLUSTERED 
+(
+	[DownloadHistoryId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_CustomerDownloadHistory] ADD  CONSTRAINT [DF_LiveMonitoring_CustomerDownloadHistory_DownloadDate]  DEFAULT (getdate()) FOR [DownloadDate]
+GO
+
+-------------------------------------------------------------------------------------------------------------------
+
+
+CREATE TABLE [dbo].[LiveMonitoring_Screens](
+	[ScreenId] [int] IDENTITY(1,1) NOT NULL,
+	[ScreenDisplayName] [nvarchar](100) NULL,
+	[ScreenInternalName] [nvarchar](100) NULL,
+	[ScreenType] [nvarchar](50) NULL,
+	[IsActive] [bit] NULL,
+	[IsDeleted] [bit] NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedDate] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+	[DeletedDate] [datetime] NULL,
+	[DeletedBy] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_Screens] PRIMARY KEY CLUSTERED 
+(
+	[ScreenId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Screens] ADD  CONSTRAINT [DF_LiveMonitoring_Screens_IsActive]  DEFAULT ((1)) FOR [IsActive]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Screens] ADD  CONSTRAINT [DF_LiveMonitoring_Screens_IsDeleted]  DEFAULT ((0)) FOR [IsDeleted]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Screens] ADD  CONSTRAINT [DF_LiveMonitoring_Screens_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Screens] ADD  CONSTRAINT [DF_LiveMonitoring_Screens_ModifiedDate]  DEFAULT (getdate()) FOR [ModifiedDate]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Screens] ADD  CONSTRAINT [DF_LiveMonitoring_Screens_DeletedDate]  DEFAULT (getdate()) FOR [DeletedDate]
+GO
+
+-------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_UserScreenPermissions](
+	[UserScreenPermissionId] [int] IDENTITY(1,1) NOT NULL,
+	[MembershipId] [int] NULL,
+	[ScreenId] [int] NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_UserScreenPermissions] PRIMARY KEY CLUSTERED 
+(
+	[UserScreenPermissionId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_UserScreenPermissions] ADD  CONSTRAINT [DF_LiveMonitoring_UserScreenPermissions_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+-------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_ScheduleReports](
+	[ScheduleReportId] [int] IDENTITY(1,1) NOT NULL,
+	[ScreenId] [int] NULL,
+	[MembershipId] [int] NULL,
+	[ScheduleType] [nvarchar](50) NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[SendDate] [datetime] NULL,
+	[IsSend] [bit] NULL,
+ CONSTRAINT [PK_LiveMonitoring_ScheduleReports] PRIMARY KEY CLUSTERED 
+(
+	[ScheduleReportId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_ScheduleReports] ADD  CONSTRAINT [DF_LiveMonitoring_ScheduleReports_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_ScheduleReports] ADD  CONSTRAINT [DF_LiveMonitoring_ScheduleReports_SendDate]  DEFAULT (getdate()) FOR [SendDate]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_ScheduleReports] ADD  CONSTRAINT [DF_LiveMonitoring_ScheduleReports_IsSend]  DEFAULT ((0)) FOR [IsSend]
+GO
+-------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_CustomerUserMapping](
+	[CustomerUserId] [int] IDENTITY(1,1) NOT NULL,
+	[CustomerId] [int] NULL,
+	[MembershipId] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_CustomerUserMapping] PRIMARY KEY CLUSTERED 
+(
+	[CustomerUserId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+
+-------------------------------------------------------------------------------------------------------------------
+--Create & Alter Tables (Added By Irshad Hussain on Dated 27-01-2015)
+-------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_Customers](
+	[CustomerId] [int] IDENTITY(1,1) NOT NULL,
+	[MembershipId] [int] NOT NULL,
+	[Email] [varchar](100) NOT NULL,
+	[FirstName] [varchar](100) NOT NULL,
+	[LastName] [varchar](100) NOT NULL,
+	[OrganizationName] [varchar](100) NOT NULL,
+	[CreateDate] [datetime] NOT NULL,
+	[LastLoginDate] [datetime] NULL,
+ CONSTRAINT [PK_LiveMonitoring_CustomerProfiles] PRIMARY KEY CLUSTERED 
+(
+	[CustomerId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Customers] ADD  CONSTRAINT [DF_LiveMonitoring_CustomerProfiles_UserId]  DEFAULT ((1)) FOR [MembershipId]
+GO
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_Subscribers](
+	[SubscriberId] [int] IDENTITY(1,1) NOT NULL,
+	[CustomerId] [int] NOT NULL,
+	[FreeUsers] [int] NOT NULL,
+	[PaidUsers] [int] NOT NULL,
+	[IsActive] [bit] NULL,
+	[IsDeleted] [bit] NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedDate] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+	[DeletedDate] [datetime] NULL,
+	[DeletedBy] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_Subscribers] PRIMARY KEY CLUSTERED 
+(
+	[SubscriberId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Subscribers] ADD  CONSTRAINT [DF_LiveMonitoring_Subscribers_IsActive]  DEFAULT ((1)) FOR [IsActive]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Subscribers] ADD  CONSTRAINT [DF_LiveMonitoring_Subscribers_IsDeleted]  DEFAULT ((0)) FOR [IsDeleted]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Subscribers] ADD  CONSTRAINT [DF_LiveMonitoring_Subscribers_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Subscribers] ADD  CONSTRAINT [DF_LiveMonitoring_Subscribers_ModifiedDate]  DEFAULT (getdate()) FOR [ModifiedDate]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Subscribers] ADD  CONSTRAINT [DF_LiveMonitoring_Subscribers_DeletedDate]  DEFAULT (getdate()) FOR [DeletedDate]
+GO
+------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE [dbo].[LiveMonitoring_Category](
+	[CategoryId] [int] IDENTITY(1,1) NOT NULL,
+	[CategoryName] [nvarchar](50) NULL,
+	[IsBlocked] [bit] NULL,
+	[IsActive] [bit] NULL,
+	[IsDeleted] [bit] NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedDate] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+	[DeletedDate] [datetime] NULL,
+	[DeletedBy] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_Category] PRIMARY KEY CLUSTERED 
+(
+	[CategoryId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+----------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_SubCategoryType](
+	[SubCategoryTypeId] [int] IDENTITY(1,1) NOT NULL,
+	[SubCategoryTypeName] [nvarchar](50) NULL,
+ CONSTRAINT [PK_LiveMonitoring_SubCategoryType] PRIMARY KEY CLUSTERED 
+(
+	[SubCategoryTypeId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+----------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_SubCategory](
+	[SubCategoryId] [int] IDENTITY(1,1) NOT NULL,
+	[CategoryId] [int] NULL,
+	[SubCategoryTypeId] [int] NULL,
+	[SubCategoryName] [nvarchar](50) NULL,
+	[IsProductive] [bit] NULL,
+	[IsBlocked] [bit] NULL,
+	[IsActive] [bit] NULL,
+	[IsDeleted] [bit] NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedDate] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+	[DeletedDate] [datetime] NULL,
+	[DeletedBy] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_SubCategory] PRIMARY KEY CLUSTERED 
+(
+	[SubCategoryId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_SubCategory] ADD  CONSTRAINT [DF_LiveMonitoring_SubCategory_IsProductive]  DEFAULT ((1)) FOR [IsProductive]
+GO
+
+-------------------------------------------------------------------------------------------------------------------
+--Create & Alter Tables (Added By Irshad Hussain on Dated 21-01-2015)
+-------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[UserProfile](
+	[UserId] [int] IDENTITY(1,1) NOT NULL,
+	[UserName] [nvarchar](56) NOT NULL,
+	[FullName] [nvarchar](56) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[UserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[UserName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+----------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[webpages_Membership](
+	[UserId] [int] NOT NULL,
+	[CreateDate] [datetime] NULL,
+	[ConfirmationToken] [nvarchar](128) NULL,
+	[IsConfirmed] [bit] NULL,
+	[LastPasswordFailureDate] [datetime] NULL,
+	[PasswordFailuresSinceLastSuccess] [int] NOT NULL,
+	[Password] [nvarchar](128) NOT NULL,
+	[PasswordChangedDate] [datetime] NULL,
+	[PasswordSalt] [nvarchar](128) NOT NULL,
+	[PasswordVerificationToken] [nvarchar](128) NULL,
+	[PasswordVerificationTokenExpirationDate] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[UserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[webpages_Membership] ADD  DEFAULT ((0)) FOR [IsConfirmed]
+GO
+
+ALTER TABLE [dbo].[webpages_Membership] ADD  DEFAULT ((0)) FOR [PasswordFailuresSinceLastSuccess]
+GO
+----------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[webpages_OAuthMembership](
+	[Provider] [nvarchar](30) NOT NULL,
+	[ProviderUserId] [nvarchar](100) NOT NULL,
+	[UserId] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Provider] ASC,
+	[ProviderUserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+----------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[webpages_Roles](
+	[RoleId] [int] IDENTITY(1,1) NOT NULL,
+	[RoleName] [nvarchar](256) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[RoleId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[RoleName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+----------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[webpages_UsersInRoles](
+	[UserId] [int] NOT NULL,
+	[RoleId] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[UserId] ASC,
+	[RoleId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[webpages_UsersInRoles]  WITH CHECK ADD  CONSTRAINT [fk_RoleId] FOREIGN KEY([RoleId])
+REFERENCES [dbo].[webpages_Roles] ([RoleId])
+GO
+
+ALTER TABLE [dbo].[webpages_UsersInRoles] CHECK CONSTRAINT [fk_RoleId]
+GO
+
+ALTER TABLE [dbo].[webpages_UsersInRoles]  WITH CHECK ADD  CONSTRAINT [fk_UserId] FOREIGN KEY([UserId])
+REFERENCES [dbo].[UserProfile] ([UserId])
+GO
+
+ALTER TABLE [dbo].[webpages_UsersInRoles] CHECK CONSTRAINT [fk_UserId]
+GO
+
+----------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE [dbo].[LiveMonitoring_AppDetails](
+	[AppId] [int] IDENTITY(1,1) NOT NULL,
+	[MachineDetailId] [int] NOT NULL,
+	[AppName] [varchar](255) NOT NULL,
+	[Title] [varchar](255) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_LiveMonitoring_AppDetails] PRIMARY KEY CLUSTERED 
+(
+	[AppId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_AppDetails] ADD  CONSTRAINT [DF_LiveMonitoring_AppDetails_Title]  DEFAULT ('') FOR [AppName]
+GO
+
+----------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_BrowserDetails](
+	[BrowserDetailId] [int] IDENTITY(1,1) NOT NULL,
+	[MachineDetailId] [int] NOT NULL,
+	[BrowserName] [varchar](50) NOT NULL,
+	[BrowserVersion] [varchar](50) NOT NULL,
+	[Title] [varchar](255) NULL,
+	[URL] [varchar](255) NULL,
+	[CreatedDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_LiveMonitoring_BrowserDetails] PRIMARY KEY CLUSTERED 
+(
+	[BrowserDetailId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+----------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_Configuration](
+	[ConfigurationId] [int] IDENTITY(1,1) NOT NULL,
+	[CustomerId] [int] NOT NULL,
+	[BrowserTacker_Interval] [int] NOT NULL,
+	[ScreenShot_Interval] [int] NOT NULL,
+	[MachineIdle_Interval] [int] NOT NULL,
+	[MachineIdle_MinTime] [int] NOT NULL,
+	[KeyLogger_Interval] [int] NOT NULL,
+	[KeyLogger_MinTime] [int] NOT NULL,
+	[AppTracker_Interval] [int] NOT NULL,
+	[IsActive] [bit] NULL,
+	[IsSendBlockData] [bit] NULL,
+	[IsDeleted] [bit] NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedDate] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+	[DeletedDate] [datetime] NULL,
+	[DeletedBy] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_Configuration] PRIMARY KEY CLUSTERED 
+(
+	[ConfigurationId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_CustomerId]  DEFAULT ((0)) FOR [CustomerId]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_BrowserTacker_Interval]  DEFAULT ((0)) FOR [BrowserTacker_Interval]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_ScreenShot_Interval]  DEFAULT ((0)) FOR [ScreenShot_Interval]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_MachineIdle_Interval]  DEFAULT ((0)) FOR [MachineIdle_Interval]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_MachineIdle_MinTime]  DEFAULT ((0)) FOR [MachineIdle_MinTime]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_KeyLogger_Interval]  DEFAULT ((0)) FOR [KeyLogger_Interval]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_KeyLogger_MinTime]  DEFAULT ((0)) FOR [KeyLogger_MinTime]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_AppTracker_Interval]  DEFAULT ((0)) FOR [AppTracker_Interval]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_IsActive]  DEFAULT ((1)) FOR [IsActive]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_IsSendBlockData]  DEFAULT ((1)) FOR [IsSendBlockData]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_IsDeleted]  DEFAULT ((0)) FOR [IsDeleted]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_ModifiedDate]  DEFAULT (getdate()) FOR [ModifiedDate]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_DeletedDate]  DEFAULT (getdate()) FOR [DeletedDate]
+GO
+----------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_Idle](
+	[IdleTimeId] [int] IDENTITY(1,1) NOT NULL,
+	[MachineDetailId] [int] NOT NULL,
+	[IdleTime] [int] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_LiveMonitoring_Idle] PRIMARY KEY CLUSTERED 
+(
+	[IdleTimeId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+----------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_KeyLoggings](
+	[KeyLoggerId] [int] IDENTITY(1,1) NOT NULL,
+	[MachineDetailId] [int] NOT NULL,
+	[TextType] [char](2) NOT NULL,
+	[Text] [varchar](max) NULL,
+	[CreatedDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_LiveMonitoring_KeyLoggings] PRIMARY KEY CLUSTERED 
+(
+	[KeyLoggerId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_KeyLoggings] ADD  CONSTRAINT [DF_LiveMonitoring_KeyLoggings_TextType]  DEFAULT ('KL') FOR [TextType]
+GO
+----------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[LiveMonitoring_MachineDetails](
+	[MachineDetailId] [int] IDENTITY(1,1) NOT NULL,
+	[CustomerId] [int] NOT NULL,
+	[MachineMacAddress] [varchar](15) NOT NULL,
+	[MachineName] [varchar](50) NOT NULL,
+	[MachineIP] [varchar](50) NOT NULL,
+	[UserName] [varchar](50) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[IsBlocked] [bit] NULL,
+ CONSTRAINT [PK_LiveMonitoring_MachineDetails] PRIMARY KEY CLUSTERED 
+(
+	[MachineDetailId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_MachineDetails] ADD  CONSTRAINT [DF_LiveMonitoring_MachineDetails_CustomerId]  DEFAULT ((0)) FOR [CustomerId]
+GO
+
+ALTER TABLE [dbo].[LiveMonitoring_MachineDetails] ADD  CONSTRAINT [DF_LiveMonitoring_MachineDetails_IsBlocked]  DEFAULT ((0)) FOR [IsBlocked]
+GO
+----------------------------------------------------------------------------------------------------------------------
+
+-----------------INSERT RECORDS-----------------------------------------------------------------------
+
+INSERT INTO UserProfile ([UserName],[FullName]) VALUES('admin','Administrator');
+INSERT INTO [webpages_Membership] ([UserId],[CreateDate],[ConfirmationToken],[IsConfirmed],[LastPasswordFailureDate],[PasswordFailuresSinceLastSuccess],[Password],[PasswordChangedDate],[PasswordSalt],[PasswordVerificationToken],[PasswordVerificationTokenExpirationDate]) VALUES(1,'2013-12-11 08:09:10.000',Null,1,null,0,'AEABE3lhKThyvsRidEENXORQTLyn6PyzQlxaAZRguJMIOzxEO/vPebm9/jJx9iGIWA==','2013-12-11 08:09:10.000','',null,null);
+INSERT INTO [webpages_Roles] ([RoleName]) VALUES ('Admin');
+INSERT INTO [webpages_Roles] ([RoleName]) VALUES ('Customer');
+INSERT INTO [webpages_Roles] ([RoleName]) VALUES ('User');
+INSERT INTO [webpages_UsersInRoles] ([UserId],RoleId) VALUES (1,1);
+
+-------------------------------------------------------------------------------------------------------------------
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_Screens]    Script Date: 02/05/2015 19:48:06 ******/
+SET IDENTITY_INSERT [dbo].[LiveMonitoring_Screens] ON
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (1, N'Top Idle Users(Graph)', N'Dashboard_TopIdleUserGraph', N'R', 0, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF055 AS DateTime), NULL, CAST(0x0000A435010FF055 AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (2, N'Top Sites (Graph)', N'Dashboard_TopSitesGraph', N'R', 0, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF068 AS DateTime), NULL, CAST(0x0000A435010FF068 AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (3, N'Top User Productivity (Graph)', N'Dashboard_TopUserProductivityGraph', N'R', 0, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF07F AS DateTime), NULL, CAST(0x0000A435010FF07F AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (4, N'Top Applications', N'Dashboard_TopApplications', N'R', 0, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF08D AS DateTime), NULL, CAST(0x0000A435010FF08D AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (5, N'Top Clipboard Activity', N'Dashboard_TopClipboardActivity', N'R', 0, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF09B AS DateTime), NULL, CAST(0x0000A435010FF09B AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (6, N'Top Idle Machines', N'Dashboard_TopIdleMachines', N'R', 0, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF0A9 AS DateTime), NULL, CAST(0x0000A435010FF0A9 AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (7, N'Top Key Activity', N'Dashboard_TopKeyActivity', N'R', 0, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF0B7 AS DateTime), NULL, CAST(0x0000A435010FF0B7 AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (8, N'Top Screen Shots', N'Dashboard_TopScreenShots', N'R', 0, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF0C5 AS DateTime), NULL, CAST(0x0000A435010FF0C5 AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (9, N'Top Sites', N'Dashboard_TopSites', N'R', 0, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF0D3 AS DateTime), NULL, CAST(0x0000A435010FF0D3 AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (10, N'Top Users', N'Dashboard_TopUsers', N'R', 0, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF0E1 AS DateTime), NULL, CAST(0x0000A435010FF0E1 AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (11, N'Screen Shots', N'Report_ScreenShots', N'R', 0, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF0EA AS DateTime), NULL, CAST(0x0000A435010FF0EA AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (12, N'Machine Details', N'Report_MachineDetails', N'R', 1, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF0F8 AS DateTime), NULL, CAST(0x0000A435010FF0F8 AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (13, N'Key Logger Details', N'Report_KeyLoggerDetails', N'R', 1, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF107 AS DateTime), NULL, CAST(0x0000A435010FF107 AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (14, N'Browser Details', N'Report_BrowserDetails', N'R', 1, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF115 AS DateTime), NULL, CAST(0x0000A435010FF115 AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (15, N'Machine Idle Details', N'Report_MachineIdleDetails', N'R', 1, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF123 AS DateTime), NULL, CAST(0x0000A435010FF123 AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (16, N'Application Details', N'Report_ApplicationDetails', N'R', 1, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF12C AS DateTime), NULL, CAST(0x0000A435010FF12C AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (17, N'Productivity Report (Graph)', N'Report_ProductivityReportGraph', N'R', 0, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF143 AS DateTime), NULL, CAST(0x0000A435010FF143 AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (18, N'User Idle Report (Graph)', N'Report_UserIdleReportGraph', N'R', 0, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF15F AS DateTime), NULL, CAST(0x0000A435010FF15F AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (19, N'Sites Report (Graph)', N'Report_SitesReportGraph', N'R', 0, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF16D AS DateTime), NULL, CAST(0x0000A435010FF16D AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (20, N'Project Summary', N'Report_ProjectSummary', N'R', 1, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF17C AS DateTime), NULL, CAST(0x0000A435010FF17C AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (21, N'Configuration', N'Admin_Configuration', N'F', 1, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF18A AS DateTime), NULL, CAST(0x0000A435010FF18A AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (22, N'Category', N'Admin_Category', N'F', 1, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF198 AS DateTime), NULL, CAST(0x0000A435010FF198 AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (23, N'Sub Category', N'Admin_SubCategory', N'F', 1, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF1A6 AS DateTime), NULL, CAST(0x0000A435010FF1A6 AS DateTime), NULL)
+INSERT [dbo].[LiveMonitoring_Screens] ([ScreenId], [ScreenDisplayName], [ScreenInternalName], [ScreenType], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (24, N'Group', N'Admin_Group', N'F', 1, 0, CAST(0x0000A43300000000 AS DateTime), NULL, CAST(0x0000A435010FF1A6 AS DateTime), NULL, CAST(0x0000A435010FF1A6 AS DateTime), NULL)
+SET IDENTITY_INSERT [dbo].[LiveMonitoring_Screens] OFF
+
+----------------------------------------------------------------------------------------------------------------------
+SET IDENTITY_INSERT [dbo].[LiveMonitoring_Category] ON
+INSERT [dbo].[LiveMonitoring_Category] ([CategoryId], [CategoryName], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (1, N'Banking', 0, 1, 0, CAST(0x0000A422011AB7DC AS DateTime), 1, CAST(0x0000A42501430CD6 AS DateTime), 1, CAST(0x0000A422011B3D64 AS DateTime), 1)
+INSERT [dbo].[LiveMonitoring_Category] ([CategoryId], [CategoryName], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (2, N'Computer', 0, 1, 0, CAST(0x0000A422011B4C95 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_Category] ([CategoryId], [CategoryName], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (3, N'Email', 0, 1, 0, CAST(0x0000A422011C6E0F AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_Category] ([CategoryId], [CategoryName], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (4, N'Employment', 0, 1, 0, CAST(0x0000A422011C7FD3 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_Category] ([CategoryId], [CategoryName], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (5, N'Entertainment', 0, 1, 0, CAST(0x0000A422011C893A AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_Category] ([CategoryId], [CategoryName], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (6, N'Games', 0, 1, 0, CAST(0x0000A422011C9941 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_Category] ([CategoryId], [CategoryName], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (7, N'News', 0, 1, 0, CAST(0x0000A422011C9F68 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_Category] ([CategoryId], [CategoryName], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (8, N'Reference', 0, 1, 0, CAST(0x0000A422011CA707 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_Category] ([CategoryId], [CategoryName], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (9, N'Shopping', 0, 1, 0, CAST(0x0000A422011CB7C4 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_Category] ([CategoryId], [CategoryName], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (10, N'Social Networking', 0, 1, 0, CAST(0x0000A422011CC1B5 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_Category] ([CategoryId], [CategoryName], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (11, N'Sports', 0, 1, 0, CAST(0x0000A422011CC96E AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_Category] ([CategoryId], [CategoryName], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (12, N'Tools', 0, 1, 0, CAST(0x0000A422011CE956 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_Category] ([CategoryId], [CategoryName], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (13, N'Travels', 0, 1, 0, CAST(0x0000A422011CF22F AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_Category] ([CategoryId], [CategoryName], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (14, N'UnCategorized', 0, 1, 0, CAST(0x0000A422011CFF10 AS DateTime), 1, NULL, NULL, NULL, NULL)
+SET IDENTITY_INSERT [dbo].[LiveMonitoring_Category] OFF
+-------------------------------------------------------------------------------------------------------------------
+SET IDENTITY_INSERT [dbo].[LiveMonitoring_SubCategoryType] ON
+INSERT [dbo].[LiveMonitoring_SubCategoryType] ([SubCategoryTypeId], [SubCategoryTypeName]) VALUES (1, N'Website')
+INSERT [dbo].[LiveMonitoring_SubCategoryType] ([SubCategoryTypeId], [SubCategoryTypeName]) VALUES (2, N'Application')
+SET IDENTITY_INSERT [dbo].[LiveMonitoring_SubCategoryType] OFF
+-------------------------------------------------------------------------------------------------------------------
+SET IDENTITY_INSERT [dbo].[LiveMonitoring_SubCategory] ON
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (3, 1, 1, N'bankofamerica.com', 1, 1, 1, 0, CAST(0x0000A42201202EA4 AS DateTime), 1, CAST(0x0000A422012360E8 AS DateTime), 1, CAST(0x0000A42201235C1C AS DateTime), 1)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (4, 1, 1, N'capitalone.com', 0, 0, 1, 0, CAST(0x0000A422012067FC AS DateTime), 1, CAST(0x0000A42700B3467A AS DateTime), 1, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (5, 1, 1, N'chase', 1, 0, 1, 0, CAST(0x0000A42201207A93 AS DateTime), 1, CAST(0x0000A4220121A936 AS DateTime), 1, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (6, 1, 1, N'citybank.com', 1, 0, 1, 0, CAST(0x0000A42201209B9D AS DateTime), 1, CAST(0x0000A422014253FA AS DateTime), 1, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (7, 1, 1, N'wallsfargo.com', 1, 0, 1, 0, CAST(0x0000A4220120EA64 AS DateTime), 1, CAST(0x0000A42201424CF0 AS DateTime), 1, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (8, 1, 1, N'wachovia.com', 0, 0, 1, 0, CAST(0x0000A422012103F2 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (9, 2, 1, N'ibm.com', 0, 0, 1, 0, CAST(0x0000A42201211C8A AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (10, 2, 1, N'adodb.com', 0, 0, 1, 0, CAST(0x0000A422012127D7 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (11, 1, 1, N'avg.com', 0, 0, 1, 0, CAST(0x0000A422012132B0 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (12, 1, 1, N'dell.com', 0, 0, 1, 0, CAST(0x0000A422012143E9 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (13, 1, 1, N'hp.com', 1, 0, 1, 0, CAST(0x0000A42201214E0B AS DateTime), 1, CAST(0x0000A4220142207B AS DateTime), 1, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (14, 2, 1, N'cnet.com', 0, 0, 1, 0, CAST(0x0000A42201215D23 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (15, 2, 1, N'microsoft.com', 1, 0, 1, 0, CAST(0x0000A42201217026 AS DateTime), 1, CAST(0x0000A422013F1CD3 AS DateTime), 1, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (16, 2, 1, N'mozilla.com', 0, 0, 1, 0, CAST(0x0000A42201217C24 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (17, 2, 1, N'apple.com', 1, 0, 1, 0, CAST(0x0000A422012198A4 AS DateTime), 1, CAST(0x0000A422013F0C14 AS DateTime), 1, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (18, 2, 1, N'intel.com', 0, 0, 1, 0, CAST(0x0000A4220121A399 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (19, 3, 1, N'hotmail.com', 0, 0, 1, 0, CAST(0x0000A4220121C081 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (20, 3, 1, N'mail.google.com', 0, 0, 1, 0, CAST(0x0000A4220121CCD4 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (21, 3, 1, N'mail.yahoo.com', 0, 0, 1, 0, CAST(0x0000A4220121D960 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (22, 4, 1, N'careerbuilder.com', 0, 0, 1, 0, CAST(0x0000A4220121F5D6 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (23, 4, 1, N'job.com', 0, 0, 1, 0, CAST(0x0000A422012200DF AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (24, 4, 1, N'monstor.com', 0, 0, 1, 0, CAST(0x0000A422012214C3 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (25, 5, 1, N'hulu.com', 0, 0, 1, 0, CAST(0x0000A42201223FC0 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (26, 5, 1, N'imdb.com', 0, 0, 1, 0, CAST(0x0000A422012250FA AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (27, 5, 1, N'netflix.com', 0, 0, 1, 0, CAST(0x0000A42201226640 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (28, 5, 1, N'pandora.com', 0, 0, 1, 0, CAST(0x0000A42201227480 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (29, 6, 1, N'battle.net', 0, 0, 1, 0, CAST(0x0000A422012292E5 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (30, 6, 1, N'gamespot.com', 0, 0, 1, 0, CAST(0x0000A4220122A0B8 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (31, 7, 1, N'cbsnews.com', 0, 0, 1, 0, CAST(0x0000A4220122BE78 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (32, 7, 1, N'news.yahoo.com', 0, 0, 1, 0, CAST(0x0000A4220122CC14 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (33, 7, 1, N'cnn.com', 0, 0, 1, 0, CAST(0x0000A4220122E337 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (34, 7, 1, N'weather.com', 0, 0, 1, 0, CAST(0x0000A4220122F70B AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (35, 8, 1, N'dictionary.com', 0, 0, 1, 0, CAST(0x0000A42201231345 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (36, 8, 1, N'eshow.com', 0, 0, 1, 0, CAST(0x0000A4220123251B AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (37, 8, 1, N'answer.yahoo.com', 0, 0, 1, 0, CAST(0x0000A42201233A50 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (38, 8, 1, N'maps.google.com', 0, 0, 1, 0, CAST(0x0000A42201234CE4 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (39, 9, 1, N'amazon.com', 0, 0, 1, 0, CAST(0x0000A42201236B01 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (40, 9, 1, N'ebay.com', 0, 0, 1, 0, CAST(0x0000A42201237B73 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (41, 9, 1, N'bestbuy.com', 0, 0, 1, 0, CAST(0x0000A422012388CF AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (42, 10, 1, N'linkedin.com', 0, 0, 1, 0, CAST(0x0000A4220123AA25 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (43, 10, 1, N'facebook.com', 0, 0, 1, 0, CAST(0x0000A4220123B818 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (44, 10, 1, N'skype.com', 0, 0, 1, 0, CAST(0x0000A4220123D33E AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (45, 10, 1, N'myspace.com', 0, 0, 1, 0, CAST(0x0000A4220125061D AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (46, 10, 1, N'twitter.com', 0, 0, 1, 0, CAST(0x0000A422012514BF AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (47, 10, 1, N'youtube.com', 0, 0, 1, 0, CAST(0x0000A42201252241 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (48, 11, 1, N'cbssports.com', 0, 0, 1, 0, CAST(0x0000A4220125715D AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (49, 11, 1, N'mlb.com', 0, 0, 1, 0, CAST(0x0000A42201257D63 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (50, 11, 1, N'sports.yahoo.com', 0, 0, 1, 0, CAST(0x0000A4220125916F AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (51, 11, 1, N'nfl.com', 0, 0, 1, 0, CAST(0x0000A4220125A674 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (52, 13, 1, N'avis.com', 0, 0, 1, 0, CAST(0x0000A4220125D2F9 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (53, 13, 1, N'delta.com', 0, 0, 1, 0, CAST(0x0000A4220125DE1F AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (54, 13, 1, N'hotels.com', 0, 0, 1, 0, CAST(0x0000A4220125FB4E AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (55, 13, 1, N'travolicity.com', 0, 0, 1, 0, CAST(0x0000A42201261423 AS DateTime), 1, NULL, NULL, NULL, NULL)
+INSERT [dbo].[LiveMonitoring_SubCategory] ([SubCategoryId], [CategoryId], [SubCategoryTypeId], [SubCategoryName], [IsProductive], [IsBlocked], [IsActive], [IsDeleted], [CreatedDate], [CreatedBy], [ModifiedDate], [ModifiedBy], [DeletedDate], [DeletedBy]) VALUES (56, 13, 1, N'expedia.com', 0, 0, 1, 0, CAST(0x0000A422012629F7 AS DateTime), 1, NULL, NULL, NULL, NULL)
+SET IDENTITY_INSERT [dbo].[LiveMonitoring_SubCategory] OFF
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

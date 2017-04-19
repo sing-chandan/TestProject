@@ -1,0 +1,374 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using LiveMonitoringWeb.Models;
+using LiveMonitoringWeb.Classes;
+using CommonUtility;
+
+namespace LiveMonitoringWeb.Controllers
+{
+    [Authorize(Roles = "Customer")]
+    public class GroupsController : Controller
+    {
+        private DBContext db = new DBContext();
+
+        //
+        // GET: /Groups/
+
+        public ActionResult Index()
+        {
+            //Check Authorization
+            if (!cls_Authorization.isAllowedURL("Admin_Group")) return RedirectToAction("login", "account");
+
+            using (var db = new DBContext())
+            {
+                return View(db.Groups.OrderBy(a => a.GroupName).ToList());
+            }
+        }
+
+        public JsonResult GroupDetails()
+        {
+            using (var db = new DBContext())
+            {
+                return Json(db.Groups.OrderBy(a => a.GroupName).ToList(),JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        //
+        // GET: /Groups/Details/5
+
+        public ActionResult Details(int id = 0)
+        {
+            //Check Authorization
+            if (!cls_Authorization.isAllowedURL("Admin_Group")) return RedirectToAction("login", "account");
+
+            Groups groups = new Groups();
+            try
+            {
+                using (var db = new DBContext())
+                {
+                    groups = db.Groups.Find(id);
+                    if (groups == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(groups);
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+
+            return View(groups);
+            
+        }
+
+
+
+        //
+        // GET: /Groups/Create
+
+        public ActionResult Create()
+        {
+            //Check Authorization
+            if (!cls_Authorization.isAllowedURL("Admin_Group")) return RedirectToAction("login", "account");
+
+            return View();
+        }
+
+        //
+        // POST: /Groups/Create
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Groups model)
+        {
+            try
+            {
+                //Check Authorization
+                if (!cls_Authorization.isAllowedURL("Admin_Group")) return RedirectToAction("login", "account");
+
+                if (ModelState.IsValid)
+                {
+                    using (var db = new DBContext())
+                    {
+                        var groups = db.Groups.FirstOrDefault(c => c.GroupName == model.GroupName);
+                        if (groups == null)
+                        {
+                            if (model.ShiftStartTime.Length != 5)
+                            {
+                                string[] shiftstart = model.ShiftStartTime.Split(':');
+                                if (shiftstart[0].Length != 2)
+                                    shiftstart[0] = "0" + shiftstart[0];
+                                if (shiftstart[1].Length != 2)
+                                    shiftstart[1] = "0" + shiftstart[1];
+                                model.ShiftStartTime = shiftstart[0] + ":" + shiftstart[1];
+                            }
+                            if (model.ShiftEndTime.Length != 5)
+                            {
+                                string[] shiftend = model.ShiftEndTime.Split(':');
+                                if (shiftend[0].Length != 2)
+                                    shiftend[0] = "0" + shiftend[0];
+                                if (shiftend[1].Length != 2)
+                                    shiftend[1] = "0" + shiftend[1];
+                                model.ShiftEndTime = shiftend[0] + ":" + shiftend[1];
+                            }
+                            if (model.LunchStartTime.Length != 5)
+                            {
+                                string[] lunchstart = model.LunchStartTime.Split(':');
+                                if (lunchstart[0].Length != 2)
+                                    lunchstart[0] = "0" + lunchstart[0];
+                                if (lunchstart[1].Length != 2)
+                                    lunchstart[1] = "0" + lunchstart[1];
+                                model.LunchStartTime = lunchstart[0] + ":" + lunchstart[1];
+                            }
+                            if (model.LunchEndTime.Length != 5)
+                            {
+                                string[] lunchend = model.LunchEndTime.Split(':');
+                                if (lunchend[0].Length != 2)
+                                    lunchend[0] = "0" + lunchend[0];
+                                if (lunchend[1].Length != 2)
+                                    lunchend[1] = "0" + lunchend[1];
+                                model.LunchEndTime = lunchend[0] + ":" + lunchend[1];
+                            }
+                            
+                            model.IsActive = true;
+                            model.CreatedDate = DateTime.Now;
+                            model.CreatedBy = WebMatrix.WebData.WebSecurity.CurrentUserId;
+                            db.Groups.Add(model);
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        else
+                        {
+                            ViewBag.Message = "Group already exist";
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return View(model);
+
+
+        }
+
+        //
+        // GET: /Groups/Edit/5
+
+        public ActionResult Edit(int id = 0)
+        {
+
+            //Check Authorization
+            if (!cls_Authorization.isAllowedURL("Admin_Group")) return RedirectToAction("login", "account");
+
+            Groups groups = new Groups();
+            try
+            {
+                using (var db = new DBContext())
+                {
+                    groups = db.Groups.Find(id);
+                    if (groups == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(groups);
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return View(groups);
+
+        }
+
+        //
+        // POST: /Groups/Edit/5
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Groups model)
+        {
+            try
+            {
+                //Check Authorization
+                if (!cls_Authorization.isAllowedURL("Admin_Group")) return RedirectToAction("login", "account");
+
+                if (ModelState.IsValid)
+                {
+                    using (var db = new DBContext())
+                    {
+                        var grp = db.Groups.FirstOrDefault(c => c.GroupName == model.GroupName && c.GroupId != model.GroupId);
+                        if (grp == null)
+                        {
+                            var groups = db.Groups.Find(model.GroupId);
+                            if (groups == null)
+                            {
+                                return HttpNotFound();
+                            }
+
+                            groups.GroupName = model.GroupName;
+
+                            if (model.ShiftStartTime.Length != 5)
+                            {
+                                string[] shiftstart = model.ShiftStartTime.Split(':');
+                                if (shiftstart[0].Length != 2)
+                                    shiftstart[0] = "0" + shiftstart[0];
+                                if (shiftstart[1].Length != 2)
+                                    shiftstart[1] = "0" + shiftstart[1];
+                                groups.ShiftStartTime = shiftstart[0] + ":" + shiftstart[1];
+                            }
+                            else
+                            {
+                                groups.ShiftStartTime =  model.ShiftStartTime;
+                            }
+
+                            if (model.ShiftEndTime.Length != 5)
+                            {
+                                string[] shiftend = model.ShiftEndTime.Split(':');
+                                if (shiftend[0].Length != 2)
+                                    shiftend[0] = "0" + shiftend[0];
+                                if (shiftend[1].Length != 2)
+                                    shiftend[1] = "0" + shiftend[1];
+                                groups.ShiftEndTime = shiftend[0] + ":" + shiftend[1];
+                            }
+                            else
+                            {
+                                groups.ShiftEndTime =  model.ShiftEndTime;
+                            }
+
+                            if (model.LunchStartTime.Length != 5)
+                            {
+                                string[] lunchstart = model.LunchStartTime.Split(':');
+                                if (lunchstart[0].Length != 2)
+                                    lunchstart[0] = "0" + lunchstart[0];
+                                if (lunchstart[1].Length != 2)
+                                    lunchstart[1] = "0" + lunchstart[1];
+                                groups.LunchStartTime = lunchstart[0] + ":" + lunchstart[1];
+                            }
+                            else
+                            {
+                                groups.LunchStartTime =  model.LunchStartTime;
+                            }
+
+                            if (model.LunchEndTime.Length != 5)
+                            {
+                                string[] lunchend = model.LunchEndTime.Split(':');
+                                if (lunchend[0].Length != 2)
+                                    lunchend[0] = "0" + lunchend[0];
+                                if (lunchend[1].Length != 2)
+                                    lunchend[1] = "0" + lunchend[1];
+                                groups.LunchEndTime = lunchend[0] + ":" + lunchend[1];
+                            }
+                            else
+                            {
+                                groups.LunchEndTime =  model.LunchEndTime;
+                            }
+                            groups.IsActive = model.IsActive;
+                            if (groups.IsActive)
+                            {
+                                groups.IsDeleted = false;
+                            }
+                            groups.ModifiedDate = DateTime.Now;
+                            groups.ModifiedBy = WebMatrix.WebData.WebSecurity.CurrentUserId;
+                            db.Entry(groups).State = EntityState.Modified;
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        else
+                        {
+                            ViewBag.Message = "Group already exist";
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return View(model);
+        }
+
+        //
+        // GET: /Groups/Delete/5
+
+        public ActionResult Delete(int id = 0)
+        {
+            //Check Authorization
+            if (!cls_Authorization.isAllowedURL("Admin_Group")) return RedirectToAction("login", "account");
+
+            Groups groups = new Groups();
+            try
+            {
+                using (var db = new DBContext())
+                {
+                    groups = db.Groups.Find(id);
+                    if (groups == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(groups);
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+
+            return View(groups);
+          
+        }
+
+        //
+        // POST: /Groups/Delete/5
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            try
+            {
+                //Check Authorization
+                if (!cls_Authorization.isAllowedURL("Admin_Group")) return RedirectToAction("login", "account");
+
+                using (var db = new DBContext())
+                {
+                    Groups groups = db.Groups.Find(id);
+                    groups.IsActive = false;
+                    groups.IsDeleted = true;
+                    groups.DeletedDate = DateTime.Now;
+                    groups.DeletedBy = WebMatrix.WebData.WebSecurity.CurrentUserId;
+                    db.Entry(groups).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return RedirectToAction("Index");
+            
+         
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            db.Dispose();
+            base.Dispose(disposing);
+        }
+    }
+}

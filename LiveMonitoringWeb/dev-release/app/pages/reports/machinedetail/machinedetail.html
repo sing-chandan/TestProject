@@ -1,0 +1,78 @@
+﻿<top-filter></top-filter>
+<div class="row">
+    <div class="col-md-12">
+        <div ba-panel ba-panel-title="Machine Details" ba-panel-class="with-scroll">
+            
+                <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-condensed table-bordered table-hover">
+                    <thead>
+                        <tr class="sortable ">
+                            <th class="table-id" st-sort="id" st-sort-default="true">#</th>
+                            <th st-sort="FirstName">Customer Name</th>
+                            <th st-sort="MachineName">Machine Name</th>
+                            <th st-sort="UserName">User Name</th>
+                            <th st-sort="MachineMacAddress">Machine MacAddress</th>
+                            <th st-sort="MachineIP">Machine IP</th>
+                            <th st-sort="CreatedDate">Created Date</th>
+                            <th st-sort="IsBlocked">Block Status</th>
+                            <th>Add Group</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <input st-search="FirstName" placeholder="Search Customer Name" class="input-sm form-control search-input"
+                                       type="search" />
+                            </th>
+                            <th>
+                                <input st-search="MachineName" placeholder="Search Machine Name" class="input-sm form-control search-input"
+                                       type="search" />
+                            </th>
+                            <th>
+                                <input st-search="UserName" placeholder="Search Username" class="input-sm form-control search-input"
+                                       type="search" />
+                            </th>
+                            <th>
+                                <input st-search="MachineMacAddress" placeholder="Search MAC Address" class="input-sm form-control search-input" type="search" />
+                            </th>
+                            <th>
+                                <input st-search="MachineIP" placeholder="Search Machine IP" class="input-sm form-control search-input" type="search" />
+                            </th>
+                            <th>
+                                <input st-search="CreatedDate" placeholder="Search Created Date" class="input-sm form-control search-input" type="search" />
+                            </th>
+                            <th>
+                                <input st-search="IsBlocked" placeholder="Search Block Status" class="input-sm form-control search-input" type="search" />
+                            </th>
+                            <th>
+                                <input st-search="addGroup" placeholder="Search Group" class="input-sm form-control search-input" type="search" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in displayedCollection">
+                            <td class="table-id">{{$index}}</td>
+                            <td>{{item.customer.FirstName}}</td>
+                            <td>{{item.MachineName}}</td>
+                            <td>{{item.UserName}}</td>
+                            <td>{{item.MachineMacAddress}}</td>
+                            <td>{{item.MachineIP}}</td>
+                            <td>{{item.CreatedDate}}</td>
+                            <td>{{item.IsBlocked}}</td>
+                            <td><a class="email-link" ng-href="#">Add Group</a></td>
+
+                            <!--<td><a class="email-link" ng-href="mailto:{{item.email}}">{{item.email}}</a></td>-->
+
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="9" class="text-center">
+                                <div st-pagination="" st-items-by-page="1" st-displayed-pages="5"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            
+        </div>
+    </div>
+</div>
+

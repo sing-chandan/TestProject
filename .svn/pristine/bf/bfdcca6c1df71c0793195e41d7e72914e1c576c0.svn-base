@@ -1,0 +1,193 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    var role = System.Web.Security.Roles.GetRolesForUser(WebSecurity.CurrentUserName);
+    if (role[0] == "Admin")
+    {
+        Layout = "~/Views/Shared/_Layout_AdminOuth.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout_Outh.cshtml";
+    }
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+     <meta http-equiv="refresh" content="30" />
+}
+<script type="text/javascript">
+    var msg = '@TempData["ErrorMessage"]';
+    $(document).ready(function () {
+        if (msg != '') {        
+            alert(msg);
+        }   
+        });
+</script>
+<style>
+    .bg-col {
+        min-width: 95%;
+        margin-bottom: 15px;
+        /*background-color: rgba(47, 49, 53, 0.05);*/
+        background-image: url(@AppBaseURL/Content/images/sand.png);
+        background-repeat: repeat;
+        min-height: 280px;
+        height: 100%;
+    }
+    .bg-col-screen {
+        min-width: 95%;
+        margin-bottom: 30px;
+        /*background-color: rgba(47, 49, 53, 0.05);*/
+        background-image: url(@AppBaseURL/Content/images/sand.png);
+        min-height: 240px;
+        height: 100%;
+    }
+
+    .bg-col-Graph {
+        min-width: 95%;
+        margin-bottom: 15px;
+        /*background-color: rgba(47, 49, 53, 0.05);*/
+        background-image: url(@AppBaseURL/Content/images/sand.png);
+        min-height: 410px;
+        height: 100%;
+    }
+ 
+   
+</style>
+
+<div class="container-fluid" style="min-height:100%;margin-bottom:2%;">
+    <input id="hdnFrom" type="hidden" value="0" />
+    <input id="hdnTo" type="hidden" value="0" />
+    <div class="row">
+
+        <div class="col-sm-12 ">
+            <h3><span class="glyphicon glyphicon-dashboard"></span> Dashboard</h3><hr />
+            
+        </div>
+        <div class="col-sm-12" style="margin-bottom:30px;">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="col-radius bg-col-Graph" >
+                        <div class="col-sm-12">
+                            <p style="font-weight:700"><a href='@AppBaseURL/Reports/IdleReport'>Top Idle Users</a> <span style="float:right;"> <input style="margin-right:20px;" type="image" src="@AppBaseURL/Content/images/printer.png" width="24" height="24" value="print" onclick="PrintDiv('currentIdleUsersGraph');" /></span></p>
+                            <p>
+                                @{Html.RenderAction("_CurrentIdleUsersGraph");}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="col-radius bg-col-Graph">
+                        <div class="col-sm-12">
+                            <p style="font-weight:700"><a href='@AppBaseURL/Reports/ProductiveReport'>Top Users Productivity</a> <span style="float:right;"> <input style="margin-right:20px;" type="image" src="@AppBaseURL/Content/images/printer.png"  width="24" height="24" value="print" onclick="PrintDiv('userProductivityGraph');" /></span></p>
+                            <p>
+                                @{Html.RenderAction("_UserProductivity");}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="col-radius bg-col-Graph">
+                        <div class="col-sm-12 ">
+                            <p style="font-weight:700"><a href='@AppBaseURL/Reports/SitesReport'>Top Sites</a> <span style="float:right;"><input style="margin-right:20px;" type="image" src="@AppBaseURL/Content/images/printer.png"  width="24" height="24" value="print" onclick="PrintDiv('topSitesGraph');" /></span></p>
+                            <p>
+                                @{Html.RenderAction("_TopSitesGraph");}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="col-radius bg-col">
+                        <div class="col-sm-12">
+                            <a style="font-weight:700" href='@AppBaseURL/KeyLogger/Index?Type=KL'>Top Keyboard Activity</a>
+                            <p>
+                                @{Html.RenderAction("_RecentKeyActivity");}
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-6">
+                    <div class="col-radius bg-col">
+                        <div class="col-sm-12">
+                            <a style="font-weight:700" href='@AppBaseURL/AppSummary/Index'>Top Apps</a>
+                            <p>
+                                @{Html.RenderAction("_RecentApps");}
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="col-radius bg-col-screen">
+                        <div class="col-sm-12">
+                            <a style="font-weight:700" href='@AppBaseURL/ScreenShot/Index'>Top Screenshots</a>
+                            <p style="font-weight:700"></p>
+                            <p>
+                                @{Html.RenderAction("_RecentScreenShots");}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="col-radius bg-col">
+                        <div class="col-sm-12">
+                            <a style="font-weight:700" href='@AppBaseURL/IdleSummary/Index'>Top Idle Machines</a>
+                            <p>
+                                @{Html.RenderAction("_RecentIdleMachines");}
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="col-radius bg-col">
+                        <div class="col-sm-12">
+                            <a style="font-weight:700" href='@AppBaseURL/MachineDetail/Index'>Top Users</a>
+                            <p>
+                                @{Html.RenderAction("_RecentUsers");}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="col-radius bg-col">
+                        <div class="col-sm-12">
+                            <a style="font-weight:700" href='@AppBaseURL/SiteSummary/Index'>Top Sites</a>
+                            <p>
+                                @{Html.RenderAction("_RecentSites");}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-7" style="margin-bottom:2%;">
+                    <div class="col-radius bg-col">
+                        <div class="col-sm-12">
+                            <a style="font-weight:700" href='@AppBaseURL/KeyLogger/Index?Type=CB'>Top Clipboard Activity</a>
+                            <p>
+                                @{Html.RenderAction("_RecentClipbordActivity");}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function PrintDiv(id) {
+        var divToPrint = document.getElementById(id);
+        var popupWin = window.open('', '_blank', 'height=600px,width=1200px');
+        popupWin.document.open();
+        popupWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</html>');
+        popupWin.document.close();
+    }
+</script>

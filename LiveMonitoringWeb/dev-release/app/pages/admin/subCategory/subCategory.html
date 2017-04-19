@@ -1,0 +1,117 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div ba-panel ba-panel-title="Sub Category" ba-panel-class="with-scroll">
+            <div class="add-row-editable-table">
+                <button class="btn btn-primary" ng-click="addUser()">Add row</button>
+
+            </div>
+            <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-bordered table-hover">
+                <thead>
+                    <tr class="sortable ">
+                        <th class="table-id" st-sort="id" st-sort-default="true">#</th>
+                        <th st-sort="CategoryName">Category Name</th>
+                        <th st-sort="SubCategoryTypeName">Sub Category Type</th>
+                        <th st-sort="SubCategoryName">Sub Category Name</th>
+                        <th >Productive</th>
+                        <th >Block</th>
+                        <th >Status</th>
+                        <th >Deleted</th>
+                        <th></th>
+
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <th>
+                            <input st-search="CategoryName" placeholder="Search display Name" class="input-sm form-control search-input"
+                                   type="search" />
+                        </th>
+                        <th>
+                            <input st-search="SubCategoryTypeName" placeholder="Search Sub Category Type" class="input-sm form-control search-input"
+                                   type="search" />
+                        </th>
+                        <th>
+                            <input st-search="SubCategoryName" placeholder="Search SubCategory Name" class="input-sm form-control search-input"
+                                   type="search" />
+                        </th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr ng-repeat="item in displayedCollection" class="editable-row">
+                        <td>
+                           {{$index+1}}
+
+                        </td>
+                        <td class="select-td">
+                            <span editable-select="item.CategoryId" e-name="CategoryId" e-form="rowform" e-selectpicker
+                                  e-ng-options="s.CategoryId as s.CategoryName for s in Categorylist">
+                                {{ showCategory(item) }}
+                            </span>
+                        </td>
+                        <td class="select-td">
+                            <span editable-select="item.SubCategoryTypeId" e-name="SubCategoryTypeId" e-form="rowform" e-selectpicker
+                                  e-ng-options="s.SubCategoryTypeId as s.SubCategoryTypeName for s in SubCatType">
+                                {{ showSubCatType(item) }}
+                            </span>
+                        </td>
+                        <td >
+                            <span editable-text="item.SubCategoryName" e-name="SubCategoryName" e-form="rowform" e-required>
+                                {{ item.SubCategoryName || 'empty' }}
+                            </span>
+                        </td>
+                      <td>
+                          <span editable-checkbox="item.IsProductive" e-name="IsProductive" e-form="rowform">
+                              {{ item.IsProductive || 'empty' }}
+                          </span>
+                      </td>
+                        <td>
+                            <span editable-checkbox="item.IsBlocked" e-name="IsBlocked" e-form="rowform">
+                                {{ item.IsBlocked || 'empty' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span editable-checkbox="item.IsActive" e-name="IsActive" e-form="rowform">
+                                {{ item.IsProductive || 'empty' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span editable-checkbox="item.IsDeleted" e-name="IsDeleted" e-form="rowform">
+                                {{ item.IsDeleted || 'empty' }}
+                            </span>
+                        
+                        </td>
+                        <td>
+                            <form editable-form name="rowform" ng-show="rowform.$visible" onbeforesave="SubmitSubCategory($data,item)" class="form-buttons form-inline"
+                                  shown="inserted == item">
+                                <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary editable-table-button btn-xs">
+                                    Save
+                                </button>
+                                <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default editable-table-button btn-xs">
+                                    Cancel
+                                </button>
+                            </form>
+                            <div class="buttons" ng-show="!rowform.$visible">
+                                <button class="btn btn-primary editable-table-button btn-xs" ng-click="rowform.$show()">Edit</button>
+                                <button class="btn btn-danger editable-table-button btn-xs" ng-click="removeUser($index)">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="9" class="text-center">
+                            <div st-pagination="" st-items-by-page="10" st-displayed-pages="5"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+       
+    </div>
+</div>

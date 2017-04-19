@@ -1,0 +1,130 @@
+﻿@model LiveMonitoringWeb.Models.UserProfile
+@{
+    var role = System.Web.Security.Roles.GetRolesForUser(WebSecurity.CurrentUserName);
+
+    if (role[0] == "Admin")
+    {
+        Layout = "~/Views/Shared/_Layout_AdminOuth.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout_Outh.cshtml";
+    }
+    ViewBag.Title = "Create";
+}
+<style>
+    .field-validation-error {
+        color: #e80c4d;
+        list-style-type: none;
+    }
+
+    .field-validation-valid {
+        display: none;
+        list-style-type: none;
+    }
+
+    input.input-validation-error {
+        border: 1px solid #e80c4d;
+        list-style-type: none;
+    }
+
+    input[type="checkbox"].input-validation-error {
+        border: 0 none;
+        list-style-type: none;
+    }
+
+    .validation-summary-errors {
+        color: #e80c4d;
+        list-style-type: none;
+        font-size: 1.1em;
+    }
+
+    .validation-summary-valid {
+        display: none;
+        list-style-type: none;
+    }
+
+    ul {
+        list-style-type: none;
+    }
+
+    .h2txt {
+        color: #152f48;
+    }
+</style>
+
+<div class="container-fluid" style="min-height:500px;margin-bottom:5%;height:100%;">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-user"></span> User &#58;&#58; Create</h3><hr />
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-1"></div><div class="col-sm-10">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.RoleId, new { @class = "labeltop" })
+                    </div>
+                    <div class="editor-field">
+
+                        @if (role[0] == "Admin")
+                        {
+                            @Html.DropDownList("RoleId", null, "Admin", new { @RoleId = "RoleId", @disabled = "disabled", @class = "textarea1" })
+                        }
+                        else
+                        {
+                            @*@Html.DropDownList("RoleId", null, new { @class = "textarea1" })*@
+                            @Html.DropDownList("RoleId", null, "User", new { @RoleId = "RoleId", @disabled = "disabled", @class = "textarea1" })
+                        }
+
+                        @Html.ValidationMessageFor(model => model.RoleId)
+                    </div>
+
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.UserName, new { @class = "labeltop" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.UserName, new { @class = "textarea1" })
+                        @Html.ValidationMessageFor(model => model.UserName)
+                    </div>
+
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Password, new { @class = "labeltop" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.PasswordFor(model => model.Password, new { @class = "textarea1" })
+                        @Html.ValidationMessageFor(model => model.Password)
+                    </div>
+
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ComfirmPassword, new { @class = "labeltop" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.PasswordFor(model => model.ComfirmPassword, new { @class = "textarea1" })
+                        @Html.ValidationMessageFor(model => model.ComfirmPassword)
+                    </div>
+                    <br />
+                    <p>
+                        <input type="submit" value="Create" class="button-link" style="width:100px;" /> | @Html.ActionLink("Back to List", "Index")
+                    </p>
+
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<br /><br />
+<br /><br />
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(this).find('select').addClass("textarea1");
+    });
+</script>
+

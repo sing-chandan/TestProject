@@ -1,0 +1,68 @@
+﻿<top-filter></top-filter>
+
+<div class="row">
+    <div class="col-md-12">
+        <div ba-panel ba-panel-title="App Details" ba-panel-class="with-scroll">
+         
+              
+            <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-condensed table-bordered table-hover">
+                <thead>
+                    <tr class="sortable ">
+                        <th class="table-id" st-sort="id" st-sort-default="true">#</th>
+                        <th st-sort="MachineName">Machine Name</th>
+                        <th st-sort="UserName">User Name</th>
+                        <th st-sort="Title">Tital</th>
+                        <th st-sort="AppName">App Name</th>
+                        <th st-sort="CreatedDate">Created Date</th>
+
+                    </tr>
+                    <tr class="searchable">
+                        <th></th>
+                        <th>
+                            <input st-search="MachineName" placeholder="Search Machine Name" class="input-sm form-control search-input"
+                                   type="search" />
+                        </th>
+                        <th>
+                            <input st-search="UserName" placeholder="Search User Name" class="input-sm form-control search-input"
+                                   type="search" />
+                        </th>
+                        <th>
+                            <input st-search="Title" placeholder="Search Tital" class="input-sm form-control search-input"
+                                   type="search" />
+                        </th>
+                        <th>
+                            <input st-search="AppName" placeholder="Search App Name" class="input-sm form-control search-input" type="search" />
+                        </th>
+                        <th>
+                            <input st-search="CreatedDate" placeholder="Search Created Date" class="input-sm form-control search-input" type="search" />
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in displayedCollection">
+                        <td class="table-id">{{$index+1}}</td>
+                        <td>{{item.machine_detail.MachineName}}</td>
+                        <td>{{item.machine_detail.UserName}}</td>
+                        <td>{{item.Title}}</td>
+                        <td>{{item.AppName}}</td>
+                        <td>{{item.CreatedDate}}</td>
+
+
+                        <!--<td><a class="email-link" ng-href="mailto:{{item.email}}">{{item.email}}</a></td>-->
+
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            <div st-pagination="" st-items-by-page="10" st-displayed-pages="5"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+         
+        </div>
+    </div>
+</div>
+

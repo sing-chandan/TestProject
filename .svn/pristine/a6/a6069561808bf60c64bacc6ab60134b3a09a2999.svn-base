@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <style>
+        p {
+            font-family: Verdana;
+        }
+    </style>
+</head>
+<body>
+    <p>Welcome to LiveMonitoring!,</p>
+
+    <p>Thank you for signing up! You just joined thousands of people who are taking control of their computers and their time with LiveMonitoring.com</p>
+
+    <p>Visit your account at http://192.168.1.99/livemonitoring/ and use your email address  and password created during registration.</p>
+
+    <p>You have been registered with the following information:</p>
+    <table>
+        <tr>
+            <td>Login: </td>
+            <td>##Login##</td>
+        </tr>
+        <tr>
+            <td>Password: </td>
+            <td>##Password##.</td>
+        </tr>
+    </table><p>
+        To login use this link:
+        <a href="http://192.168.1.99/livemonitoring/">www.livemonitoring.com</a>
+    </p>
+</body>
+</html>

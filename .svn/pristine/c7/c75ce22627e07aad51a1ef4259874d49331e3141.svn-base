@@ -1,0 +1,421 @@
+﻿using CommonUtility;
+using LiveMonitoringWeb.Classes;
+using LiveMonitoringWeb.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Linq;
+using System.Web.Mvc;
+using WebMatrix.WebData;
+
+namespace LiveMonitoringWeb.Controllers
+{
+    [Authorize(Roles = "Admin,Customer")]
+
+    public class CreateUserController : Controller
+    {
+
+        private DBContext db = new DBContext();
+        private UsersAPIController oUserAPI = new UsersAPIController();
+        //
+        // GET: /CreateUser/
+
+        public ActionResult Index()
+        {
+            List<UserProfile> ListUserProfile = new List<UserProfile>();
+            try
+            {
+                //Check Authorization
+                var CustomerId = Utility.GetCustomerId();
+                string roleName = System.Web.Security.Roles.GetRolesForUser().Single();
+                if (roleName.ToUpper() == "USER")
+                {
+                    return RedirectToAction("login", "account");
+                }
+
+                var uir = db.tbl_webpages_UsersInRoles.Find(WebMatrix.WebData.WebSecurity.CurrentUserId);
+                if (uir.RoleId == 1)
+                {
+                    var obj = (from u in db.tbl_UserProfile
+                               join m in db.tbl_webpages_Membership on u.UserId equals m.UserId
+                               join ur in db.tbl_webpages_UsersInRoles on m.UserId equals ur.UserId
+                               join wr in db.tbl_webpages_Roles on ur.RoleId equals wr.RoleId
+                               where ur.RoleId == 1
+                               select new
+                               {
+                                   UserId = u.UserId,
+                                   UserName = u.UserName,
+                                   Password = m.Password,
+                                   CreateDate = m.CreateDate,
+                                   RoleId = wr.RoleId,
+                                   RoleName = wr.RoleName
+
+                               });
+                    ListUserProfile = obj.ToList().Select(r => new UserProfile
+                    {
+                        UserId = r.UserId,
+                        UserName = r.UserName,
+                        Password = r.Password,
+                        CreateDate = r.CreateDate,
+                        RoleId = r.RoleId,
+                        RoleName = r.RoleName
+                    }).OrderByDescending(b => b.CreateDate).ToList();
+                    return View(ListUserProfile);
+
+                }
+
+                var obj1 = (from u in db.tbl_UserProfile
+                            join m in db.tbl_webpages_Membership on u.UserId equals m.UserId
+                            join ur in db.tbl_webpages_UsersInRoles on m.UserId equals ur.UserId
+                            join wr in db.tbl_webpages_Roles on ur.RoleId equals wr.RoleId
+                            join cum in db.CustomerUserMapping on ur.UserId equals cum.MembershipId
+                            where wr.RoleId == 3 && cum.CustomerId == CustomerId
+                            select new
+                            {
+                                UserId = u.UserId,
+                                UserName = u.UserName,
+                                Password = m.Password,
+                                CreateDate = m.CreateDate,
+                                RoleId = wr.RoleId,
+                                RoleName = wr.RoleName
+
+                            });
+                ListUserProfile = obj1.ToList().Select(r => new UserProfile
+                {
+                    UserId = r.UserId,
+                    UserName = r.UserName,
+                    Password = r.Password,
+                    CreateDate = r.CreateDate,
+                    RoleId = r.RoleId,
+                    RoleName = r.RoleName
+                }).OrderByDescending(b => b.CreateDate).ToList();
+
+
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+
+            return View(ListUserProfile);
+        }
+
+        //
+        // GET: /CreateUser/Details/5
+
+        public ActionResult Details(int id = 0)
+        {
+            UserProfile up = new UserProfile();
+            try
+            {
+                //Check Authorization
+                string roleName = System.Web.Security.Roles.GetRolesForUser().Single();
+                if (roleName.ToUpper() == "USER")
+                {
+                    return RedirectToAction("login", "account");
+                }
+
+                up = db.tbl_UserProfile.Find(id);
+                webpages_UsersInRoles wr = db.tbl_webpages_UsersInRoles.Find(up.UserId);
+                webpages_Roles r = db.tbl_webpages_Roles.Find(wr.RoleId);
+                up.RoleId = wr.RoleId;
+                up.RoleName = r.RoleName;
+                if (up == null)
+                {
+                    return HttpNotFound();
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return View(up);
+        }
+
+        //
+        // GET: /CreateUser/Create
+
+
+        public ActionResult Create()
+        {
+            //Check Authorization
+            string roleName = System.Web.Security.Roles.GetRolesForUser().Single();
+            if (roleName.ToUpper() == "USER")
+            {
+                return RedirectToAction("login", "account");
+            }
+
+            var role = System.Web.Security.Roles.GetRolesForUser(WebSecurity.CurrentUserName);
+            if (role[0] == "Admin")
+            {
+                ViewBag.RoleId = new SelectList(db.tbl_webpages_Roles, "RoleId", "RoleName", 1);
+            }
+            else
+            {
+                ViewBag.RoleId = new SelectList(db.tbl_webpages_Roles, "RoleId", "RoleName", 3);
+            }
+
+            return View("Create", new UserProfile());
+        }
+
+        //
+        // POST: /CreateUser/Create
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(UserProfile UserProfile, webpages_UsersInRoles webpages_UsersInRoles)
+        {
+            var db = new DBContext();
+            try
+            {
+                //Check Authorization
+                string roleName = System.Web.Security.Roles.GetRolesForUser().Single();
+                if (roleName.ToUpper() == "USER")
+                {
+                    return RedirectToAction("login", "account");
+                }
+
+                if (ModelState.IsValid)
+                {
+                    if (oUserAPI.CntDuplicateUserName(UserProfile.UserName, UserProfile.UserId) > 0)
+                    {
+                        ModelState.AddModelError("", "The user name already exists.");
+                        TempData["Name"] = "The user name is already exists.";
+                        ViewBag.RoleId = new SelectList(db.tbl_webpages_Roles, "RoleId", "RoleName");
+                        return View(UserProfile);
+                    }
+                    else if (Convert.ToString(UserProfile.Password).Trim().Length < 6)
+                    {
+                        ModelState.AddModelError("", "Password should be atleast 6 characters.");
+                        TempData["Name"] = "Password should be atleast 6 characters.";
+                        ViewBag.RoleId = new SelectList(db.tbl_webpages_Roles, "RoleId", "RoleName");
+                        return View(UserProfile);
+                    }
+                    else if (Convert.ToString(UserProfile.Password).Trim() != Convert.ToString(UserProfile.ComfirmPassword).Trim())
+                    {
+                        ModelState.AddModelError("", "Password & Confirm Password should be same.");
+                        TempData["Name"] = "Password & Confirm Password should be same.";
+                        ViewBag.RoleId = new SelectList(db.tbl_webpages_Roles, "RoleId", "RoleName");
+                        return View(UserProfile);
+                    }
+                    else
+                    {
+                        var userName = Convert.ToString(UserProfile.UserName).Trim();
+                        var password = Convert.ToString(UserProfile.Password).Trim();
+                        var RoleId = Convert.ToInt32(UserProfile.RoleId);
+                        var role = System.Web.Security.Roles.GetRolesForUser().Single();
+                        if (role == "Admin")
+                            RoleId = 1;
+                        else
+                            RoleId = 3;
+                        oUserAPI.CreateUserAndAccount(userName, password);
+                        string RoleName = string.Empty;
+                        webpages_Roles r = db.tbl_webpages_Roles.Find(RoleId);
+                        RoleName = r.RoleName;
+                        if (Convert.ToInt16(RoleId) == 1)
+                        {
+                            RoleName = "Admin";
+                        }
+                        else
+                        {
+                            RoleName = "User";
+                        }
+                        oUserAPI.AddUserToRoles(userName, RoleName);
+                        CustomerUserMapping model = new CustomerUserMapping();
+                        model.CustomerId = Utility.GetCustomerId();
+                        //model.CustomerId = oUserAPI.GetUserIDByName(System.Web.HttpContext.Current.User.Identity.Name);
+                        model.MembershipId = oUserAPI.GetUserIDByName(userName);
+
+
+                        oUserAPI.AddToCust_User_Mapping(model);
+                        return RedirectToAction("Index");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            //return RedirectToAction("Index");
+            ViewBag.RoleId = new SelectList(db.tbl_webpages_Roles, "RoleId", "RoleName");
+            return View(UserProfile);
+        }
+
+        //
+        // GET: /CreateUser/Edit/5
+
+        public ActionResult Edit(int id = 0)
+        {
+            UserProfile up = new UserProfile();
+            try
+            {
+                //Check Authorization
+                string roleName = System.Web.Security.Roles.GetRolesForUser().Single();
+                if (roleName.ToUpper() == "USER")
+                {
+                    return RedirectToAction("login", "account");
+                }
+
+                up = db.tbl_UserProfile.Find(id);
+                webpages_UsersInRoles ur = db.tbl_webpages_UsersInRoles.Find(up.UserId);
+                if (up == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.RoleId = new SelectList(db.tbl_webpages_Roles, "RoleId", "RoleName", ur.RoleId);
+                return View(up);
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return View(up);
+        }
+
+        //
+        // POST: /CreateUser/Edit/5
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(UserProfile UserProfile, webpages_UsersInRoles webpages_UsersInRoles)
+        {
+            var db = new DBContext();
+            try
+            {
+                //Check Authorization
+                string roleName = System.Web.Security.Roles.GetRolesForUser().Single();
+                if (roleName.ToUpper() == "USER")
+                {
+                    return RedirectToAction("login", "account");
+                }
+
+                if (ModelState.IsValid)
+                {
+                    if (oUserAPI.CntDuplicateUserName(UserProfile.UserName, UserProfile.UserId) > 0)
+                    {
+                        ModelState.AddModelError("", "The user name already exists.");
+                        TempData["Name"] = "The user name is already exists.";
+                        ViewBag.RoleId = new SelectList(db.tbl_webpages_Roles, "RoleId", "RoleName");
+                        return View(UserProfile);
+                    }
+                    else if (Convert.ToString(UserProfile.Password).Trim().Length < 6)
+                    {
+                        ModelState.AddModelError("", "Password should be atleast 6 characters.");
+                        TempData["Name"] = "Password should be atleast 6 characters.";
+                        ViewBag.RoleId = new SelectList(db.tbl_webpages_Roles, "RoleId", "RoleName");
+                        return View(UserProfile);
+                    }
+                    else if (Convert.ToString(UserProfile.Password).Trim() != Convert.ToString(UserProfile.ComfirmPassword).Trim())
+                    {
+                        ModelState.AddModelError("", "Password & Confirm Password should be same.");
+                        TempData["Name"] = "Password & Confirm Password should be same.";
+                        ViewBag.RoleId = new SelectList(db.tbl_webpages_Roles, "RoleId", "RoleName");
+                        return View(UserProfile);
+                    }
+                    else
+                    {
+                        var userName = Convert.ToString(UserProfile.UserName).Trim();
+                        var password = Convert.ToString(UserProfile.Password).Trim();
+
+                        var ur = webpages_UsersInRoles;
+                        webpages_UsersInRoles = db.tbl_webpages_UsersInRoles.Find(UserProfile.UserId);
+                        webpages_UsersInRoles.RoleId = ur.RoleId;
+                        db.Entry(webpages_UsersInRoles).State = EntityState.Modified;
+                        db.SaveChanges();
+
+                        var up = UserProfile;
+                        UserProfile = db.tbl_UserProfile.Find(UserProfile.UserId);
+                        UserProfile.UserName = up.UserName;
+                        UserProfile.Password = up.Password;
+                        UserProfile.ComfirmPassword = up.ComfirmPassword;
+                        db.Entry(UserProfile).State = EntityState.Modified;
+                        db.SaveChanges();
+
+                        if (oUserAPI.GetMemberShipPassWordByID(UserProfile.UserId) != Convert.ToString(password))
+                        {
+                            var token = oUserAPI.GetPasswordResetToken(userName);
+                            oUserAPI.GetResetPassword(token, Convert.ToString(password));
+                        }
+                        return RedirectToAction("Index");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            ViewBag.RoleId = new SelectList(db.tbl_webpages_Roles, "RoleId", "RoleName");
+            return View(UserProfile);
+        }
+
+        //
+        // GET: /CreateUser/Delete/5
+
+        public ActionResult Delete(int id = 0)
+        {
+            try
+            {
+                //Check Authorization
+                string roleName = System.Web.Security.Roles.GetRolesForUser().Single();
+                if (roleName.ToUpper() == "USER")
+                {
+                    return RedirectToAction("login", "account");
+                }
+
+                UserProfile userprofile = db.tbl_UserProfile.Find(id);
+                if (userprofile == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(userprofile);
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return null;
+        }
+
+        //
+        // POST: /CreateUser/Delete/5
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            try
+            {
+                //Check Authorization
+                string roleName = System.Web.Security.Roles.GetRolesForUser().Single();
+                if (roleName.ToUpper() == "USER")
+                {
+                    return RedirectToAction("login", "account");
+                }
+
+                UserProfile userprofile = db.tbl_UserProfile.Find(id);
+                db.tbl_UserProfile.Remove(userprofile);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return null;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            db.Dispose();
+            base.Dispose(disposing);
+        }
+    }
+}

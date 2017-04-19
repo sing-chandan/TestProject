@@ -1,0 +1,274 @@
+﻿@model IEnumerable<LiveMonitoringWeb.Models.MachineDetail>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_outh.cshtml";
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+}
+
+@*<script src="@AppBaseURL/Scripts/jquery-1.4.3.min.js" type="text/javascript"></script>*@
+<style type="text/css">
+    .web_dialog_overlay {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: #000000;
+        opacity: .15;
+        filter: alpha(opacity=15);
+        -moz-opacity: .15;
+        z-index: 101;
+        display: none;
+    }
+
+    .web_dialog {
+        display: none;
+        position: fixed;
+        width: 350px;
+        height: 180px;
+        top: 50%;
+        left: 50%;
+        margin-left: -190px;
+        margin-top: -100px;
+        background-color: #ffffff;
+        border: 2px solid #336699;
+        padding: 0px;
+        z-index: 102;
+        font-family: Verdana;
+        font-size: 10pt;
+    }
+
+    .web_dialog_title {
+        border-bottom: solid 2px #336699;
+        background-color: #336699;
+        padding: 4px;
+        color: White;
+        font-weight: bold;
+    }
+
+        .web_dialog_title a {
+            color: White;
+            text-decoration: none;
+        }
+
+    .align_right {
+        text-align: right;
+    }
+</style>
+<script type="text/javascript">
+    function ShowDialog(modal) {
+        $("#overlay").show();
+        $("#dialog").fadeIn(300);
+
+        if (modal) {
+            $("#overlay").unbind("click");
+        }
+        else {
+            $("#overlay").click(function (e) {
+                HideDialog();
+            });
+        }
+    }
+
+    function HideDialog() {
+        $("#overlay").hide();
+        $("#dialog").fadeOut(300);
+    }
+
+</script>
+
+
+<div>
+    <div id="output"></div>
+    <div id="overlay" class="web_dialog_overlay"></div>
+    <div id="dialog" class="web_dialog">
+        @using (Html.BeginForm("_OpenModelPopup", "MachineDetail"))
+        {
+        <table style="width: 100%; border: 0px;" cellpadding="3" cellspacing="0">
+            <tr>
+                <td class="web_dialog_title">Select Group Name</td>
+                <td class="web_dialog_title align_right">
+                    <a href="#" id="btnClose">Close</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @{Html.RenderAction("_OpenModelPopup");}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <input id="btnSubmit" type="submit" value="Submit" class="button-link" />
+                    <input type="hidden" id="machineid" name="machineid" />
+                </td>
+            </tr>
+        </table>
+        }
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(".btnShowModal").click(function (e) {
+            var machinedetailID = this.id;
+            var groupId = this.name;
+            if (groupId != "0") {
+                $("#GroupId").val(groupId);
+            }
+            else {
+                $("#GroupId").prop('selectedIndex', 0);
+            }
+            $("#machineid").val(machinedetailID);
+
+            $.ajax({
+                url: "@AppBaseURL/MachineDetail/CheckGroups",
+                type: 'GET',
+                async: false,
+                cache: false,
+                error: function () {
+                    return false;
+                },
+                success: function (msg) {
+                    if (msg == 0) {
+                        ShowDialog(true);
+                        e.preventDefault();
+                    }
+                    else {
+                        window.location = "@AppBaseURL/Groups/Index";
+                    }
+                }
+            });
+        });
+
+        $("#btnClose").click(function (e) {
+            HideDialog();
+            e.preventDefault();
+        });
+
+        $("#btnSubmit").click(function (e) {
+            HideDialog();
+        });
+
+        $("input[type='checkbox']").change(function () {
+            var checkstatus = $(this).is(':checked');
+            if (checkstatus) {
+                if (confirm("Are you sure you want to block this user?")) {
+                    var machinedetailID = this.id;
+                    $.get('@Url.Action("SetBlockUser", "MachineDetail")' + "?MachineDetailId=" + machinedetailID + "&status=block"); // or use $.post
+                    window.location.reload();
+
+                }
+                else {
+                    $(this).prop("checked", false);
+
+                }
+            }
+            else {
+                if (confirm("Are you sure you want to unblock this user?")) {
+                    var machinedetailID = this.id;
+                    $.get('@Url.Action("SetBlockUser", "MachineDetail")' + "?MachineDetailId=" + machinedetailID + "&status=unblock"); // or use $.post
+                    window.location.reload();
+                }
+                else {
+                    $(this).prop("checked", true);
+                }
+            }
+        });
+
+        $('#table').dataTable({
+            "iDisplayLength": 10,
+            "bDestroy": true
+        });
+    });
+
+
+</script>
+
+<div class="container" style="min-height:100%;margin-bottom:50px;">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-th-large"></span> Machine Details</h3><hr />
+        </div>
+        <div class="col-sm-12 table-responsive" style="margin-bottom:50px;">
+            <table id="table" style=" border-right: 1px solid #000000; " class="CSSTableGenerator">
+                <thead>
+                    <tr style=" background-color: #4C638E; color: white; height :30px;border-top-left-radius:20px;">
+                        <th>
+                            @Html.Label("Customer Name")
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.MachineName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.UserName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.MachineMacAddress)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.MachineIP)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CreatedDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IsBlocked)
+                        </th>
+                        <th>
+                            @Html.Label("Add Group")
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.customer.FirstName)&nbsp;@Html.DisplayFor(modelItem => item.customer.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MachineName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UserName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MachineMacAddress)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MachineIP)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreatedDate)
+                            </td>
+                            <td>
+                                @Html.CheckBoxFor(modelItem => item.IsBlocked, new { id = item.MachineDetailId })
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.GroupName))
+                                {
+                                    <a href="#" id=@item.MachineDetailId name="@item.GroupId" class="btnShowModal">@item.GroupName</a>
+                                }
+                                else
+                                {
+                                    <a href="#" id=@item.MachineDetailId name="0" class="btnShowModal">Add Group</a>
+                                }
+
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

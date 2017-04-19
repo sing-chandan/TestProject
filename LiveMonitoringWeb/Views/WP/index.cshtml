@@ -1,0 +1,55 @@
+﻿@model IEnumerable<LiveMonitoringWeb.Models.WorkingPerformancetest>
+
+@{
+    ViewBag.Title = "index";
+}
+
+<h2>Working Perfomance Table Data</h2>
+
+
+<div class="col-sm-12 table-responsive" style="margin-bottom:50px;">
+    <table id="table" style=" border-right: 1px solid #000000; " class="CSSTableGenerator">
+        <thead>
+            <tr style=" background-color: #4C638E; color: white; height :30px;">
+                <th>
+                    @Html.DisplayName("ID")
+                </th>
+                <th>
+                    @Html.DisplayName("MachineID")
+                </th>
+                <th>
+                    @Html.DisplayName("EntryDate")
+                </th>
+                <th>
+                    @Html.DisplayName("StartDate")
+                </th>
+                <th>
+                    @Html.DisplayName("EndDate")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MachineID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EntryDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

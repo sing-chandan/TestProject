@@ -1,0 +1,8 @@
+﻿@{
+    ViewBag.Title = "Dashbord";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+    @Html.AntiForgeryToken();
+}
+<div ng-view></div>

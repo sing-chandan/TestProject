@@ -1,0 +1,20 @@
+<div class="table-responsive" id="keyboardActivity">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>MachineName</th>
+                <th>UserName</th>
+                <th>Text</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in keyActivityData">
+                <td>{{$index+1}}</td>
+                <td>{{item.machine_detail.MachineName}}</td>
+                <td>{{item.machine_detail.UserName}}</td>
+                <td>{{item.Text}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

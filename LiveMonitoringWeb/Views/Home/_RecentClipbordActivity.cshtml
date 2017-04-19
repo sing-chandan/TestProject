@@ -1,0 +1,59 @@
+﻿@model IEnumerable<LiveMonitoringWeb.Models.KeyLogging>
+@using LiveMonitoringWeb.Models;
+@{
+    Layout = null;
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table').dataTable({
+            "bDestroy": true
+        });
+    });
+</script>
+
+<div class="col-sm-12 table-responsive " style="margin-bottom:50px;">
+    <table id="table" style=" border: 1px solid #000000; " class="CSSTableGeneratorHome table-curved">
+        <tr style=" background-color: #4C638E; color: white; height: 30px;">
+            <th>
+                @Html.DisplayNameFor(model => model.machine_detail.MachineName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.machine_detail.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Text)
+
+            </th>
+        </tr>
+
+        @if (Model.Count() == 0)
+        {
+            <tr style="height: 190px; " id="newpost">
+                <td></td>
+                <td>No Data Available</td>
+                <td></td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td style=" border-left: 1px solid #ddd; border-top: 1px solid #ddd;">
+                        <a href='@AppBaseURL/KeyLogger/Index?KeyLoggerId=@item.KeyLoggerId'>@Html.DisplayFor(modelItem => item.machine_detail.MachineName)</a>
+
+                    </td>
+                    <td style=" border-left: 1px solid #ddd; border-top: 1px solid #ddd;">
+                        @Html.DisplayFor(modelItem => item.machine_detail.UserName)
+                    </td>
+                    <td style=" width: 50%; border-left: 1px solid #ddd; border-top: 1px solid #ddd;">
+                        <label title="@Html.DisplayFor(modelItem => item.Text)"> @Utility.EllipsisString(@Html.DisplayFor(modelItem => item.Text).ToString(), 40)</label>
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>

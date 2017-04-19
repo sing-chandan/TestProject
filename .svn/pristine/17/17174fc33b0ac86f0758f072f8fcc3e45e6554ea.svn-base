@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "SitesReport";
+    Layout = "~/Views/Shared/_Layout_outh.cshtml";
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+}
+<div class="container" style="min-height:100%;margin-bottom:2%;">
+    <div class="row" style="margin-bottom:6%;">
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-pencil"></span> Sites Report</h3><hr />
+        </div>
+        <div class="col-sm-12">
+            <div id="topSitesGraph"></div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $.get('@Url.Action("JsonSitesReport")', function (result) {
+        new Morris.Bar({
+            element: 'topSitesGraph',
+            data: result,
+            // The name of the data record attribute that contains x-values.
+            xkey: 'Domain',
+            // A list of names of data record attributes that contain y-values.
+            ykeys: ['Count'],
+            // Labels for the ykeys -- will be displayed when you hover over the
+            // chart.
+            labels: ['Frequency'],
+            //barColors: ['rgba(76, 99, 142, 1)'],
+            //barColors: [' rgb(65,105,225)'],
+            barColors: function (row, series, type) {
+                if (type === 'bar') {
+                    var red = Math.ceil(125 * row.y / this.ymax);
+                    return 'rgb(' + red + ',125,160)';
+                }
+                else {
+                    return '#000';
+                }
+            },
+            hideHover: 'auto',
+            resize: true,
+            parseTime:false,
+            xLabelAngle: 90,
+            units: ' min.',
+            yLabelFormat: function (y) { return Math.ceil(y / 5) * 5; },
+            integerYLabels: true
+        });
+        $('svg').height(450);
+    });
+</script>

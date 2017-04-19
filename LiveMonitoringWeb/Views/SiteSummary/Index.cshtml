@@ -1,0 +1,55 @@
+﻿@model IEnumerable<LiveMonitoringWeb.Models.BrowserDetail>
+@using LiveMonitoringWeb.Models;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_outh.cshtml";
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table').dataTable({
+            "iDisplayLength": 10,
+            "bDestroy": true
+        });
+    });
+    function myfunction(id, val) {
+        $('#' + id).tinytooltip({ message: val });
+    }
+</script>
+<div class="container" style="min-height:100%;margin-bottom:2%;">
+    <div class="row" style="margin-bottom:6%;">
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-edit"></span> Site Details</h3><hr />
+        </div>
+        <div class="col-sm-12 table-responsive" style="margin-bottom:50px;">
+            <table id="table" style=" border-right: 1px solid #000000; " class="CSSTableGenerator">
+               <thead>
+                 <tr style=" background-color: #4C638E; color: white; height :30px;">
+                    <th>
+                        @Html.DisplayNameFor(model => model.URL)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.count)
+                    </th>
+
+                </tr>
+                   </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+       
+                    <tr>
+                        <td>
+                            <label id="@Html.DisplayFor(modelItem => item.URL)"> @Utility.EllipsisString(@Html.DisplayFor(modelItem => item.URL).ToString(), 100)</label>
+                        </td>
+                        <td>
+                            <a href='@AppBaseURL/BrowserDetails/Index?URL=@item.URL'>@Html.DisplayFor(modelItem => item.count)</a> 
+                        </td>
+                    </tr>
+                }
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</div>

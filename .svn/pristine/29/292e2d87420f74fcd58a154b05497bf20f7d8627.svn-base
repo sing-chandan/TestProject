@@ -1,0 +1,62 @@
+﻿@model IEnumerable<LiveMonitoringWeb.Models.MachineIdle>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout_outh.cshtml";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table').dataTable({
+            "iDisplayLength": 10,
+            "bDestroy": true
+        });
+    });
+</script>
+<div class="container" style="min-height:100%;margin-bottom:2%;">
+    <div class="row" style="margin-bottom:3%;">
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-hdd"></span> Machine Idle Details</h3><hr />
+        </div>
+        <div class="col-sm-12 table-responsive">
+            <table id="table" style="width: 100%; border-right: 1px solid #000000; " class="CSSTableGenerator">
+                <thead>
+                    <tr style=" background-color: #4C638E; color: white; height :30px;">
+                        <th>
+                            @Html.DisplayNameFor(model => model.machine_detail.MachineName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.machine_detail.UserName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IdleTime)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CreatedDate)
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.machine_detail.MachineName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.machine_detail.UserName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IdleTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreatedDate)
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+﻿@using LiveMonitoringWeb.Models;
+
+@helper GetTreeView(List<LiveMonitoringWeb.Models.Tree> tree, int parentID, int CustomerId)
+{
+
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+    int clsId = 1;
+    foreach (var i in tree.Where(a => a.ParentId.Equals(parentID)))
+    {
+        <li>
+            @{
+        var db = new DBContext();
+        var submenu = tree.Where(a => a.ParentId.Equals(i.Id)).Count();
+        var machinename = tree.Where(a => a.Id.Equals(parentID)).Select(b => b.Name).FirstOrDefault();
+        var machinedetailid = Convert.ToString(db.MachineDetails.Where(a => a.MachineName == machinename && a.UserName == i.Name && a.CustomerId == CustomerId && a.MachineMacAddress == i.MachineMacAddress).Select(b => b.MachineDetailId).FirstOrDefault());
+            }
+            @if (submenu > 0)
+            {
+                <span id="@i.Name" class="collapse collapsible">&nbsp;</span>
+            }
+            else
+            {
+                <span style="width:15px; display:inline-block">&nbsp;</span>
+            }
+            @if (parentID == 0)
+            {
+                <span>
+                    <a href="#">@i.Name</a>
+                </span>
+            }
+            else
+            {
+                <span>
+                    <a href="@AppBaseURL/WorkingPerformance/Index?sMachineDetailId=@machinedetailid">@i.Name</a>
+                </span>
+            }
+
+            @if (submenu > 0)
+            {
+                <ul style=" max-width: 380px; width: 100%; border-radius: 5px; color: white; font-weight: 700; ">
+                    @TreeViewWorkPerfm.GetTreeView(tree, i.Id, CustomerId)                  
+                </ul>
+            }
+        </li>
+            clsId += 1;
+    }
+
+
+}
+

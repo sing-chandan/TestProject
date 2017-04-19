@@ -1,0 +1,290 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using LiveMonitoringWeb.Models;
+using CommonUtility;
+using LiveMonitoringWeb.Classes;
+
+namespace LiveMonitoringWeb.Controllers
+{
+    [Authorize(Roles = "Admin,User,Customer")]
+    
+    public class ConfigurationController : Controller
+    {
+        //
+        // GET: /Configuration/
+
+        public ActionResult Index()
+        {
+            //Check Authorization
+            if (!cls_Authorization.isAllowedURL("Admin_Configuration")) return RedirectToAction("login", "account");
+
+            using (var db = new DBContext())
+            {
+                var uir = db.tbl_webpages_UsersInRoles.Find(WebMatrix.WebData.WebSecurity.CurrentUserId);
+                if (uir.RoleId == 1)
+                {
+                    var configurations = db.Configurations.Include(a => a.UserProfile).Include(a => a.customer).OrderByDescending(a => a.CreatedDate);
+                    return View(configurations.ToList());
+                }
+                int customerId = Utility.GetCustomerId();
+                var configurationsnew = db.Configurations.Include(a => a.UserProfile).Include(a => a.customer).Where(a => a.CustomerId == customerId).OrderByDescending(a => a.CreatedDate);
+                return View(configurationsnew.ToList());
+
+            }
+
+        }
+
+        //
+        // GET: /Configuration/Details/5
+
+        public ActionResult Details(int id = 0)
+        {
+            //Check Authorization
+            if (!cls_Authorization.isAllowedURL("Admin_Configuration")) return RedirectToAction("login", "account");
+
+            Configuration configuration = new Configuration();
+            try
+            {
+                using (var db = new DBContext())
+                {
+                    configuration = db.Configurations.Include(a => a.UserProfile).Where(a => a.ConfigurationId == id).FirstOrDefault();
+                    if (configuration == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(configuration);
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return View(configuration);
+        }
+
+        //
+        // GET: /Configuration/Create
+
+        public ActionResult Create()
+        {
+            //Check Authorization
+            if (!cls_Authorization.isAllowedURL("Admin_Configuration")) return RedirectToAction("login", "account");
+
+            return View();
+        }
+
+        //
+        // POST: /Configuration/Create
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Configuration model)
+        {
+            //Check Authorization
+            if (!cls_Authorization.isAllowedURL("Admin_Configuration")) return RedirectToAction("login", "account");
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    using (var db = new DBContext())
+                    {
+                        int customerId = Utility.GetCustomerId();
+                        var configdata = db.Configurations.Where(a => a.CustomerId == customerId).FirstOrDefault();
+                        if (configdata != null)
+                        {
+                            var configuration = db.Configurations.SingleOrDefault();
+                            if (configuration == null)
+                            {
+                                return HttpNotFound();
+                            }
+                            configuration.ScreenShot_Interval = model.ScreenShot_Interval;
+                            configuration.MachineIdle_Interval = model.MachineIdle_Interval;
+                            configuration.MachineIdle_MinTime = model.MachineIdle_MinTime;
+                            configuration.KeyLogger_Interval = model.KeyLogger_Interval;
+                            configuration.KeyLogger_MinTime = model.KeyLogger_MinTime;
+                            configuration.AppTracker_Interval = model.AppTracker_Interval;
+                            configuration.IsActive = true;
+                            configuration.IsSendBlockData = model.IsSendBlockData;
+                            configuration.IsDeleted = false;
+                            configuration.ModifiedDate = DateTime.Now;
+                            configuration.ModifiedBy = WebMatrix.WebData.WebSecurity.CurrentUserId;
+                            db.Entry(configuration).State = EntityState.Modified;
+                        }
+                        else
+                        {
+
+                            model.CustomerId = Utility.GetCustomerId();
+                            model.IsActive = true;
+                            model.CreatedDate = DateTime.Now;
+                            model.CreatedBy = WebMatrix.WebData.WebSecurity.CurrentUserId;
+                            db.Configurations.Add(model);
+                        }
+
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return View(model);
+        }
+
+        //
+        // GET: /Configuration/Edit/5
+
+        public ActionResult Edit(int id = 0)
+        {
+            //Check Authorization
+            if (!cls_Authorization.isAllowedURL("Admin_Configuration")) return RedirectToAction("login", "account");
+
+            Configuration configuration = new Configuration();
+            try
+            {
+                using (var db = new DBContext())
+                {
+                    configuration = db.Configurations.Find(id);
+                    if (configuration == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(configuration);
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return View(configuration);
+        }
+        //
+        // POST: /Configuration/Edit/5
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Configuration model)
+        {
+            //Check Authorization
+            if (!cls_Authorization.isAllowedURL("Admin_Configuration")) return RedirectToAction("login", "account");
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    using (var db = new DBContext())
+                    {
+                        var configuration = db.Configurations.Find(model.ConfigurationId);
+                        if (configuration == null)
+                        {
+                            return HttpNotFound();
+                        }
+
+                        configuration.ScreenShot_Interval = model.ScreenShot_Interval;
+                        configuration.MachineIdle_Interval = model.MachineIdle_Interval;
+                        configuration.MachineIdle_MinTime = model.MachineIdle_MinTime;
+                        configuration.KeyLogger_Interval = model.KeyLogger_Interval;
+                        configuration.KeyLogger_MinTime = model.KeyLogger_MinTime;
+                        configuration.AppTracker_Interval = model.AppTracker_Interval;
+                        configuration.IsActive = model.IsActive;
+                        configuration.IsSendBlockData = model.IsSendBlockData;
+                        if (model.IsActive == true)
+                        {
+                            configuration.IsDeleted = false;
+                        }
+                        configuration.ModifiedDate = DateTime.Now;
+                        configuration.ModifiedBy = WebMatrix.WebData.WebSecurity.CurrentUserId;
+                        db.Entry(configuration).State = EntityState.Modified;
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return View(model);
+        }
+
+        //
+        // GET: /Configuration/Delete/5
+
+        public ActionResult Delete(int id = 0)
+        {
+            //Check Authorization
+            if (!cls_Authorization.isAllowedURL("Admin_Configuration")) return RedirectToAction("login", "account");
+
+            Configuration configuration = new Configuration();
+            try
+            {
+                using (var db = new DBContext())
+                {
+                    configuration = db.Configurations.Find(id);
+                    if (configuration == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(configuration);
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return View(configuration);
+        }
+
+        //
+        // POST: /Configuration/Delete/5
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            //Check Authorization
+            if (!cls_Authorization.isAllowedURL("Admin_Configuration")) return RedirectToAction("login", "account");
+
+            try
+            {
+                using (var db = new DBContext())
+                {
+                    Configuration configuration = db.Configurations.Find(id);
+                    configuration.IsActive = false;
+                    configuration.IsDeleted = true;
+                    configuration.DeletedDate = DateTime.Now;
+                    configuration.DeletedBy = WebMatrix.WebData.WebSecurity.CurrentUserId;
+                    db.Entry(configuration).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            using (var db = new DBContext())
+            {
+                db.Dispose();
+                base.Dispose(disposing);
+            }
+        }
+    }
+}

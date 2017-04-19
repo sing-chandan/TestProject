@@ -1,0 +1,86 @@
+﻿@model LiveMonitoringWeb.Models.Customer
+@using LiveMonitoringWeb.Models;
+
+@{
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+    ViewBag.Title = "Index";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#table').dataTable({
+            "iDisplayLength": 10,
+            "bDestroy": true
+        });
+    });
+</script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-user"></span> My Profile</h3>
+            <hr />
+        </div>
+        <div class="col-sm-12 table-responsive">
+            <table id="table" style=" border-right: 1px solid #000000;width:100%; " class="CSSTableGenerator">
+                <thead>
+                    <tr style=" background-color: #4C638E; color: white; height :30px;border-top-left-radius:20px;">
+                        <th>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.LastName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.OrganizationName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CreateDate)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.LastName)
+                        </td>
+                        <td>
+                            <label title="@Html.DisplayFor(modelItem => Model.OrganizationName)"> @Utility.EllipsisString(@Html.DisplayFor(modelItem => Model.OrganizationName).ToString(), 30)</label>
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.CreateDate)
+                        </td>
+                        <td>
+
+                            @{
+    if (Model != null)
+    {
+        <a href="@AppBaseURL/Customer/Edit?id=@Model.CustomerId"><img src="~/Content/images/edit.png" title="Edit" style="padding-right:5px;" /></a>
+
+    }
+}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <br />
+    <br />
+
+    <br />
+    <br />
+</div>

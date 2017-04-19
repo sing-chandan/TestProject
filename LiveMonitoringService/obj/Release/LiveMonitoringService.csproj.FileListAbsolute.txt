@@ -1,0 +1,8 @@
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringService\bin\Release\svcrshost.exe.config
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringService\bin\Release\svcrshost.exe
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringService\bin\Release\svcrshost.pdb
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringService\obj\Release\LiveMonitoringService.csprojResolveAssemblyReference.cache
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringService\obj\Release\LiveMonitoringService.ProjectInstaller.resources
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringService\obj\Release\LiveMonitoringService.csproj.GenerateResource.Cache
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringService\obj\Release\svcrshost.exe
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringService\obj\Release\svcrshost.pdb

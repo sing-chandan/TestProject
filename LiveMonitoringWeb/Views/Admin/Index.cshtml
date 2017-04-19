@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout_AdminOuth.cshtml";
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+
+}
+<style>
+    .bg-col {
+        min-width: 95%;
+        margin-bottom: 15px;
+        background-color: rgba(47, 49, 53, 0.05);
+        min-height: 280px;
+        height: 100%;
+    }
+
+    /*.bg-col-Graph-admin {
+        min-width: 95%;
+        margin-bottom: 15px;
+        background-color: rgba(47, 49, 53, 0.05);
+        min-height: 350px;
+        height: 100%;
+    }*/
+   
+</style>
+
+<div class="container-fluid" style="min-height:100%;margin-bottom:2%;">
+    <input id="hdnFrom" type="hidden" value="0" />
+    <input id="hdnTo" type="hidden" value="0" />
+    <div class="row">
+        <div class="col-sm-12 ">
+            <h3><span class="glyphicon glyphicon-dashboard"></span> Dashboard</h3><hr />
+        </div>
+        <div class="col-sm-12" style="margin-bottom:30px;">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="col-radius bg-col-Graph-admin">
+                        <div class="col-sm-12">
+                            <a style="font-weight:700" href='@AppBaseURL/Admin/CustomerSummary'>Recent Customers</a>
+                            <p>
+                                @{Html.RenderAction("_RecentCustomers");}
+                </p>
+                </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

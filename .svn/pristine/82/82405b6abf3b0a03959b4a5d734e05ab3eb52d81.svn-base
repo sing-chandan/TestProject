@@ -1,0 +1,216 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using LiveMonitoringWeb.Models;
+using System.IO;
+using System.Data;
+using CommonUtility;
+using LiveMonitoringWeb.Classes;
+using WebMatrix.WebData;
+
+namespace LiveMonitoringWeb.Controllers
+{
+    [Authorize(Roles = "Customer, User")]
+    public class ScreenShotController : Controller
+    {
+        #region Declaration
+
+        private AppSettingReader appKeyReader = new AppSettingReader();
+        private const int _pageSize = 10;
+
+        #endregion Declaration
+
+        //
+        // GET: /ScreenShot/
+
+        public ActionResult Index(string sMachineDetailId)
+        {
+            //Check Authorization
+            if (!cls_Authorization.isAllowedURL("Report_ScreenShots")) return RedirectToAction("login", "account");
+
+            var model = new ScreenShot();
+            //Populate Tree View
+            List<Tree> objTree = new List<Tree>();
+            //Populate File List
+            List<FileList> objfilelist = new List<FileList>();
+
+            using (var db = new DBContext())
+            {
+                int CustomerId = Utility.GetCustomerId();
+                ViewBag.CustomerId = CustomerId;
+                try
+                {
+                    string UserName = string.Empty;
+                    string MachineName = string.Empty;
+                    if (sMachineDetailId != "")
+                    {
+                        Int32 MachineDetailId = Convert.ToInt32(sMachineDetailId);
+                        MachineName = db.MachineDetails.Where(a => a.MachineDetailId == MachineDetailId).Select(b => b.MachineName).FirstOrDefault();
+                        UserName = db.MachineDetails.Where(a => a.MachineDetailId == MachineDetailId).Select(b => b.UserName).FirstOrDefault();
+                    }
+                    ViewBag.MachineName = MachineName;
+                    ViewBag.UserName = UserName;
+
+                    DataTable dt = new DataTable();
+                    DataRow dtrow;
+                    dt.Columns.Add("Id", typeof(Int32));
+                    dt.Columns.Add("Name", typeof(string));
+                    dt.Columns.Add("ParentId", typeof(Int32));
+                    dt.Columns.Add("MacAddress", typeof(string));
+
+                    var machinedetaillst = db.MachineDetails.Where(a => a.CustomerId == CustomerId).Select(a => a.MachineName).Distinct().ToList();
+                    int Id = 0, PId = 0;
+                    foreach (var machinename in machinedetaillst)
+                    {
+                        PId = Id;
+                        var userdetaillst = db.MachineDetails.Where(a => a.MachineName == machinename && a.CustomerId == CustomerId).ToList();
+                        dtrow = dt.NewRow();
+                        dtrow["Id"] = Id + 1;
+                        dtrow["Name"] = machinename;
+                        dtrow["ParentId"] = 0;
+                        dt.Rows.Add(dtrow);
+                        Id = Id + 1;
+                        foreach (var userdetail in userdetaillst)
+                        {
+                            dtrow = dt.NewRow();
+                            dtrow["Id"] = Id + 1;
+                            dtrow["Name"] = userdetail.UserName;
+                            dtrow["ParentId"] = PId + 1;
+                            dtrow["MacAddress"] = userdetail.MachineMacAddress;
+                            dt.Rows.Add(dtrow);
+                            Id = Id + 1;
+                        }
+                    }
+                    if (dt.Rows.Count > 0)
+                    {
+                        ViewBag.MachineCount = dt.Rows.Count.ToString();
+                    }
+
+
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        objTree.Add(new Tree { Id = Convert.ToInt32(dt.Rows[i]["Id"]), Name = Convert.ToString(dt.Rows[i]["Name"]), ParentId = Convert.ToInt32(dt.Rows[i]["ParentId"]), MachineMacAddress = Convert.ToString(dt.Rows[i]["MacAddress"]) });
+                    }
+                    objTree = objTree.OrderBy(a => a.ParentId).ToList();
+
+                    string screenShotFolderPath = Server.MapPath(appKeyReader.ReadKey("ScreenShotFolder"));
+                    string customerId = Utility.GetCustomerId().ToString();
+                    string machineName = string.Empty;
+                    if (!string.IsNullOrWhiteSpace(MachineName))
+                    {
+                        machineName = sMachineDetailId.Trim().ToString() + "_" + MachineName.Trim().ToString();
+                    }
+                    screenShotFolderPath = Path.Combine(screenShotFolderPath, customerId);
+                    screenShotFolderPath = Path.Combine(screenShotFolderPath, machineName);
+                    screenShotFolderPath = Path.Combine(screenShotFolderPath, UserName.Trim().ToString());
+
+                    if (Directory.Exists(screenShotFolderPath))
+                    {
+                        DateTime dFrom = Utility.GetStartDate();
+                        DateTime dTo = Utility.GetEndDate();
+                        var Folder = new DirectoryInfo(screenShotFolderPath);
+                        var Images = Folder.GetFiles("*.png").OrderByDescending(p => p.LastWriteTime).ToArray();
+                        foreach (FileInfo img in Images)
+                        {
+                            String[] FileName = img.ToString().Split('_');
+                            // DateTime FileDate = Convert.ToDateTime(FileName[1] + "/" + FileName[2] + "/" + FileName[0]);
+                            DateTime FileDate = DateTime.ParseExact((FileName[1] + "-" + FileName[2] + "-" + FileName[0]), "MM-dd-yyyy", new System.Globalization.CultureInfo("en-US"), System.Globalization.DateTimeStyles.None);
+                            if (FileDate >= dFrom && FileDate <= dTo)
+                            {
+                                objfilelist.Add(new FileList { FileURL = img.FullName.Replace(Server.MapPath("~/"), string.Empty).Replace("\\", "/"), MachineName = MachineName, UserName = UserName });
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    ExceptionHandler handler = new ExceptionHandler();
+                    handler.HandleException(e);
+                }
+                model.tree = objTree;
+                model.filelist = objfilelist;
+                return View(model);
+            }
+        }
+
+        public ActionResult DeleteImage(string FileURL, string sMachineDetailId)
+        {
+            //Check Authorization
+            if (!cls_Authorization.isAllowedURL("Report_ScreenShots")) return RedirectToAction("login", "account");
+
+            string UserName = string.Empty;
+            string MachineName = string.Empty;
+            int CustomerId = 0;
+            try
+            {
+                if (sMachineDetailId != "")
+                {
+                    var db = new DBContext();
+                    Int32 MachineDetailId = Convert.ToInt32(sMachineDetailId);
+                    MachineName = db.MachineDetails.Where(a => a.MachineDetailId == MachineDetailId).Select(b => b.MachineName).FirstOrDefault();
+                    UserName = db.MachineDetails.Where(a => a.MachineDetailId == MachineDetailId).Select(b => b.UserName).FirstOrDefault();
+                    CustomerId = Utility.GetCustomerId();
+                }
+                ViewBag.MachineName = MachineName;
+                ViewBag.UserName = UserName;
+                ViewBag.CustomerId = CustomerId;
+
+                if (System.IO.File.Exists(Server.MapPath("~/" + FileURL)))
+                {
+                    System.IO.File.Delete(Server.MapPath("~/" + FileURL));
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return RedirectToAction("Index", new { sMachineDetailId = sMachineDetailId });
+        }
+
+        public ActionResult DeleteAllImage(string FileURLs, string sMachineDetailId)
+        {
+            //Check Authorization
+            if (!cls_Authorization.isAllowedURL("Report_ScreenShots")) return RedirectToAction("login", "account");
+
+            string UserName = string.Empty;
+            string MachineName = string.Empty;
+            string CustomerId = string.Empty;
+            try
+            {
+                if (sMachineDetailId != "")
+                {
+                    var db = new DBContext();
+                    Int32 MachineDetailId = Convert.ToInt32(sMachineDetailId);
+                    MachineName = db.MachineDetails.Where(a => a.MachineDetailId == MachineDetailId).Select(b => b.MachineName).FirstOrDefault();
+                    UserName = db.MachineDetails.Where(a => a.MachineDetailId == MachineDetailId).Select(b => b.UserName).FirstOrDefault();
+                    CustomerId = db.MachineDetails.Where(a => a.MachineDetailId == MachineDetailId).Select(b => b.CustomerId).FirstOrDefault().ToString();
+                }
+                ViewBag.MachineName = MachineName;
+                ViewBag.UserName = UserName;
+                ViewBag.CustomerId = CustomerId;
+                if (FileURLs != "")
+                {
+                    string[] arrFileUrls = FileURLs.Split('|');
+                    foreach (var item in arrFileUrls)
+                    {
+                        if (System.IO.File.Exists(Server.MapPath("~/Images/" + CustomerId + "/" + sMachineDetailId + "_" + MachineName + "/" + UserName + "/" + item)))
+                        {
+                            System.IO.File.Delete(Server.MapPath("~/Images/" + CustomerId + "/" + sMachineDetailId + "_" + MachineName + "/" + UserName + "/" + item));
+                        }
+
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return RedirectToAction("Index", new { sMachineDetailId = sMachineDetailId });
+        }
+    }
+}

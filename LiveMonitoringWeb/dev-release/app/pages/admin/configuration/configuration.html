@@ -1,0 +1,121 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div ba-panel ba-panel-title="Configuration [Time Interval(sec.)]" ba-panel-class="with-scroll">
+
+            <div class="add-row-editable-table">
+                <button class="btn btn-primary" ng-click="addUser()">Add row</button>
+
+            </div>
+            <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-bordered table-hover">
+                <thead>
+                    <tr class="sortable ">
+                        <th class="table-id" st-sort="id" st-sort-default="true">#</th>
+                        <th st-sort="FirstName">Customer</th>
+                        <th st-sort="BrowserTacker_Interval">Browser</th>
+                        <th st-sort="ScreenShot_Interval">Screen Shot</th>
+                        <th st-sort="MachineIdle_Interval">Machine Idle</th>
+                        <th st-sort="MachineIdle_MinTime">Machine Idle Min Time</th>
+                        <th st-sort="KeyLogger_Interval">KeyLogger</th>
+                        <th st-sort="KeyLogger_MinTime">KeyLogger Min Time</th>
+                        <th st-sort="AppTracker_Interval">App Tracker</th>
+                        <th st-sort="IsSendBlockData">Block Data</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <th>
+                            <input st-search="FirstName" placeholder="Search Customer" class="input-sm form-control search-input"
+                                   type="search" />
+                        </th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr ng-repeat="item in displayedCollection" class="editable-row">
+                        <td>
+                            {{$index}}
+                        </td>
+                        <td>
+                            <span editable-text="item.customer.FirstName" e-name="FirstName" e-form="rowform" e-required>
+                                {{ item.customer.FirstName || 'empty' }}
+                            </span>
+                        </td>
+                        <td >
+                            <span editable-text="item.BrowserTacker_Interval" e-name="BrowserTacker_Interval" e-form="rowform">
+                                {{ item.BrowserTacker_Interval || 'empty' }}
+                            </span>
+                        </td>
+                        <td >
+                            <span editable-text="item.ScreenShot_Interval" e-name="ScreenShot_Interval" e-form="rowform">
+                                {{ item.ScreenShot_Interval || 'empty' }}
+                            </span>
+                        </td>
+                        <td >
+                            <span editable-text="item.MachineIdle_Interval" e-name="MachineIdle_Interval" e-form="rowform">
+                                {{ item.MachineIdle_Interval || 'empty' }}
+                            </span>
+                        </td>
+                        <td >
+                            <span editable-text="item.MachineIdle_MinTime" e-name="MachineIdle_MinTime" e-form="rowform">
+                                {{ item.MachineIdle_MinTime || 'empty' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span editable-text="item.KeyLogger_Interval" e-name="KeyLogger_Interval" e-form="rowform">
+                                {{ item.KeyLogger_Interval || 'empty' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span editable-text="item.KeyLogger_MinTime" e-name="KeyLogger_MinTime" e-form="rowform">
+                                {{ item.KeyLogger_MinTime || 'empty' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span editable-text="item.AppTracker_Interval" e-name="AppTracker_Interval" e-form="rowform">
+                                {{ item.AppTracker_Interval || 'empty' }}
+                            </span>
+                        </td>
+                        <td class="checkbox-td">
+                            <span editable-checkbox="item.IsSendBlockData" e-name="IsSendBlockData" e-form="rowform">
+                                {{ item.IsSendBlockData || 'empty' }}
+                            </span>
+                        </td>
+                        <td>
+                            <form editable-form name="rowform" ng-show="rowform.$visible" onbeforesave="updateUser($data)" class="form-buttons form-inline"
+                                  shown="inserted == item">
+                                <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary editable-table-button btn-xs">
+                                    Save
+                                </button>
+                                <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default editable-table-button btn-xs">
+                                    Cancel
+                                </button>
+                            </form>
+                            <div class="buttons" ng-show="!rowform.$visible">
+                                <button class="btn btn-primary editable-table-button btn-xs" ng-click="rowform.$show()">Edit</button>
+                                <button class="btn btn-danger editable-table-button btn-xs" ng-click="removeUser($index)">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="11" class="text-center">
+                            <div st-pagination="" st-items-by-page="10" st-displayed-pages="5"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+</div>

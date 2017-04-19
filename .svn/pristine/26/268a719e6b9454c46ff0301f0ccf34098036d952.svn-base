@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "ProductiveReport";
+    Layout = "~/Views/Shared/_Layout_outh.cshtml";
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+}
+<div class="container" style="min-height:100%;margin-bottom:2%;">
+    <div class="row" style="margin-bottom:6%;">
+        <div class="col-sm-12">
+            <h3><span class="glyphicon glyphicon-pencil"></span> Productivity Report</h3><hr />
+        </div>
+        <div class="col-sm-12">
+            <div id="userProductivityGraph"></div>
+        </div>
+    </div>
+</div>
+<script>
+    $.get('@Url.Action("JsonProductiveReport")', function (result) {
+        new Morris.Bar({
+            element: 'userProductivityGraph',
+            data: result,
+            // The name of the data record attribute that contains x-values.
+            xkey: 'User',
+
+            // A list of names of data record attributes that contain y-values.
+            ykeys: ['Productive', 'NonProductive'],
+            // Labels for the ykeys -- will be displayed when you hover over the
+            // chart.
+            labels: ['Productive', 'NonProductive'],
+            hideHover: 'auto',
+            resize: true,
+            parseTime: false,
+            xLabelFormat: function (d) {
+                return d.label.substring(0, d.label.length >= 20 ? 20 : d.label.length);
+            },
+            xLabelAngle: 90,
+            units: '%',
+            goals: [0, 100]
+        });
+        $('svg').height(450);
+    });
+
+</script>

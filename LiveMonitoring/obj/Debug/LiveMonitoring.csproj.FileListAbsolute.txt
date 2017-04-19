@@ -1,0 +1,15 @@
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoring\bin\Debug\svcrhost.exe.config
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoring\obj\Debug\Interop.SHDocVw.dll
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoring\obj\Debug\LiveMonitoring.csproj.ResolveComReference.cache
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoring\bin\Debug\svcrhost.exe
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoring\bin\Debug\svcrhost.pdb
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoring\bin\Debug\APIR.dll
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoring\bin\Debug\D.Net.Clipboard.dll
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoring\bin\Debug\Microsoft.Win32Ex.dll
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoring\bin\Debug\NDde.dll
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoring\bin\Debug\Newtonsoft.Json.dll
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoring\bin\Debug\System.Net.Http.dll
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoring\bin\Debug\System.Net.Http.Formatting.dll
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoring\obj\Debug\LiveMonitoring.csprojResolveAssemblyReference.cache
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoring\obj\Debug\svcrhost.exe
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoring\obj\Debug\svcrhost.pdb

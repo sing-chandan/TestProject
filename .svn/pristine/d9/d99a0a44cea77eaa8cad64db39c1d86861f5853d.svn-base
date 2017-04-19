@@ -1,0 +1,46 @@
+﻿@{
+    Layout = null;
+    String AppBaseURLWithSlash = new CommonUtility.AppSettingReader().ReadKey("WebBaseURL");
+    String AppBaseURL = AppBaseURLWithSlash.Substring(0, AppBaseURLWithSlash.Length - 1);
+}
+
+
+<div id="userProductivityGraph">
+    <img id="loading2" style="display: none;"
+         src="@AppBaseURL/content/images/Graph_image.png" />
+</div>
+<script>
+    $.get('@Url.Action("JsonUserProductivity")', function (result) {
+        if (result.length == 0) {
+            $("#loading2").show();
+            debugger;
+            $.get('<%= Url.Action("@AppBaseURL/Home/Index") %>', {},
+                function (data) {
+                    $('#userProductivityGraph').html(data);
+                    $('#loading2').hide();
+                });
+        }
+        else {
+            new Morris.Bar({
+                element: 'userProductivityGraph',
+                data: result,
+                // The name of the data record attribute that contains x-values.
+                xkey: 'User',
+                // A list of names of data record attributes that contain y-values.
+                ykeys: ['Productive', 'NonProductive'],
+                // Labels for the ykeys -- will be displayed when you hover over the
+                // chart.
+                labels: ['Productive', 'NonProductive'],
+                hideHover: 'auto',
+                resize: true,
+                parseTime: false,
+                xLabelAngle: 90,
+                axes: 'y',
+                units: '%',
+                goals: [0, 100]
+
+            });
+            $('svg').height(400);
+        }
+    });
+</script>

@@ -1,0 +1,10 @@
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringScheduler\bin\Debug\LiveMonitoringScheduler.exe.config
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringScheduler\bin\Debug\LiveMonitoringScheduler.exe
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringScheduler\bin\Debug\LiveMonitoringScheduler.pdb
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringScheduler\bin\Debug\CommonUtility.dll
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringScheduler\bin\Debug\Newtonsoft.Json.dll
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringScheduler\bin\Debug\System.Net.Http.dll
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringScheduler\bin\Debug\System.Net.Http.Formatting.dll
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringScheduler\obj\Debug\LiveMonitoringScheduler.exe
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringScheduler\obj\Debug\LiveMonitoringScheduler.pdb
+C:\WorkArea\LiveMonitoring_Projects\LiveMonitoringScheduler\obj\Debug\LiveMonitoringScheduler.csprojResolveAssemblyReference.cache
