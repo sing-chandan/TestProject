@@ -52,8 +52,17 @@ namespace LiveMonitoringWeb.Controllers
                 }
                 int customerId = Utility.GetCustomerId();
                 var configurationsnew = db.Configurations.Include(a => a.UserProfile).Include(a => a.customer).OrderByDescending(a => a.CreatedDate).Where(a => a.CustomerId == customerId)
-                    .Select(a => new {a.customer.FirstName,a.BrowserTacker_Interval,a.ScreenShot_Interval,a.MachineIdle_Interval,a.MachineIdle_MinTime,
-                        a.KeyLogger_Interval,a.KeyLogger_MinTime,a.AppTracker_Interval,a.IsSendBlockData});
+                    .Select(a => new
+                    {
+                        a.customer.FirstName,
+                        a.ConfigurationId,
+                        a.BrowserTacker_Interval,
+                        a.ScreenShot_Interval,
+                        a.MachineIdle_Interval,
+                        a.MachineIdle_MinTime,
+                        a.KeyLogger_Interval,a.KeyLogger_MinTime,a.AppTracker_Interval,a.IsSendBlockData,
+                       a.IsActive
+                    });
                 
                 return Json(configurationsnew.ToList(),JsonRequestBehavior.AllowGet);
 
@@ -358,7 +367,7 @@ namespace LiveMonitoringWeb.Controllers
         // POST: /Configuration/Delete/5
 
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+       // [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             //Check Authorization

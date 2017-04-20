@@ -66,22 +66,26 @@
                         </td>
                       <td>
                           <span editable-checkbox="item.IsProductive" e-name="IsProductive" e-form="rowform">
-                              {{ item.IsProductive || 'empty' }}
+                              <span ng-show="!item.IsProductive" class="fa fa-minus-circle"></span>
+                              <span ng-show="item.IsProductive" class="fa fa-check-circle"></span>
                           </span>
                       </td>
                         <td>
                             <span editable-checkbox="item.IsBlocked" e-name="IsBlocked" e-form="rowform">
-                                {{ item.IsBlocked || 'empty' }}
+                                <span ng-show="!item.IsBlocked" class="fa fa-minus-circle"></span>
+                                <span ng-show="item.IsBlocked" class="fa fa-check-circle"></span>
                             </span>
                         </td>
                         <td>
                             <span editable-checkbox="item.IsActive" e-name="IsActive" e-form="rowform">
-                                {{ item.IsProductive || 'empty' }}
+                                <span ng-show="!item.IsActive" class="fa fa-minus-circle"></span>
+                                <span ng-show="item.IsActive" class="fa fa-check-circle"></span>
                             </span>
                         </td>
                         <td>
                             <span editable-checkbox="item.IsDeleted" e-name="IsDeleted" e-form="rowform">
-                                {{ item.IsDeleted || 'empty' }}
+                                <span ng-show="!item.IsDeleted" class="fa fa-minus-circle"></span>
+                                <span ng-show="item.IsDeleted" class="fa fa-check-circle"></span>
                             </span>
                         
                         </td>

@@ -1,65 +1,65 @@
-﻿<div class="row">
+﻿<div class="row" ng-controller="CategoryCtrl">
     <div class="col-md-12">
         <div ba-panel ba-panel-title="Category list" ba-panel-class="with-scroll">
 
-            <div class="add-row-editable-table">
-                <button class="btn btn-primary" ng-click="AddRow=true;">Add row</button>
-               
+            <div class="add-row-editable-table" ng-show="!AddRow">
+                <button class="btn btn-primary" ng-click="CatAdd();">Add New</button>
+
             </div>
             <div class="row" ng-show="AddRow">
-                
+
                 <table class="table table-no-borders">
                     <tr>
                         <td>Category Name</td>
                         <td>
-                            <input type="text" class="form-control" ng-model="Category.txtCategory" />
+                            <input type="text" class="form-control" ng-model="Category.CategoryName" />
                         </td>
                         <td>
                             <div class="checkbox">
-                            <label class="custom-checkbox">
-                                <input type="checkbox" ng-model="Category.chkBlock" value="option1"> 
-                                <span>Block</span>
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" ng-model="Category.chkBlock" value="option1">
+                                    <span>Block</span>
                                 </label>
                             </div>
-                       
+
                         </td>
-            <td>
-                <div class="checkbox">
-                    <label class="custom-checkbox">
-                        <input type="checkbox" ng-model="Category.chkSatus" value="option1">
-                        <span>Status</span>
-                    </label>
-                </div>
-         
-        </td>
-              <td>
-                  <div class="checkbox">
-                      <label class="custom-checkbox">
-                          <input type="checkbox" ng-model="Category.chkDeleted" value="option1">
-                          <span>Satatus</span>
-                      </label>
-                  </div>
-            
-                </td>
                         <td>
-                            <button type="submit" ng-click="AddCatgory()" class="btn btn-primary editable-table-button">
+                            <div class="checkbox">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" ng-model="Category.chkSatus" value="option1">
+                                    <span>Status</span>
+                                </label>
+                            </div>
+
+                        </td>
+                        <td>
+                            <div class="checkbox">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" ng-model="Category.chkDeleted" value="option1">
+                                    <span>Satatus</span>
+                                </label>
+                            </div>
+
+                        </td>
+                        <td>
+                            <button type="submit" ng-click="AddCatgory(Category)" class="btn btn-primary editable-table-button">
                                 Save
                             </button>
-                            <button type="button" ng-click="AddRow=false;" class="btn btn-default editable-table-button">
+                            <button type="button" ng-click="btnCancel()" class="btn btn-default editable-table-button">
                                 Cancel
                             </button>
                         </td>
-            </tr>
-            </table>
+                    </tr>
+                </table>
             </div>
             <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-bordered table-hover">
                 <thead>
                     <tr class="sortable ">
                         <th class="table-id" st-sort="id" st-sort-default="true">#</th>
                         <th st-sort="CategoryName">Category Name</th>
-                        <th st-sort="IsActive">Block</th>
-                        <th st-sort="IsBlocked">Status</th>
-                        <th st-sort="IsDeleted">Deleted</th>
+                        <th st-sort="IsActive" class="text-center">Status</th>
+                        <th st-sort="IsBlocked" class="text-center">Block</th>
+                        <th st-sort="IsDeleted" class="text-center">Deleted</th>
                         <th></th>
                     </tr>
                     <tr>
@@ -85,19 +85,24 @@
                                 {{ item.CategoryName || 'empty' }}
                             </span>
                         </td>
-                        <td class="select-td">
+                        <td class="checkbox-td text-center">
                             <span editable-checkbox="item.IsActive" e-name="IsActive" e-form="rowform">
-                                {{ item.IsActive || 'In Active' }}
+                                <span ng-show="!item.IsActive" class="fa fa-minus-circle"></span>
+                                <span ng-show="item.IsActive" class="fa fa-check-circle"></span>
                             </span>
                         </td>
-                        <td class="select-td">
+                        <td class="checkbox-td text-center">
                             <span editable-checkbox="item.IsBlocked" e-name="IsBlocked" e-form="rowform">
-                                {{ item.IsBlocked || 'In Active' }}
+                                <span ng-show="!item.IsBlocked" class="fa fa-minus-circle"></span>
+                                <span ng-show="item.IsBlocked" class="fa fa-check-circle "></span>
+
                             </span>
                         </td>
-                        <td class="select-td">
+                        <td class="checkbox-td text-center">
                             <span editable-checkbox="item.IsDeleted" e-name="IsBlocked" e-form="rowform">
-                                {{ item.IsDeleted || 'In Active' }}
+                                <span ng-show="!item.IsDeleted" class="fa fa-minus-circle"></span>
+                                <span ng-show="item.IsDeleted" class="fa fa-check-circle"></span>
+
                             </span>
                         </td>
                         <td>
@@ -112,7 +117,7 @@
                             </form>
                             <div class="buttons" ng-show="!rowform.$visible">
                                 <button class="btn btn-primary editable-table-button btn-xs" ng-click="rowform.$show()">Edit</button>
-                                <button class="btn btn-danger editable-table-button btn-xs" ng-click="removeUser($index)">Delete</button>
+                                <button class="btn btn-danger editable-table-button btn-xs" ng-click="deactive(item)">Delete</button>
                             </div>
                         </td>
                     </tr>
@@ -125,7 +130,7 @@
                     </tr>
                 </tfoot>
             </table>
-            
+
         </div>
     </div>
 </div>

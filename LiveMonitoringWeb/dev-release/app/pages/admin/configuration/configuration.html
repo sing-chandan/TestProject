@@ -2,10 +2,10 @@
     <div class="col-md-12">
         <div ba-panel ba-panel-title="Configuration [Time Interval(sec.)]" ba-panel-class="with-scroll">
 
-            <div class="add-row-editable-table">
+            <!--<div class="add-row-editable-table">
                 <button class="btn btn-primary" ng-click="addUser()">Add row</button>
 
-            </div>
+            </div>-->
             <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-bordered table-hover">
                 <thead>
                     <tr class="sortable ">
@@ -14,11 +14,12 @@
                         <th st-sort="BrowserTacker_Interval">Browser</th>
                         <th st-sort="ScreenShot_Interval">Screen Shot</th>
                         <th st-sort="MachineIdle_Interval">Machine Idle</th>
-                        <th st-sort="MachineIdle_MinTime">Machine Idle Min Time</th>
+                        <th st-sort="MachineIdle_MinTime">Idle Min Time</th>
                         <th st-sort="KeyLogger_Interval">KeyLogger</th>
                         <th st-sort="KeyLogger_MinTime">KeyLogger Min Time</th>
-                        <th st-sort="AppTracker_Interval">App Tracker</th>
-                        <th st-sort="IsSendBlockData">Block Data</th>
+                        <th st-sort="AppTracker_Interval">Apps</th>
+                        <th st-sort="IsSendBlockData">Block</th>
+                        <th st-sort="IsSendBlockData">Status</th>
                         <th></th>
                     </tr>
                     <tr>
@@ -27,6 +28,7 @@
                             <input st-search="FirstName" placeholder="Search Customer" class="input-sm form-control search-input"
                                    type="search" />
                         </th>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -85,13 +87,20 @@
                                 {{ item.AppTracker_Interval || 'empty' }}
                             </span>
                         </td>
-                        <td class="checkbox-td">
+                        <td class="checkbox-td text-center">
                             <span editable-checkbox="item.IsSendBlockData" e-name="IsSendBlockData" e-form="rowform">
-                                {{ item.IsSendBlockData || 'empty' }}
+                                <span ng-show="!item.IsSendBlockData" class="fa fa-minus-circle"></span>
+                                <span ng-show="item.IsSendBlockData" class="fa fa-check-circle"></span>
+                            </span>
+                        </td>
+                        <td class="checkbox-td text-center">
+                            <span editable-checkbox="item.IsActive" e-name="IsActive" e-form="rowform">
+                                <span ng-show="!item.IsActive" class="fa fa-minus-circle"></span>
+                                <span ng-show="item.IsActive" class="fa fa-check-circle"></span>
                             </span>
                         </td>
                         <td>
-                            <form editable-form name="rowform" ng-show="rowform.$visible" onbeforesave="updateUser($data)" class="form-buttons form-inline"
+                            <form editable-form name="rowform" ng-show="rowform.$visible" onbeforesave="update($data)" class="form-buttons form-inline"
                                   shown="inserted == item">
                                 <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary editable-table-button btn-xs">
                                     Save
@@ -102,14 +111,14 @@
                             </form>
                             <div class="buttons" ng-show="!rowform.$visible">
                                 <button class="btn btn-primary editable-table-button btn-xs" ng-click="rowform.$show()">Edit</button>
-                                <button class="btn btn-danger editable-table-button btn-xs" ng-click="removeUser($index)">Delete</button>
+                                <button class="btn btn-danger editable-table-button btn-xs" ng-click="delete(item)">Delete</button>
                             </div>
                         </td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="11" class="text-center">
+                        <td colspan="12" class="text-center">
                             <div st-pagination="" st-items-by-page="10" st-displayed-pages="5"></div>
                         </td>
                     </tr>

@@ -293,7 +293,7 @@ namespace LiveMonitoringWeb.Controllers
         // POST: /Category/Delete/5
 
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+       // [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             try

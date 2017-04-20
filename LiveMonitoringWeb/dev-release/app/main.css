@@ -6276,3 +6276,17 @@ label.todo-checkbox {
 .table .checkbox{
     margin-top:0px;
 }
+.table .fa-minus-circle{
+    color:#e85656;
+    font-size:20px
+}
+.table .fa-check-circle{
+    color:#209e91;
+    font-size:20px
+}
+
+
+.checkbox-td input[type="checkbox"]{
+    margin-top:-20px;
+    margin-left:0px !important;
+}

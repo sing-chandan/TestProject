@@ -5,9 +5,12 @@
         .controller('CategoryCtrl', CategoryCtrl);
 
     /** @ngInject */
-    function CategoryCtrl($scope, $filter,$http, editableOptions, editableThemes) {
+    function CategoryCtrl($scope, $filter, $http, editableOptions, editableThemes, SweetAlert) {
 
-    $scope.rowCollection = [];
+        $scope.rowCollection = [];
+        $scope.AddRow = false;
+
+        $scope.Category = {};
 
     var baseSiteUrlPath = $("base").first().attr("href");
 
@@ -22,8 +25,14 @@
           $scope.rowCollection.splice(index, 1);
       };
 
-
-
+      $scope.CatAdd = function () {
+          $scope.AddRow = true;
+      }
+      
+      $scope.btnCancel = function () {
+          $scope.Category = undefined;
+          $scope.AddRow = false;
+      }
 
       editableOptions.theme = 'bs3';
       editableThemes['bs3'].submitTpl = '<button type="submit" class="btn btn-primary btn-with-icon"><i class="ion-checkmark-round"></i></button>';
@@ -40,7 +49,45 @@
 
         $scope.fillGrid();
 
+        $scope.deactive = function (item) {
+           
+
+            SweetAlert.swal({
+                title: "Are you sure want to delete?",
+                text: "",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55", confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+function (isConfirm) {
+    if (isConfirm) {
+        var ID = item.CategoryId;
+
+        $http.post(baseSiteUrlPath + "Category/Delete", { id: ID }).
+success(function (data, status, headers, config) {
+    debugger;
+
+    $scope.fillGrid();
+}).
+    error(function (data, status, headers, config) {
+
+    });
+    } else {
+        
+    }
+});
+
+          
+
+        }
+        
+
         $scope.addUser = function () {
+
+            
             $scope.inserted = {
                 CategoryName: null,
                 IsActive: false,
@@ -50,15 +97,17 @@
             $scope.rowCollection.unshift($scope.inserted);
         };
 
-        $scope.AddCatgory = function () {
-            var Category = JSON.parse(angular.toJson(Category));
+        $scope.AddCatgory = function (AddObj) {
+            debugger;
+            var Category = JSON.parse(angular.toJson(AddObj));
 
             $http.post(baseSiteUrlPath + "Category/Save", JSON.stringify(Category)).
- success(function (data, status, headers, config) {
-     debugger;
+    success(function (data, status, headers, config) {
+        debugger;
+        $scope.AddRow = false;
+        $scope.fillGrid();
 
-     $scope.fillGrid();
- }).
+    }).
         error(function (data, status, headers, config) {
 
         });
@@ -115,5 +164,7 @@
      
 
     }
+
+   
 
 })();
