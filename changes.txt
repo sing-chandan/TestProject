@@ -1,0 +1,628 @@
+USE [LiveMonitoring]
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_AdminScheduleReport]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LiveMonitoring_AdminScheduleReport](
+	[AdminScheduleReportId] [int] IDENTITY(1,1) NOT NULL,
+	[MachineDetailId] [int] NULL,
+	[CustomerId] [int] NULL,
+	[bSend] [bit] NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_CustomerDownloadHistory]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LiveMonitoring_CustomerDownloadHistory](
+	[DownloadHistoryId] [int] IDENTITY(1,1) NOT NULL,
+	[CustomerId] [int] NULL,
+	[DownloadDate] [datetime] NULL,
+ CONSTRAINT [PK_LiveMonitoring_CustomerDownloadHistory] PRIMARY KEY CLUSTERED 
+(
+	[DownloadHistoryId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_Screens]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LiveMonitoring_Screens](
+	[ScreenId] [int] IDENTITY(1,1) NOT NULL,
+	[ScreenDisplayName] [nvarchar](100) NULL,
+	[ScreenInternalName] [nvarchar](100) NULL,
+	[ScreenType] [nvarchar](50) NULL,
+	[IsActive] [bit] NULL,
+	[IsDeleted] [bit] NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedDate] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+	[DeletedDate] [datetime] NULL,
+	[DeletedBy] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_Screens] PRIMARY KEY CLUSTERED 
+(
+	[ScreenId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_UserScreenPermissions]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LiveMonitoring_UserScreenPermissions](
+	[UserScreenPermissionId] [int] IDENTITY(1,1) NOT NULL,
+	[MembershipId] [int] NULL,
+	[ScreenId] [int] NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_UserScreenPermissions] PRIMARY KEY CLUSTERED 
+(
+	[UserScreenPermissionId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_ScheduleReports]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LiveMonitoring_ScheduleReports](
+	[ScheduleReportId] [int] IDENTITY(1,1) NOT NULL,
+	[ScreenId] [int] NULL,
+	[MembershipId] [int] NULL,
+	[ScheduleType] [nvarchar](50) NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[SendDate] [datetime] NULL,
+	[IsSend] [bit] NULL,
+ CONSTRAINT [PK_LiveMonitoring_ScheduleReports] PRIMARY KEY CLUSTERED 
+(
+	[ScheduleReportId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_CustomerUserMapping]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LiveMonitoring_CustomerUserMapping](
+	[CustomerUserId] [int] IDENTITY(1,1) NOT NULL,
+	[CustomerId] [int] NULL,
+	[MembershipId] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_CustomerUserMapping] PRIMARY KEY CLUSTERED 
+(
+	[CustomerUserId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_Customers]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[LiveMonitoring_Customers](
+	[CustomerId] [int] IDENTITY(1,1) NOT NULL,
+	[MembershipId] [int] NOT NULL,
+	[Email] [varchar](100) NOT NULL,
+	[FirstName] [varchar](100) NOT NULL,
+	[LastName] [varchar](100) NOT NULL,
+	[OrganizationName] [varchar](100) NOT NULL,
+	[CreateDate] [datetime] NOT NULL,
+	[LastLoginDate] [datetime] NULL,
+ CONSTRAINT [PK_LiveMonitoring_CustomerProfiles] PRIMARY KEY CLUSTERED 
+(
+	[CustomerId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_Subscribers]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LiveMonitoring_Subscribers](
+	[SubscriberId] [int] IDENTITY(1,1) NOT NULL,
+	[CustomerId] [int] NOT NULL,
+	[FreeUsers] [int] NOT NULL,
+	[PaidUsers] [int] NOT NULL,
+	[IsActive] [bit] NULL,
+	[IsDeleted] [bit] NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedDate] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+	[DeletedDate] [datetime] NULL,
+	[DeletedBy] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_Subscribers] PRIMARY KEY CLUSTERED 
+(
+	[SubscriberId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_Category]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LiveMonitoring_Category](
+	[CategoryId] [int] IDENTITY(1,1) NOT NULL,
+	[CategoryName] [nvarchar](50) NULL,
+	[IsBlocked] [bit] NULL,
+	[IsActive] [bit] NULL,
+	[IsDeleted] [bit] NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedDate] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+	[DeletedDate] [datetime] NULL,
+	[DeletedBy] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_Category] PRIMARY KEY CLUSTERED 
+(
+	[CategoryId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_SubCategoryType]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LiveMonitoring_SubCategoryType](
+	[SubCategoryTypeId] [int] IDENTITY(1,1) NOT NULL,
+	[SubCategoryTypeName] [nvarchar](50) NULL,
+ CONSTRAINT [PK_LiveMonitoring_SubCategoryType] PRIMARY KEY CLUSTERED 
+(
+	[SubCategoryTypeId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_SubCategory]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LiveMonitoring_SubCategory](
+	[SubCategoryId] [int] IDENTITY(1,1) NOT NULL,
+	[CategoryId] [int] NULL,
+	[SubCategoryTypeId] [int] NULL,
+	[SubCategoryName] [nvarchar](50) NULL,
+	[IsProductive] [bit] NULL,
+	[IsBlocked] [bit] NULL,
+	[IsActive] [bit] NULL,
+	[IsDeleted] [bit] NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedDate] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+	[DeletedDate] [datetime] NULL,
+	[DeletedBy] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_SubCategory] PRIMARY KEY CLUSTERED 
+(
+	[SubCategoryId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[UserProfile]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[UserProfile](
+	[UserId] [int] IDENTITY(1,1) NOT NULL,
+	[UserName] [nvarchar](56) NOT NULL,
+	[FullName] [nvarchar](56) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[UserId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[UserName] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[webpages_Membership]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[webpages_Membership](
+	[UserId] [int] NOT NULL,
+	[CreateDate] [datetime] NULL,
+	[ConfirmationToken] [nvarchar](128) NULL,
+	[IsConfirmed] [bit] NULL,
+	[LastPasswordFailureDate] [datetime] NULL,
+	[PasswordFailuresSinceLastSuccess] [int] NOT NULL,
+	[Password] [nvarchar](128) NOT NULL,
+	[PasswordChangedDate] [datetime] NULL,
+	[PasswordSalt] [nvarchar](128) NOT NULL,
+	[PasswordVerificationToken] [nvarchar](128) NULL,
+	[PasswordVerificationTokenExpirationDate] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[UserId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[webpages_OAuthMembership]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[webpages_OAuthMembership](
+	[Provider] [nvarchar](30) NOT NULL,
+	[ProviderUserId] [nvarchar](100) NOT NULL,
+	[UserId] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Provider] ASC,
+	[ProviderUserId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[webpages_Roles]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[webpages_Roles](
+	[RoleId] [int] IDENTITY(1,1) NOT NULL,
+	[RoleName] [nvarchar](256) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[RoleId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[RoleName] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_AppDetails]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING OFF
+GO
+CREATE TABLE [dbo].[LiveMonitoring_AppDetails](
+	[AppId] [int] IDENTITY(1,1) NOT NULL,
+	[MachineDetailId] [int] NOT NULL,
+	[AppName] [varchar](255) NOT NULL,
+	[Title] [varchar](255) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_LiveMonitoring_AppDetails] PRIMARY KEY CLUSTERED 
+(
+	[AppId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_BrowserDetails]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING OFF
+GO
+CREATE TABLE [dbo].[LiveMonitoring_BrowserDetails](
+	[BrowserDetailId] [int] IDENTITY(1,1) NOT NULL,
+	[MachineDetailId] [int] NOT NULL,
+	[BrowserName] [varchar](50) NOT NULL,
+	[BrowserVersion] [varchar](50) NOT NULL,
+	[Title] [varchar](255) NULL,
+	[URL] [varchar](255) NULL,
+	[CreatedDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_LiveMonitoring_BrowserDetails] PRIMARY KEY CLUSTERED 
+(
+	[BrowserDetailId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_Configuration]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LiveMonitoring_Configuration](
+	[ConfigurationId] [int] IDENTITY(1,1) NOT NULL,
+	[CustomerId] [int] NOT NULL,
+	[BrowserTacker_Interval] [int] NOT NULL,
+	[ScreenShot_Interval] [int] NOT NULL,
+	[MachineIdle_Interval] [int] NOT NULL,
+	[MachineIdle_MinTime] [int] NOT NULL,
+	[KeyLogger_Interval] [int] NOT NULL,
+	[KeyLogger_MinTime] [int] NOT NULL,
+	[AppTracker_Interval] [int] NOT NULL,
+	[IsActive] [bit] NULL,
+	[IsSendBlockData] [bit] NULL,
+	[IsDeleted] [bit] NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedDate] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+	[DeletedDate] [datetime] NULL,
+	[DeletedBy] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_Configuration] PRIMARY KEY CLUSTERED 
+(
+	[ConfigurationId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_Idle]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LiveMonitoring_Idle](
+	[IdleTimeId] [int] IDENTITY(1,1) NOT NULL,
+	[MachineDetailId] [int] NOT NULL,
+	[IdleTime] [int] NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_LiveMonitoring_Idle] PRIMARY KEY CLUSTERED 
+(
+	[IdleTimeId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_KeyLoggings]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING OFF
+GO
+CREATE TABLE [dbo].[LiveMonitoring_KeyLoggings](
+	[KeyLoggerId] [int] IDENTITY(1,1) NOT NULL,
+	[MachineDetailId] [int] NOT NULL,
+	[TextType] [char](2) NOT NULL,
+	[Text] [varchar](max) NULL,
+	[CreatedDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_LiveMonitoring_KeyLoggings] PRIMARY KEY CLUSTERED 
+(
+	[KeyLoggerId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_MachineDetails]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING OFF
+GO
+CREATE TABLE [dbo].[LiveMonitoring_MachineDetails](
+	[MachineDetailId] [int] IDENTITY(1,1) NOT NULL,
+	[CustomerId] [int] NOT NULL,
+	[MachineMacAddress] [varchar](15) NOT NULL,
+	[MachineName] [varchar](50) NOT NULL,
+	[MachineIP] [varchar](50) NOT NULL,
+	[UserName] [varchar](50) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[IsBlocked] [bit] NULL,
+ CONSTRAINT [PK_LiveMonitoring_MachineDetails] PRIMARY KEY CLUSTERED 
+(
+	[MachineDetailId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_Groups]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LiveMonitoring_Groups](
+	[GroupId] [int] IDENTITY(1,1) NOT NULL,
+	[GroupName] [nvarchar](50) NULL,
+	[ShiftStartTime] [nvarchar](10) NULL,
+	[ShiftEndTime] [nvarchar](10) NULL,
+	[LunchStartTime] [nvarchar](10) NULL,
+	[LunchEndTime] [nvarchar](10) NULL,
+	[IsActive] [bit] NULL,
+	[IsDeleted] [bit] NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedDate] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+	[DeletedDate] [datetime] NULL,
+	[DeletedBy] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_Groups] PRIMARY KEY CLUSTERED 
+(
+	[GroupId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_MachineGrouping]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LiveMonitoring_MachineGrouping](
+	[MachineGroupId] [int] IDENTITY(1,1) NOT NULL,
+	[MachineDetailId] [int] NULL,
+	[GroupId] [int] NULL,
+	[CreatedDate] [datetime] NULL,
+	[CreatedBy] [int] NULL,
+	[ModifiedDate] [datetime] NULL,
+	[ModifiedBy] [int] NULL,
+ CONSTRAINT [PK_LiveMonitoring_MachineGrouping] PRIMARY KEY CLUSTERED 
+(
+	[MachineGroupId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LiveMonitoring_MachineSessions]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LiveMonitoring_MachineSessions](
+	[MachineSessionId] [int] IDENTITY(1,1) NOT NULL,
+	[MachineDetailId] [int] NOT NULL,
+	[SessionStart] [datetime] NOT NULL,
+	[SessionEnd] [datetime] NOT NULL,
+	[CreatedDate] [datetime] NULL,
+	[ModifiedDate] [datetime] NULL,
+ CONSTRAINT [PK_LiveMonitoring_MachineSessions] PRIMARY KEY CLUSTERED 
+(
+	[MachineSessionId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[webpages_UsersInRoles]    Script Date: 04/21/2017 21:01:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[webpages_UsersInRoles](
+	[UserId] [int] NOT NULL,
+	[RoleId] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[UserId] ASC,
+	[RoleId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Default [DF_LiveMonitoring_AppDetails_Title]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_AppDetails] ADD  CONSTRAINT [DF_LiveMonitoring_AppDetails_Title]  DEFAULT ('') FOR [AppName]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Configuration_CustomerId]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_CustomerId]  DEFAULT ((0)) FOR [CustomerId]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Configuration_BrowserTacker_Interval]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_BrowserTacker_Interval]  DEFAULT ((0)) FOR [BrowserTacker_Interval]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Configuration_ScreenShot_Interval]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_ScreenShot_Interval]  DEFAULT ((0)) FOR [ScreenShot_Interval]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Configuration_MachineIdle_Interval]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_MachineIdle_Interval]  DEFAULT ((0)) FOR [MachineIdle_Interval]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Configuration_MachineIdle_MinTime]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_MachineIdle_MinTime]  DEFAULT ((0)) FOR [MachineIdle_MinTime]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Configuration_KeyLogger_Interval]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_KeyLogger_Interval]  DEFAULT ((0)) FOR [KeyLogger_Interval]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Configuration_KeyLogger_MinTime]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_KeyLogger_MinTime]  DEFAULT ((0)) FOR [KeyLogger_MinTime]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Configuration_AppTracker_Interval]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_AppTracker_Interval]  DEFAULT ((0)) FOR [AppTracker_Interval]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Configuration_IsActive]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_IsActive]  DEFAULT ((1)) FOR [IsActive]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Configuration_IsSendBlockData]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_IsSendBlockData]  DEFAULT ((1)) FOR [IsSendBlockData]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Configuration_IsDeleted]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_IsDeleted]  DEFAULT ((0)) FOR [IsDeleted]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Configuration_CreatedDate]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Configuration_ModifiedDate]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_ModifiedDate]  DEFAULT (getdate()) FOR [ModifiedDate]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Configuration_DeletedDate]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Configuration] ADD  CONSTRAINT [DF_LiveMonitoring_Configuration_DeletedDate]  DEFAULT (getdate()) FOR [DeletedDate]
+GO
+/****** Object:  Default [DF_LiveMonitoring_CustomerDownloadHistory_DownloadDate]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_CustomerDownloadHistory] ADD  CONSTRAINT [DF_LiveMonitoring_CustomerDownloadHistory_DownloadDate]  DEFAULT (getdate()) FOR [DownloadDate]
+GO
+/****** Object:  Default [DF_LiveMonitoring_CustomerProfiles_UserId]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Customers] ADD  CONSTRAINT [DF_LiveMonitoring_CustomerProfiles_UserId]  DEFAULT ((1)) FOR [MembershipId]
+GO
+/****** Object:  Default [DF_LiveMonitoring_KeyLoggings_TextType]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_KeyLoggings] ADD  CONSTRAINT [DF_LiveMonitoring_KeyLoggings_TextType]  DEFAULT ('KL') FOR [TextType]
+GO
+/****** Object:  Default [DF_LiveMonitoring_MachineDetails_CustomerId]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_MachineDetails] ADD  CONSTRAINT [DF_LiveMonitoring_MachineDetails_CustomerId]  DEFAULT ((0)) FOR [CustomerId]
+GO
+/****** Object:  Default [DF_LiveMonitoring_MachineDetails_IsBlocked]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_MachineDetails] ADD  CONSTRAINT [DF_LiveMonitoring_MachineDetails_IsBlocked]  DEFAULT ((0)) FOR [IsBlocked]
+GO
+/****** Object:  Default [DF_LiveMonitoring_ScheduleReports_CreatedDate]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_ScheduleReports] ADD  CONSTRAINT [DF_LiveMonitoring_ScheduleReports_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+/****** Object:  Default [DF_LiveMonitoring_ScheduleReports_SendDate]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_ScheduleReports] ADD  CONSTRAINT [DF_LiveMonitoring_ScheduleReports_SendDate]  DEFAULT (getdate()) FOR [SendDate]
+GO
+/****** Object:  Default [DF_LiveMonitoring_ScheduleReports_IsSend]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_ScheduleReports] ADD  CONSTRAINT [DF_LiveMonitoring_ScheduleReports_IsSend]  DEFAULT ((0)) FOR [IsSend]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Screens_IsActive]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Screens] ADD  CONSTRAINT [DF_LiveMonitoring_Screens_IsActive]  DEFAULT ((1)) FOR [IsActive]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Screens_IsDeleted]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Screens] ADD  CONSTRAINT [DF_LiveMonitoring_Screens_IsDeleted]  DEFAULT ((0)) FOR [IsDeleted]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Screens_CreatedDate]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Screens] ADD  CONSTRAINT [DF_LiveMonitoring_Screens_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Screens_ModifiedDate]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Screens] ADD  CONSTRAINT [DF_LiveMonitoring_Screens_ModifiedDate]  DEFAULT (getdate()) FOR [ModifiedDate]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Screens_DeletedDate]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Screens] ADD  CONSTRAINT [DF_LiveMonitoring_Screens_DeletedDate]  DEFAULT (getdate()) FOR [DeletedDate]
+GO
+/****** Object:  Default [DF_LiveMonitoring_SubCategory_IsProductive]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_SubCategory] ADD  CONSTRAINT [DF_LiveMonitoring_SubCategory_IsProductive]  DEFAULT ((1)) FOR [IsProductive]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Subscribers_IsActive]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Subscribers] ADD  CONSTRAINT [DF_LiveMonitoring_Subscribers_IsActive]  DEFAULT ((1)) FOR [IsActive]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Subscribers_IsDeleted]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Subscribers] ADD  CONSTRAINT [DF_LiveMonitoring_Subscribers_IsDeleted]  DEFAULT ((0)) FOR [IsDeleted]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Subscribers_CreatedDate]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Subscribers] ADD  CONSTRAINT [DF_LiveMonitoring_Subscribers_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Subscribers_ModifiedDate]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Subscribers] ADD  CONSTRAINT [DF_LiveMonitoring_Subscribers_ModifiedDate]  DEFAULT (getdate()) FOR [ModifiedDate]
+GO
+/****** Object:  Default [DF_LiveMonitoring_Subscribers_DeletedDate]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_Subscribers] ADD  CONSTRAINT [DF_LiveMonitoring_Subscribers_DeletedDate]  DEFAULT (getdate()) FOR [DeletedDate]
+GO
+/****** Object:  Default [DF_LiveMonitoring_UserScreenPermissions_CreatedDate]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[LiveMonitoring_UserScreenPermissions] ADD  CONSTRAINT [DF_LiveMonitoring_UserScreenPermissions_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+/****** Object:  Default [DF__webpages___IsCon__2A4B4B5E]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[webpages_Membership] ADD  DEFAULT ((0)) FOR [IsConfirmed]
+GO
+/****** Object:  Default [DF__webpages___Passw__2B3F6F97]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[webpages_Membership] ADD  DEFAULT ((0)) FOR [PasswordFailuresSinceLastSuccess]
+GO
+/****** Object:  ForeignKey [fk_RoleId]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[webpages_UsersInRoles]  WITH CHECK ADD  CONSTRAINT [fk_RoleId] FOREIGN KEY([RoleId])
+REFERENCES [dbo].[webpages_Roles] ([RoleId])
+GO
+ALTER TABLE [dbo].[webpages_UsersInRoles] CHECK CONSTRAINT [fk_RoleId]
+GO
+/****** Object:  ForeignKey [fk_UserId]    Script Date: 04/21/2017 21:01:14 ******/
+ALTER TABLE [dbo].[webpages_UsersInRoles]  WITH CHECK ADD  CONSTRAINT [fk_UserId] FOREIGN KEY([UserId])
+REFERENCES [dbo].[UserProfile] ([UserId])
+GO
+ALTER TABLE [dbo].[webpages_UsersInRoles] CHECK CONSTRAINT [fk_UserId]
+GO

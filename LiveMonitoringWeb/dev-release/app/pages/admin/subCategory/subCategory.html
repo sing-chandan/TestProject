@@ -2,8 +2,83 @@
     <div class="col-md-12">
         <div ba-panel ba-panel-title="Sub Category" ba-panel-class="with-scroll">
             <div class="add-row-editable-table">
-                <button class="btn btn-primary" ng-click="addUser()">Add row</button>
+                <button class="btn btn-primary" ng-click="SubCatAdd()">Add SubCategory</button>
+                <!--<div class="form-group select-page-size-wrap ">
+                    <label>
+                        Rows on page
+                        <select class="form-control show-tick" title="Rows on page"
+                                ng-model="smartTablePageSize" ng-options="i for i in [5,10,15,20,25]"></select>
+                    </label>
+                </div>-->
+               
+            </div>
 
+            <div class="row pd-b-10" ng-show="AddRow">
+
+                <table class="table table-no-borders">
+                    <tr>
+                        <td></td>
+                        <td class="text-left">
+                            <span>Category Name</span>
+                            <select class="form-control" ng-model="SubCat.CategoryId" ng-options="s.CategoryId as s.CategoryName for s in Categorylist"></select>
+                        </td>
+
+                        <td>
+                            <span>Sub Category Type</span>
+                            <select class="form-control" ng-model="SubCat.SubCategoryTypeId" ng-options="s.SubCategoryTypeId as s.SubCategoryTypeName for s in SubCatType"></select>
+                        </td>
+
+                        <td>
+                            <span>Sub Category Name</span>
+                            <input type="text" class="form-control" ng-model="SubCat.SubCategoryName" />
+                        </td>
+                        <td class="td-bottom">
+                            <div class="checkbox">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" ng-model="SubCat.IsProductive" value="option1">
+                                    <span>Productive</span>
+                                </label>
+                            </div>
+
+                        </td>
+                        <td class="td-bottom">
+                            <div class="checkbox">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" ng-model="SubCat.IsBlock" value="option1">
+                                    <span>Block</span>
+                                </label>
+                            </div>
+
+                        </td>
+                        <td class="td-bottom">
+                            <div class="checkbox">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" ng-model="SubCat.IsStatus" value="option1">
+                                    <span>Status</span>
+                                </label>
+                            </div>
+
+                        </td>
+                        <td class="td-bottom">
+                            <div class="checkbox">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" ng-model="SubCat.IsDeleted" value="option1">
+                                    <span>Deleted</span>
+                                </label>
+                            </div>
+
+                        </td>
+
+                        <td class="td-bottom">
+                            <button type="submit" ng-click="AddCatgory(Category)" class="btn btn-primary editable-table-button">
+                                Save
+                            </button>
+                            <button type="button" ng-click="btnCancel()" class="btn btn-default editable-table-button">
+                                Cancel
+                            </button>
+                        </td>
+                    </tr>
+                </table>
             </div>
             <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-bordered table-hover">
                 <thead>
@@ -22,11 +97,11 @@
                     <tr>
                         <td></td>
                         <th>
-                            <input st-search="CategoryName" placeholder="Search display Name" class="input-sm form-control search-input"
+                            <input st-search="CategoryId" placeholder="Search display Name" class="input-sm form-control search-input"
                                    type="search" />
                         </th>
                         <th>
-                            <input st-search="SubCategoryTypeName" placeholder="Search Sub Category Type" class="input-sm form-control search-input"
+                            <input st-search="SubCategoryTypeId" placeholder="Search Sub Category Type" class="input-sm form-control search-input"
                                    type="search" />
                         </th>
                         <th>
@@ -51,6 +126,7 @@
                             <span editable-select="item.CategoryId" e-name="CategoryId" e-form="rowform" e-selectpicker
                                   e-ng-options="s.CategoryId as s.CategoryName for s in Categorylist">
                                 {{ showCategory(item) }}
+                               
                             </span>
                         </td>
                         <td class="select-td">
@@ -64,19 +140,19 @@
                                 {{ item.SubCategoryName || 'empty' }}
                             </span>
                         </td>
-                      <td>
+                      <td class="text-center">
                           <span editable-checkbox="item.IsProductive" e-name="IsProductive" e-form="rowform">
                               <span ng-show="!item.IsProductive" class="fa fa-minus-circle"></span>
                               <span ng-show="item.IsProductive" class="fa fa-check-circle"></span>
                           </span>
                       </td>
-                        <td>
+                        <td class="text-center">
                             <span editable-checkbox="item.IsBlocked" e-name="IsBlocked" e-form="rowform">
                                 <span ng-show="!item.IsBlocked" class="fa fa-minus-circle"></span>
                                 <span ng-show="item.IsBlocked" class="fa fa-check-circle"></span>
                             </span>
                         </td>
-                        <td>
+                        <td class="text-center">
                             <span editable-checkbox="item.IsActive" e-name="IsActive" e-form="rowform">
                                 <span ng-show="!item.IsActive" class="fa fa-minus-circle"></span>
                                 <span ng-show="item.IsActive" class="fa fa-check-circle"></span>

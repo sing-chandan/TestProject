@@ -12,11 +12,16 @@
         $scope.Categorylist = [];
         $scope.SubCatType = [];
 
+        $scope.smartTablePageSize = 20;
+
         var baseSiteUrlPath = $("base").first().attr("href");
         $http.get(baseSiteUrlPath + "SubCategory/JsonSubCategoryData", { data: {} }).
   success(function (data, status, headers, config) {
 
-      debugger;
+      
+
+
+
       $scope.rowCollection = data.SubCategory;
 
       $scope.Categorylist = data.Categorylist;
@@ -31,6 +36,8 @@
 
 
       $scope.showCategory = function (user) {
+
+          
           var selected = [];
           if (user.CategoryId) {
               selected = $filter('filter')($scope.Categorylist, { CategoryId: user.CategoryId });
@@ -59,6 +66,12 @@
        error(function (data, status, headers, config) {
 
        });
+
+
+        $scope.SubCatAdd = function () {
+            $scope.AddRow = true;
+        }
+
         $scope.displayedCollection = [].concat($scope.rowCollection);
 
         $scope.SubmitSubCategory = function (data, item) {
