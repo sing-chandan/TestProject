@@ -11,13 +11,13 @@
 
   /** @ngInject */
   function TopappChartCtrl($scope,$http, baConfig, colorHelper) {
-      debugger;
+      
       
       var baseSiteUrlPath = $("base").first().attr("href");
 
       $http.get(baseSiteUrlPath + "Home/JsonTopApps",{data:{}})
       .success(function (result,status,headers,config) {
-          debugger;
+          
           var lablel = [];
           var dta = [];
           var pre = [];

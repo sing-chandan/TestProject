@@ -18,7 +18,7 @@
     $scope.fillGrid = function () {
         $http.get(baseSiteUrlPath + "Category/JsonCategory", { data: {} }).
   success(function (data, status, headers, config) {
-      debugger;
+      
       $scope.rowCollection = data;
 
       $scope.removeUser = function (index) {
@@ -68,7 +68,7 @@ function (isConfirm) {
 
         $http.post(baseSiteUrlPath + "Category/Delete", { id: ID }).
 success(function (data, status, headers, config) {
-    debugger;
+    
 
     $scope.fillGrid();
 }).
@@ -98,12 +98,12 @@ success(function (data, status, headers, config) {
         };
 
         $scope.AddCatgory = function (AddObj) {
-            debugger;
+            
             var Category = JSON.parse(angular.toJson(AddObj));
 
             $http.post(baseSiteUrlPath + "Category/Save", JSON.stringify(Category)).
     success(function (data, status, headers, config) {
-        debugger;
+        
         $scope.AddRow = false;
         $scope.fillGrid();
 
@@ -114,7 +114,7 @@ success(function (data, status, headers, config) {
         }
 
         $scope.updateUser = function (item) {
-            debugger;
+            
             //item.CreatedDate = null;
             //item.ModifiedDate = null;
             //item.DeletedDate = null;
@@ -122,7 +122,7 @@ success(function (data, status, headers, config) {
 
             $http.post(baseSiteUrlPath + "Category/Save",JSON.stringify(Category) ).
  success(function (data, status, headers, config) {
-     debugger;
+     
 
      $scope.fillGrid();
  }).

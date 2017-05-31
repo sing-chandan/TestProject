@@ -12,7 +12,7 @@
         var baseSiteUrlPath = $("base").first().attr("href");
         $http.get(baseSiteUrlPath + "Groups/GroupDetails", { data: {} }).
   success(function (data, status, headers, config) {
-      debugger;
+      
       $scope.rowCollection = data;
 
       $scope.removeUser = function (index) {

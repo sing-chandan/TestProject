@@ -10,7 +10,7 @@
 
   /** @ngInject */
   function BaSidebarCtrl($scope, baSidebarService) {
-      debugger;
+      
     $scope.menuItems = baSidebarService.getMenuItems();
     $scope.defaultSidebarState = $scope.menuItems[0].stateRef;
 

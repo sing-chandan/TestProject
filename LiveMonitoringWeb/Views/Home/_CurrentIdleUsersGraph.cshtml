@@ -13,7 +13,7 @@
     $.get('@Url.Action("JsonCurrentIdleUsers")', function (result) {  
         if (result.length == 0) {
             $("#loading").show();
-            debugger;
+            
             $.get('<%= Url.Action("@AppBaseURL/Home/Index") %>', {},
                 function (data) {
                     $('#currentIdleUsersGraph').html(data);

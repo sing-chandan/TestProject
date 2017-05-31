@@ -48,7 +48,7 @@
                             <td>{{item.machine_detail.UserName}}</td>
                             <td>{{item.IdleTime}}</td>
 
-                            <td>{{item.CreatedDate}}</td>
+                            <td>{{item.CreatedDate | DateFormat | date:'dd/MM/yyyy'}}</td>
 
 
                             <!--<td><a class="email-link" ng-href="mailto:{{item.email}}">{{item.email}}</a></td>-->

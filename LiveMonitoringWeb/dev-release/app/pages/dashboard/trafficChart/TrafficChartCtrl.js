@@ -11,7 +11,7 @@
 
   /** @ngInject */
   function TrafficChartCtrl($scope,$http, baConfig, colorHelper) {
-      debugger;
+      
       
       var baseSiteUrlPath = $("base").first().attr("href");
 

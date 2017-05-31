@@ -7,7 +7,7 @@
 
     /** @ngInject */
     function UserIdleCtrl($scope, $http, baConfig, $element, layoutPaths) {
-        debugger;
+        
         var layoutColors = baConfig.colors;
         var id = $element[0].getAttribute('id');
 
@@ -16,7 +16,7 @@
         $http.get(baseSiteUrlPath + "Report/JsonIdleReport", { data: {} }).
   success(function (result, status, headers, config) {
 
-      debugger;
+      
 
       var barChart = AmCharts.makeChart(id, {
           type: 'serial',

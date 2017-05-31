@@ -2,7 +2,7 @@
  * @author v.lugovksy
  * created on 16.12.2015
  */
-debugger;
+
 (function () {
     'use strict';
 
@@ -21,7 +21,7 @@ debugger;
 
         $http.get(baseSiteUrlPath + "Report/JsonProjectSummary", { data: {} }).
    success(function (data, status, headers, config) {
-       debugger;
+       
      
        $scope.rowCollection = data;
 

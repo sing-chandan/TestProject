@@ -13,7 +13,7 @@
     $.get('@Url.Action("JsonUserProductivity")', function (result) {
         if (result.length == 0) {
             $("#loading2").show();
-            debugger;
+            
             $.get('<%= Url.Action("@AppBaseURL/Home/Index") %>', {},
                 function (data) {
                

@@ -55,7 +55,7 @@
                             <td>{{item.UserName}}</td>
                             <td>{{item.MachineMacAddress}}</td>
                             <td>{{item.MachineIP}}</td>
-                            <td>{{item.CreatedDate}}</td>
+                            <td>{{item.CreatedDate | DateFormat | date:'dd/MM/yyyy'}}</td>
                             <td>{{item.IsBlocked}}</td>
                             <td><a class="email-link" ng-href="#">Add Group</a></td>
 

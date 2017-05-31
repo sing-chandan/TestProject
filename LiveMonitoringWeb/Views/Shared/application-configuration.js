@@ -1,6 +1,6 @@
-﻿debugger;
+﻿
 (function () {
-    debugger;
+    
     var app = angular.module('Blurtest', ['BlurAdmin','ngRoute']);
 
 
@@ -14,17 +14,17 @@
         return total
     }
 
-    debugger;
+    
     app.config(
     ['$routeProvider', '$locationProvider',
 
         function ($routeProvider, $locationProvider) {
 
-            debugger;
+            
 
             
             var baseSiteUrlPath = $("base").first().attr("href");
-            debugger;
+            
             
             $routeProvider.when('/',
             {

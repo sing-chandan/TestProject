@@ -15,7 +15,7 @@
 
             $http.get(baseSiteUrlPath + "Configuration/JsonConfigurations", { data: {} }).
       success(function (data, status, headers, config) {
-          debugger;
+          
           $scope.rowCollection = data;
 
           $scope.removeUser = function (index) {
@@ -48,7 +48,7 @@
 
         $scope.update = function (data) {
 
-            debugger;
+            
 
             $http.post(baseSiteUrlPath + "Configuration/Save", JSON.stringify(data)).
         success(function (data, status, headers, config) {
@@ -64,7 +64,7 @@
         $scope.delete = function (item) {
 
            
-            debugger;
+            
             SweetAlert.swal({
                 title: "Are you sure want to delete?",
                 text: "",
@@ -81,7 +81,7 @@ function (isConfirm) {
 
         $http.post(baseSiteUrlPath + "Configuration/Delete", { id: ID }).
 success(function (data, status, headers, config) {
-    debugger;
+    
 
     $scope.fillGrid();
 }).

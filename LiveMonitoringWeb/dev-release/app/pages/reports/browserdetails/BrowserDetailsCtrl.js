@@ -2,7 +2,7 @@
  * @author v.lugovksy
  * created on 16.12.2015
  */
-debugger;
+
 (function () {
     'use strict';
 
@@ -16,12 +16,12 @@ debugger;
         var baseSiteUrlPath = $("base").first().attr("href");
 
        
-     debugger;
+     
         
     $scope.rowCollection = [];
             $http.get(baseSiteUrlPath + "BrowserDetails/JsonBrowserDetail", { data: {} }).
        success(function (data, status, headers, config) {
-           debugger;
+           
            $scope.itemsByPage = 5;
            $scope.rowCollection = data;
          

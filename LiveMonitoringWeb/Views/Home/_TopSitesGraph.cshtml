@@ -14,10 +14,10 @@
     $.get('@Url.Action("JsonTopSites")', function (result) {
         if (result.length == 0) {
             $("#loading1").show();
-            debugger;
+            
             $.get('<%= Url.Action("@AppBaseURL/Home/Index") %>', {},
                 function (data) {
-                    debugger;
+                    
                     $('#topSitesGraph').html(data);
                     $('#loading1').hide();
                 });

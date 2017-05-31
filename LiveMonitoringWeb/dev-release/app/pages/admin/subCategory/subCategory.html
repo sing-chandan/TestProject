@@ -70,7 +70,7 @@
                         </td>
 
                         <td class="td-bottom">
-                            <button type="submit" ng-click="AddCatgory(Category)" class="btn btn-primary editable-table-button">
+                            <button type="submit" ng-click="AddSubCatgory(SubCat)" class="btn btn-primary editable-table-button">
                                 Save
                             </button>
                             <button type="button" ng-click="btnCancel()" class="btn btn-default editable-table-button">
@@ -140,25 +140,25 @@
                                 {{ item.SubCategoryName || 'empty' }}
                             </span>
                         </td>
-                      <td class="text-center">
-                          <span editable-checkbox="item.IsProductive" e-name="IsProductive" e-form="rowform">
-                              <span ng-show="!item.IsProductive" class="fa fa-minus-circle"></span>
-                              <span ng-show="item.IsProductive" class="fa fa-check-circle"></span>
-                          </span>
-                      </td>
-                        <td class="text-center">
+                        <td class="text-center checkbox-td">
+                            <span editable-checkbox="item.IsProductive" e-name="IsProductive" e-form="rowform">
+                                <span ng-show="!item.IsProductive" class="fa fa-minus-circle"></span>
+                                <span ng-show="item.IsProductive" class="fa fa-check-circle"></span>
+                            </span>
+                        </td>
+                        <td class="text-center checkbox-td">
                             <span editable-checkbox="item.IsBlocked" e-name="IsBlocked" e-form="rowform">
                                 <span ng-show="!item.IsBlocked" class="fa fa-minus-circle"></span>
                                 <span ng-show="item.IsBlocked" class="fa fa-check-circle"></span>
                             </span>
                         </td>
-                        <td class="text-center">
+                        <td class="text-center checkbox-td">
                             <span editable-checkbox="item.IsActive" e-name="IsActive" e-form="rowform">
                                 <span ng-show="!item.IsActive" class="fa fa-minus-circle"></span>
                                 <span ng-show="item.IsActive" class="fa fa-check-circle"></span>
                             </span>
                         </td>
-                        <td>
+                        <td class="text-center checkbox-td">
                             <span editable-checkbox="item.IsDeleted" e-name="IsDeleted" e-form="rowform">
                                 <span ng-show="!item.IsDeleted" class="fa fa-minus-circle"></span>
                                 <span ng-show="item.IsDeleted" class="fa fa-check-circle"></span>
@@ -177,7 +177,7 @@
                             </form>
                             <div class="buttons" ng-show="!rowform.$visible">
                                 <button class="btn btn-primary editable-table-button btn-xs" ng-click="rowform.$show()">Edit</button>
-                                <button class="btn btn-danger editable-table-button btn-xs" ng-click="removeUser($index)">Delete</button>
+                                <button class="btn btn-danger editable-table-button btn-xs" ng-click="deactive(item)">Delete</button>
                             </div>
                         </td>
                     </tr>

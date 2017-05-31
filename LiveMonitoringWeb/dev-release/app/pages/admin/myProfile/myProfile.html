@@ -57,7 +57,7 @@
                         </td>
                         <td>
                             <span editable-text="item.CreateDate" e-name="CreateDate" e-form="rowform">
-                                {{ item.CreateDate || 'empty' }}
+                                {{ item.CreateDate | DateFormat | date:'dd/MM/yyyy' || 'empty' }}
                             </span>
                         </td>
                      

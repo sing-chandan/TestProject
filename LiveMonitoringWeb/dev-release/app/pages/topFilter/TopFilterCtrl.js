@@ -10,7 +10,7 @@
 
     /** @ngInject */
     function TopFilterCtrl($scope, $http, $route, $filter, $uibModal, baProgressModal) {
-        debugger;
+        
 
         $scope.CustomDate = false;
        
@@ -27,7 +27,7 @@
        $scope.standardItem.selected = { label: 'Today', value: 1 };
 
        $scope.customDate = function () {
-           debugger;
+           
 
 
        }
@@ -76,7 +76,7 @@
 
                $http.post(baseSiteUrlPath + 'Home/SetTimeInterval', { DateFrom: DateFrom, DateTo: DateTo })
                .success(function (data, status, heades, config) {
-                   debugger;
+                   
                    $route.reload();
                })
                .error(function (data, status, headers, config) {
@@ -132,7 +132,7 @@
 
            $http.get(baseSiteUrlPath + 'ScreenShot/GetTreelist', { data: {} })
                 .success(function (data, status, heades, config) {
-                    debugger;
+                    
                    // return data;
                  //   $scope.ignoreChanges = true;
                     init([
@@ -284,7 +284,7 @@
                 });
        }
 
-       debugger;
+       
      
         // $scope.treeData = 
        $scope.getDefaultData();

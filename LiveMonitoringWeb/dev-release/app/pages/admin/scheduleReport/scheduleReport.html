@@ -1,11 +1,16 @@
 ﻿<div class="row">
     <div class="col-md-12">
         <div ba-panel ba-panel-title="Shedule Reports Permissions" ba-panel-class="with-scroll">
-
+            <div class="add-row-editable-table pull-right">
+             
+                    <button class="btn btn-primary" ng-click="btnSave()">Save</button>
+                    <button class="btn btn-info" ng-click="btnReset()">Reset</button>
+             
+            </div>
             <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-bordered table-hover">
                 <thead>
                     <tr class="sortable ">
-                        <th class="table-id" st-sort="id" st-sort-default="true"><input type="checkbox"/></th>
+                        <th class="table-id" st-sort="id"><input type="checkbox" ng-model="CheckAll"/></th>
                         <th st-sort="Email">Screen Display Name</th>
                         <th st-sort="FirstName">Shedule Type</th>
                         
@@ -24,14 +29,16 @@
 
                     <tr ng-repeat="item in displayedCollection" class="editable-row">
                         <td>
-                            <input type="checkbox" ng-model="item.check"/>
+                            <input type="checkbox" ng-checked="CheckAll" ng-model="item.check" />
 
                         </td>
                         <td>
                             {{item.ScreenDisplayName}}
                         </td>
                         <td class="select-td">
-                            <select class="form-control" ng-options="s.value as s.text for s in ScheduleType" ng-model="item.ScheduleType"></select>
+                            <div class="col-xs-5">
+                                <select class="form-control" ng-options="s.value as s.text for s in ScheduleType" ng-model="item.ScheduleType"></select>
+                            </div>
                         </td>  
                   </tr>
                 </tbody>

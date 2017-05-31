@@ -7,14 +7,14 @@
     /** @ngInject */
     function UserPermissionCtrl($scope, $filter, $http, editableOptions, editableThemes) {
 
-        debugger;
+        
         $scope.rowCollection = [];
         $scope.ScheduleType = [];
 
         var baseSiteUrlPath = $("base").first().attr("href");
         $http.get(baseSiteUrlPath + "UserPermission/JsonUserPermission", { data: {} }).
   success(function (data, status, headers, config) {
-      debugger;
+      
       $scope.rowCollection = data.ScreenList;
 
       $scope.Userlist = data.Userlist;

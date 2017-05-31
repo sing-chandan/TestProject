@@ -13,7 +13,7 @@
         var baseSiteUrlPath = $("base").first().attr("href");
         $http.get(baseSiteUrlPath + "CreateUser/JsonUserData", { data: {} }).
   success(function (data, status, headers, config) {
-      debugger;
+      
       $scope.rowCollection = data.Userlist;
       $scope.UserRoles = data.UserRoles;
 
@@ -70,7 +70,7 @@
         };
 
         $scope.updateUser = function (data) {
-            debugger;
+            
         }
 
 
@@ -78,9 +78,9 @@
     }
 
     function DateFormat() {
-        debugger;
+        
         return function (value) {
-            debugger;
+            
             return new Date(parseInt(value.replace("/Date(", "").replace(")/", ""), 10));
         };
     }

@@ -9,6 +9,7 @@ using LiveMonitoringWeb.Models;
 using WebMatrix.WebData;
 using System.Data.Common;
 using CommonUtility;
+using Newtonsoft.Json;
 
 namespace LiveMonitoringWeb.Controllers
 {
@@ -175,6 +176,59 @@ namespace LiveMonitoringWeb.Controllers
                 handler.HandleException(e);
             }
             return RedirectToAction("Index");
+        }
+
+
+        public ActionResult SubmitSehedule(string modellist)
+        {
+            try
+            {
+                List<ScheduleReports> ModelData = JsonConvert.DeserializeObject<List<ScheduleReports>>(modellist);
+
+////                Check Authorization
+//                string roleName = System.Web.Security.Roles.GetRolesForUser().Single();
+//                if (roleName.ToUpper() == "USER")
+//                {
+//                    return RedirectToAction("login", "account");
+//                }
+
+                using (var db = new DBContext())
+                {
+                    var schedulereports = (from u in db.ScheduleReports where u.MembershipId == WebSecurity.CurrentUserId select u).ToList();
+                    foreach (var itm in schedulereports)
+                    {
+                        db.Entry(itm).State = EntityState.Deleted;
+                        db.SaveChanges();
+                    }
+
+                    foreach(var item in ModelData)
+                    {
+                            ScheduleReports model = new ScheduleReports();
+                            model.ScreenId = item.ScreenId;
+                            model.MembershipId = WebSecurity.CurrentUserId;
+                            model.ScheduleType = item.ScheduleType;
+                            model.CreatedDate = DateTime.Now;
+                            model.SendDate = DateTime.Now;
+                            model.IsSend = false;
+                            model.CreatedBy = WebMatrix.WebData.WebSecurity.CurrentUserId;
+                            db.ScheduleReports.Add(model);
+                            db.SaveChanges();
+                  
+                    
+                    }
+
+                }
+
+
+
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler handler = new ExceptionHandler();
+                handler.HandleException(e);
+            }
+            return RedirectToAction("Index");
+
         }
 
         public ActionResult SaveScheduleReportPermission(string ScreensScheduleTypes)

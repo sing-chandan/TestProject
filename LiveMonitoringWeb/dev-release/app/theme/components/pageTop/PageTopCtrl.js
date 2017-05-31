@@ -2,7 +2,7 @@
  * @author v.lugovksy
  * created on 16.12.2015
  */
-debugger;
+
 (function () {
     'use strict';
 
@@ -12,7 +12,7 @@ debugger;
 
     /** @ngInject */
     function PageTopCtrl($scope, $http) {
-        debugger;
+        
 
         var baseSiteUrlPath = $("base").first().attr("href");
 

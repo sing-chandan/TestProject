@@ -305,7 +305,7 @@ namespace LiveMonitoringWeb.Controllers
         // POST: /SubCategory/Delete/5
 
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+      //  [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             //Check Authorization

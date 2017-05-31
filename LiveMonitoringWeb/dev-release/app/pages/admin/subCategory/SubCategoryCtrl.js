@@ -5,9 +5,9 @@
         .controller('SubCategoryCtrl', SubCategoryCtrl);
 
     /** @ngInject */
-    function SubCategoryCtrl($scope, $filter, $http, editableOptions, editableThemes) {
+    function SubCategoryCtrl($scope, $filter, $http, editableOptions, editableThemes, SweetAlert) {
 
-        debugger;
+        
         $scope.rowCollection = [];
         $scope.Categorylist = [];
         $scope.SubCatType = [];
@@ -15,6 +15,8 @@
         $scope.smartTablePageSize = 20;
 
         var baseSiteUrlPath = $("base").first().attr("href");
+
+        $scope.fillGrid=function(){
         $http.get(baseSiteUrlPath + "SubCategory/JsonSubCategoryData", { data: {} }).
   success(function (data, status, headers, config) {
 
@@ -66,16 +68,69 @@
        error(function (data, status, headers, config) {
 
        });
-
+        }
 
         $scope.SubCatAdd = function () {
             $scope.AddRow = true;
         }
 
+        $scope.fillGrid();
+
+        $scope.deactive = function (item) {
+
+
+            SweetAlert.swal({
+                title: "Are you sure want to delete?",
+                text: "",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55", confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+function (isConfirm) {
+    if (isConfirm) {
+        var ID = item.SubCategoryId;
+
+        $http.post(baseSiteUrlPath + "SubCategory/Delete", { id: ID }).
+success(function (data, status, headers, config) {
+    
+
+    $scope.fillGrid();
+}).
+    error(function (data, status, headers, config) {
+
+    });
+    } else {
+
+    }
+});
+
+
+
+        }
+
         $scope.displayedCollection = [].concat($scope.rowCollection);
 
+
+        $scope.AddSubCatgory = function (AddObj) {
+            var SubCat = JSON.parse(angular.toJson(AddObj));
+
+            $http.post(baseSiteUrlPath + "SubCategory/Save", JSON.stringify(SubCat)).
+    success(function (data, status, headers, config) {
+        
+        $scope.AddRow = false;
+        $scope.fillGrid();
+
+    }).
+        error(function (data, status, headers, config) {
+
+        });
+        }
+
         $scope.SubmitSubCategory = function (data, item) {
-            debugger;
+            
             data.SubCategoryId= item.SubCategoryId ;
             
             $http.defaults.headers.common['X-XSRF-Token'] =angular.element('input[name="__RequestVerificationToken"]').attr('value');
@@ -83,7 +138,7 @@
             $http.post(baseSiteUrlPath + "SubCategory/Save", JSON.stringify(data)).
   success(function (data, status, headers, config) {
 
-      debugger;
+      
       return false;
 
   }).
@@ -93,7 +148,7 @@
         }
        
         $scope.addUser = function () {
-            debugger;
+            
             $scope.inserted = {
                 id: $scope.rowCollection.length + 1,
                 CategoryName: null,
