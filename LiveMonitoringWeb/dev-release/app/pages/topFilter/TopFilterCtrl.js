@@ -91,39 +91,19 @@
            
        }
 
-       function initLocationCodes(geography) {
-           var root = {
-               id:"ieki",
-               text: "Tutti",
-               children: geography
-           };
+     
+
+
+       $scope.roleList1 = [
+      {
+          "roleName": "User", "roleId": "role1", "children": [
+          { "roleName": "subUser1", "roleId": "role11", "children": [] },
+          { "roleName": "subUser1", "roleId": "role11", "children": [] }
           
-           $scope.treeLocationCodes.config.version++;
-       }
+          ]
+      }
+             ];
 
-       function init(data) {
-           initLocationCodes(data);
-       };
-
-
-       $scope.locationCodes = [];
-
-       $scope.treeLocationCodes = {
-           config: {
-               core: {
-                   animation: true,
-                   themes: {
-                       icons: false
-                   },
-                   worker: true
-               },
-               version: 0,
-               
-           },
-           instance: null
-           
-          
-       };
 
        $scope.getDefaultData =function(){
           
@@ -132,152 +112,12 @@
 
            $http.get(baseSiteUrlPath + 'ScreenShot/GetTreelist', { data: {} })
                 .success(function (data, status, heades, config) {
-                    
+                    debugger;
                    // return data;
-                 //   $scope.ignoreChanges = true;
-                    init([
-       {
-           "id": "n1",
-           "parent": "#",
-           "type": "folder",
-           "text": "Node 1",
-           "state": {
-               "opened": true
-           }
-       },
-       {
-           "id": "n2",
-           "parent": "#",
-           "type": "folder",
-           "text": "Node 2",
-           "state": {
-               "opened": true
-           }
-       },
-       {
-           "id": "n3",
-           "parent": "#",
-           "type": "folder",
-           "text": "Node 3",
-           "state": {
-               "opened": true
-           }
-       },
-       {
-           "id": "n5",
-           "parent": "n1",
-           "text": "Node 1.1",
-           "state": {
-               "opened": true
-           }
-       },
-       {
-           "id": "n6",
-           "parent": "n1",
-           "text": "Node 1.2",
-           "state": {
-               "opened": true
-           }
-       },
-       {
-           "id": "n7",
-           "parent": "n1",
-           "text": "Node 1.3",
-           "state": {
-               "opened": true
-           }
-       },
-       {
-           "id": "n8",
-           "parent": "n1",
-           "text": "Node 1.4",
-           "state": {
-               "opened": true
-           }
-       },
-       {
-           "id": "n9",
-           "parent": "n2",
-           "text": "Node 2.1",
-           "state": {
-               "opened": true
-           }
-       },
-       {
-           "id": "n10",
-           "parent": "n2",
-           "text": "Node 2.2 (Custom icon)",
-           "icon": "ion-help-buoy",
-           "state": {
-               "opened": true
-           }
-       },
-       {
-           "id": "n12",
-           "parent": "n3",
-           "text": "Node 3.1",
-           "state": {
-               "opened": true
-           }
-       },
-       {
-           "id": "n13",
-           "parent": "n3",
-           "type": "folder",
-           "text": "Node 3.2",
-           "state": {
-               "opened": true
-           }
-       },
-       {
-           "id": "n14",
-           "parent": "n13",
-           "text": "Node 3.2.1",
-           "state": {
-               "opened": true
-           }
-       },
-       {
-           "id": "n15",
-           "parent": "n13",
-           "text": "Node 3.2.2",
-           "state": {
-               "opened": true
-           }
-       },
-       {
-           "id": "n16",
-           "parent": "n3",
-           "text": "Node 3.3",
-           "state": {
-               "opened": true
-           }
-       },
-       {
-           "id": "n17",
-           "parent": "n3",
-           "text": "Node 3.4",
-           "state": {
-               "opened": true
-           }
-       },
-       {
-           "id": "n18",
-           "parent": "n3",
-           "text": "Node 3.5",
-           "state": {
-               "opened": true
-           }
-       },
-       {
-           "id": "n19",
-           "parent": "n3",
-           "text": "Node 3.6",
-           "state": {
-               "opened": true
-           }
-       }
-                    ]);
+                    //   $scope.ignoreChanges = true;
+
+                    $scope.roleList = $scope.treedata(data);
+                    
                 })
                 .error(function (data, status, headers, config) {
 
@@ -285,10 +125,36 @@
        }
 
        
+       $scope.treedata = function (treedata) {
+           var TreeArray = [];
+           for (var _t = 0; (_t < treedata.length && treedata[_t].parent==0) ; _t++) {
+               var treeobj = {};
+               treeobj.roleName = treedata[_t].text;
+               treeobj.roleId = treedata[_t].id;
+               treeobj.children = [];
+               for(var _i = 0; (_i < treedata.length) ; _i++){
+                   if (treedata[_i].parent == treedata[_t].id) {
+                       var treechildobj = {};
+                       treechildobj.roleName = treedata[_i].text;
+                       treechildobj.roleId = treedata[_i].id;
+                       treechildobj.children = [];
+                       treeobj.children.push(treechildobj);
+                   }
+               }
+               TreeArray.push(treeobj);
+           }
+
+           return TreeArray;
+       }
      
         // $scope.treeData = 
        $scope.getDefaultData();
-       
+     
+       $scope.selectNodeLabel = function (a, b) {
+           debugger;
+           alert('test');
+       }
+      
     }
 })();
 

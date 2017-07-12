@@ -14,6 +14,7 @@ angular.module('BlurAdmin', [
   'angular-progress-button-styles',
   '720kb.datepicker',
   'oitozero.ngSweetAlert',
+  'angularTreeview',
 
   'BlurAdmin.theme',
   'BlurAdmin.pages'

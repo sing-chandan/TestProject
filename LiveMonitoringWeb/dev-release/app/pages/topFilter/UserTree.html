@@ -6,8 +6,14 @@
         <h4 class="modal-title" id="myModalLabel">Select User</h4>
     </div>
     <div class="modal-body">
-        <div class="tree-locations-container" js-tree="treeLocationCodes.config" ng-model="locationCodes" tree-events="select_node:treeLocationCodes.onSelect; deselect_node:treeLocationCodes.onSelect;" tree="treeLocationCodes.instance"></div>
-
+      
+        <div data-angular-treeview="true"
+             data-function="test"
+             data-tree-model="roleList"
+             data-node-id="roleId"
+             data-node-label="roleName"
+             data-node-children="children">
+     </div>        
     </div>
 
 </div>
